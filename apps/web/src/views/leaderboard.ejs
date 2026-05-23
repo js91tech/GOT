@@ -1,0 +1,33 @@
+<%- include('partials/head', { loggedIn: false, title: 'Leaderboard', pageClass: 'page-jjk' }) %>
+<%- include('partials/jjk-shell-open') %>
+
+<h1 class="page-title">Leaderboard — <%= type %></h1>
+<nav class="tab-bar" aria-label="Leaderboard sort">
+  <a href="/leaderboard?type=level">Level</a>
+  <a href="/leaderboard?type=wealth">Wealth</a>
+  <a href="/leaderboard?type=battle">Battle</a>
+  <a href="/leaderboard?type=strength">STR</a>
+  <a href="/leaderboard?type=defense">DEF</a>
+  <a href="/leaderboard?type=speed">SPD</a>
+  <a href="/leaderboard?type=dexterity">DEX</a>
+  <a href="/leaderboard?type=pvp">PvP</a>
+</nav>
+
+<article class="jjk-panel vine-panel">
+  <ol class="rank-list">
+    <% rows.forEach(function(r, i) { %>
+      <li>
+        <span class="rank-num"><%= i + 1 %></span>
+        <span>
+          <%= r.username %> —
+          <% if (r.wins != null) { %><%= r.wins %> wins<% } else { %>Lv.<%= r.level %><% if (r.coins != null) { %> (<%= (r.coins + (r.bank_balance||0)).toLocaleString() %> wealth)<% } %><% } %>
+        </span>
+      </li>
+    <% }); %>
+  </ol>
+</article>
+
+<a class="jjk-back" href="/">← Home</a>
+
+<%- include('partials/jjk-shell-close') %>
+<%- include('partials/foot') %>

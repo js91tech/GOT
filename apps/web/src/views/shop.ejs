@@ -1,0 +1,26 @@
+<%- include('partials/head', { loggedIn: true, title: 'Shop', pageClass: 'page-jjk' }) %>
+<%- include('partials/jjk-shell-open') %>
+
+<% if (flash) { %><div class="flash"><%= flash %></div><% } %>
+<h1 class="page-title">Relic Shop</h1>
+<p class="page-lead">Spend coins on cursed tools and consumables.</p>
+
+<div class="jjk-grid">
+<% items.forEach(function(item) { %>
+  <article class="jjk-panel wood-panel shop-card">
+    <strong><%= item.name %></strong>
+    <span class="price"> — <%= item.shop_price %> coins</span>
+    <p class="stat"><%= item.description %></p>
+    <form method="post" action="/shop/buy">
+      <input type="hidden" name="item" value="<%= item.id %>" />
+      <input type="number" name="quantity" value="1" min="1" max="99" aria-label="Quantity" />
+      <button type="submit" class="btn-curse">Buy</button>
+    </form>
+  </article>
+<% }); %>
+</div>
+
+<a class="jjk-back" href="/dashboard">← Dashboard</a>
+
+<%- include('partials/jjk-shell-close') %>
+<%- include('partials/foot') %>

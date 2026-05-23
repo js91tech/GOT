@@ -1,0 +1,7 @@
+# Deprecated: use railway.toml on all services + SERVICE=bot variable.
+# Kept for backwards compatibility if this path is still linked.
+
+[deploy]
+startCommand = "npm run start:railway"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

@@ -1,0 +1,44 @@
+[
+  {
+    "id": "stark",
+    "name": "House Stark",
+    "motto": "Winter is Coming",
+    "crest_key": "stark",
+    "bonus_json": { "grainYield": 1.1 }
+  },
+  {
+    "id": "lannister",
+    "name": "House Lannister",
+    "motto": "Hear Me Roar",
+    "crest_key": "lannister",
+    "bonus_json": { "goldYield": 1.1 }
+  },
+  {
+    "id": "baratheon",
+    "name": "House Baratheon",
+    "motto": "Ours is the Fury",
+    "crest_key": "baratheon",
+    "bonus_json": { "timberYield": 1.1 }
+  },
+  {
+    "id": "tyrell",
+    "name": "House Tyrell",
+    "motto": "Growing Strong",
+    "crest_key": "tyrell",
+    "bonus_json": { "grainYield": 1.15 }
+  },
+  {
+    "id": "greyjoy",
+    "name": "House Greyjoy",
+    "motto": "We Do Not Sow",
+    "crest_key": "greyjoy",
+    "bonus_json": { "ironYield": 1.15 }
+  },
+  {
+    "id": "targaryen",
+    "name": "House Targaryen",
+    "motto": "Fire and Blood",
+    "crest_key": "targaryen",
+    "bonus_json": { "goldYield": 1.12 }
+  }
+]

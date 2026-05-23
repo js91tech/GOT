@@ -1,0 +1,36 @@
+<%- include('partials/head', { loggedIn: true, title: 'PvP', pageClass: 'page-jjk' }) %>
+<%- include('partials/jjk-shell-open') %>
+
+<% if (flash) { %>
+<div class="flash-wrap <%= flashOk ? '' : 'error' %>">
+  <% if (flashGif) { %><img class="flash-gif" src="<%= flashGif %>" alt="PvP" loading="lazy" /><% } %>
+  <div class="flash-text"><%= flash %></div>
+</div>
+<% } %>
+
+<h1 class="page-title">PvP — Duel, Mug, Rob</h1>
+<p class="page-lead">Same rules as Discord <code>/attack</code> <code>/mug</code> <code>/rob</code> <code>/bust</code></p>
+
+<% players.forEach(function(p) { %>
+  <article class="jjk-panel vine-panel pvp-card">
+    <div class="target-name"><strong><%= p.username %></strong></div>
+    <p class="stat">Lv.<%= p.level %> · <%= p.coins.toLocaleString() %>c on hand</p>
+    <div class="pvp-actions">
+      <form method="post" action="/pvp">
+        <input type="hidden" name="target" value="<%= p.discord_id %>" />
+        <button name="action" value="attack" class="btn-curse">Attack</button>
+        <button name="action" value="mug" class="btn-wood">Mug</button>
+        <button name="action" value="rob" class="danger">Rob</button>
+      </form>
+      <form method="post" action="/bust">
+        <input type="hidden" name="target" value="<%= p.discord_id %>" />
+        <button type="submit" class="btn-wood">Bust from Prison</button>
+      </form>
+    </div>
+  </article>
+<% }); %>
+
+<a class="jjk-back" href="/dashboard">← Dashboard</a>
+
+<%- include('partials/jjk-shell-close') %>
+<%- include('partials/foot') %>

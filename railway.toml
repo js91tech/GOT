@@ -1,0 +1,17 @@
+# Use on bot, web, and api Railway services (same railway.toml).
+# Set variable on each service:
+#   Web service → SERVICE=web
+#   Bot service → SERVICE=bot
+#   API service → SERVICE=api  (2D — see docs/RAILWAY-2D-ACTIVITY.md)
+#   Bot+web one save → SERVICE=botweb  (see docs/RAILWAY-SHARED-DATABASE.md)
+#   Easiest all-in-one → SERVICE=stack  (see docs/SIMPLE-SETUP.md)
+# 2D Activity: SERVICE=api + westeros-game-2d repo — docs/RAILWAY-2D-ACTIVITY.md
+# Or name services with "web" / "bot" in the name (auto-detected).
+
+[deploy]
+startCommand = "npm run start:railway"
+# Probes PORT (web/api/botweb use app /health; SERVICE=bot uses a tiny listener in railway-service-start.js)
+healthcheckPath = "/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5

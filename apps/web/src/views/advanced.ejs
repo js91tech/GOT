@@ -1,0 +1,61 @@
+<%- include('partials/head', { loggedIn: true, title: 'Advanced', pageClass: 'page-jjk' }) %>
+<%- include('partials/jjk-shell-open') %>
+
+<% if (flash) { %><div class="flash"><%= flash %></div><% } %>
+<h1 class="page-title">Phase 2+ Systems</h1>
+<p class="page-lead">Clans, estates, forge, commodities, and endgame progression.</p>
+
+<div class="jjk-grid">
+  <article class="jjk-panel stone-frame">
+    <h3>Clans</h3>
+    <% clans.forEach(c => { %><p class="stat"><%= c.name %> (<%= c.id %>)</p><% }) %>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="joinClan" /><input name="clanId" placeholder="tokyo" /><button type="submit" class="btn-curse">Join</button></form>
+  </article>
+  <article class="jjk-panel wood-panel">
+    <h3>Estates</h3>
+    <% estates.forEach(e => { %><p class="stat">T<%= e.tier %> <%= e.name %> — <%= e.cost %>c</p><% }) %>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="buyEstate" /><input name="tier" type="number" /><button type="submit" class="btn-wood">Buy</button></form>
+  </article>
+  <article class="jjk-panel stone-frame">
+    <h3>Education</h3>
+    <% education.forEach(c => { %><p class="stat"><%= c.id %>: <%= c.name %> (<%= c.cost %>c)</p><% }) %>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="enroll" /><input name="courseId" /><button type="submit" class="btn-curse">Enroll</button></form>
+  </article>
+  <article class="jjk-panel vine-panel">
+    <h3>Company / Drugs</h3>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="joinCompany" /><input name="companyId" placeholder="jujutsu_ops" /><button type="submit" class="btn-curse">Join Company</button></form>
+    <form method="post" action="/drug" style="margin-top:6px"><input name="drugId" value="ce_shot" /><button type="submit" class="btn-wood">CE Shot</button></form>
+  </article>
+  <article class="jjk-panel wood-panel">
+    <h3>Forge / Delve / Grab bag</h3>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="forge" /><input name="recipeId" placeholder="cursed_blade" /><button type="submit" class="btn-curse">Forge</button></form>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="delve" /><button type="submit" class="btn-wood">Delve</button></form>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="endDelve" /><button type="submit" class="btn-wood">End Delve</button></form>
+    <form method="post" action="/advanced"><input type="hidden" name="type" value="grabbag" /><button type="submit" class="btn-curse">Open Capsule</button></form>
+  </article>
+  <article class="jjk-panel stone-frame">
+    <h3>Commodities</h3>
+    <% commodities.forEach(c => { %><p class="stat"><%= c.name %> @ <%= c.current_price %>c</p><% }) %>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="commodity" />
+      <input name="commId" placeholder="cursed_rice" />
+      <input name="qty" type="number" value="1" />
+      <button name="action" value="buy" class="btn-curse">Buy</button>
+      <button name="action" value="sell" class="btn-wood">Sell</button>
+    </form>
+  </article>
+</div>
+
+<article class="jjk-panel wood-panel">
+  <h3>Item Market</h3>
+  <ul class="list-plain"><% market.forEach(m => { %><li>#<%= m.id %> <%= m.name %> x<%= m.quantity %> — <%= m.price %>c</li><% }) %></ul>
+</article>
+<article class="jjk-panel wood-panel">
+  <h3>Gold Market</h3>
+  <ul class="list-plain"><% gold.forEach(g => { %><li>#<%= g.id %> <%= g.gold_amount %> objects — <%= g.price %>c</li><% }) %></ul>
+</article>
+
+<a class="jjk-back" href="/dashboard">← Dashboard</a>
+
+<%- include('partials/jjk-shell-close') %>
+<%- include('partials/foot') %>

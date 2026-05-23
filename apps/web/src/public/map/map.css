@@ -1,0 +1,75 @@
+.map-layout {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 1rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+@media (max-width: 800px) {
+  .map-layout {
+    grid-template-columns: 1fr;
+  }
+}
+.map-canvas-wrap {
+  background: #121018;
+  border: 1px solid #5a4a38;
+  border-radius: 8px;
+  padding: 0.5rem;
+}
+#realm-map svg {
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+#realm-map circle {
+  transition: fill 0.2s, stroke 0.2s;
+}
+#realm-map circle:hover {
+  stroke: #e8c878;
+  stroke-width: 2.5;
+}
+#realm-map circle.selected {
+  stroke: #fff;
+  stroke-width: 3;
+}
+.map-panel {
+  background: #1e1a24;
+  border: 1px solid #5a4a38;
+  border-radius: 8px;
+  padding: 1rem;
+  color: #e8e0d0;
+}
+.map-panel h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+.map-panel .meta {
+  font-size: 0.9rem;
+  color: #b0a898;
+  margin-bottom: 1rem;
+}
+.map-actions form {
+  margin-top: 0.5rem;
+}
+.map-actions button {
+  width: 100%;
+  margin-top: 0.35rem;
+}
+.owner-faction-stark { fill: #4a6a8a; }
+.owner-faction-lannister { fill: #9a7a1a; }
+.owner-faction-baratheon { fill: #2d5a8a; }
+.owner-faction-tyrell { fill: #3d7a3d; }
+.owner-faction-greyjoy { fill: #5a5a5a; }
+.owner-faction-targaryen { fill: #8b2a2a; }
+.owner-guild { fill: #6b4a9a; }
+.owner-neutral { fill: #4a4550; }
+.map-flash {
+  padding: 0.5rem 1rem;
+  margin-bottom: 1rem;
+  background: #2a2430;
+  border-radius: 6px;
+}
+.house-pick select {
+  width: 100%;
+  margin: 0.5rem 0;
+}

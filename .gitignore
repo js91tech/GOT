@@ -1,0 +1,8 @@
+node_modules/
+zip-import/
+.env
+data/*.db
+data/*.db-journal
+*.log
+.DS_Store
+dist/

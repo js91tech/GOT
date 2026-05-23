@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title><%= typeof title !== 'undefined' ? title : 'Westeros Bot' %></title>
+  <link rel="stylesheet" href="/public/style.css" />
+  <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-jjk') || pageClass === 'page-dashboard')) { %>
+  <link rel="stylesheet" href="/public/theme.css" />
+  <% } %>
+  <script src="/public/tooltips.js" defer></script>
+</head>
+<body<% if (typeof pageClass !== 'undefined') { %> class="<%= pageClass %>"<% } %>>
+<header>
+  <strong>Westeros Realm</strong>
+  <nav class="site-nav">
+    <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
+      <a href="/dashboard">Dashboard</a>
+      <a href="/map">Map</a>
+      <a href="/shop">Shop</a>
+      <a href="/pvp">PvP</a>
+      <a href="/explore">Explore</a>
+      <a href="/advanced">Advanced</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/play/2d">2D</a>
+      <a href="/logout">Logout</a>
+    <% } else { %>
+      <a href="/leaderboard">Leaderboard</a> |
+      <a href="/login">Login</a>
+    <% } %>
+  </nav>
+</header>
+<main>

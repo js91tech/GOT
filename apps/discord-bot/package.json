@@ -1,0 +1,14 @@
+{
+  "name": "@westeros/discord-bot",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "register": "node src/register-commands.js"
+  },
+  "dependencies": {
+    "@westeros/game-core": "1.0.0",
+    "discord.js": "^14.22.0",
+    "dotenv": "^16.4.7"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "@westeros/game-core",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "scripts": {
+    "db:init": "node src/cli-init-db.js",
+    "test": "node --test src/**/*.test.js"
+  },
+  "dependencies": {
+    "better-sqlite3": "^11.7.0"
+  }
+}

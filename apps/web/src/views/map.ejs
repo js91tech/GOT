@@ -1,0 +1,41 @@
+<%- include('partials/head', { loggedIn: true, title: 'Realm Map', pageClass: 'page-jjk page-map' }) %>
+<link rel="stylesheet" href="/public/map/map.css" />
+<%- include('partials/jjk-shell-open') %>
+
+<div class="dash-page">
+  <% if (msg) { %><div class="map-flash"><%= msg %></div><% } %>
+
+  <% if (!player.faction_id) { %>
+  <section class="map-panel house-pick" style="max-width:400px;margin-bottom:1rem">
+    <h2>Choose your Great House</h2>
+    <form method="post" action="/map/join-house">
+      <select name="faction_id" required>
+        <% factions.forEach(function(f) { %>
+        <option value="<%= f.id %>"><%= f.name %> — <%= f.motto %></option>
+        <% }) %>
+      </select>
+      <button type="submit" class="btn-stone">Pledge allegiance</button>
+    </form>
+  </section>
+  <% } %>
+
+  <div class="map-layout">
+    <div class="map-canvas-wrap">
+      <div id="realm-map" data-svg-url="/public/map/westeros.svg"></div>
+    </div>
+    <aside id="map-detail" class="map-panel">
+      <h2>Realm</h2>
+      <p class="meta">Click a holding on the map.</p>
+    </aside>
+  </div>
+
+  <p style="margin-top:1rem"><a href="/dashboard">← Dashboard</a></p>
+</div>
+
+<script>
+  window.__realmMapData = <%- JSON.stringify({ territories, factions, player, guild }) %>;
+</script>
+<script src="/public/map/map.js" defer></script>
+
+<%- include('partials/jjk-shell-close') %>
+<%- include('partials/foot') %>
