@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Chain hauberk">
+  <defs>
+    <linearGradient id="cmM" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94a3b8"/><stop stop-color="#475569"/></linearGradient>
+    <filter id="cmS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#cmS)">
+    <path d="M18 16 L46 20 L50 54 L14 54 Z" fill="url(#cmM)" stroke="#64748b"/>
+    <path d="M22 24 H42 M20 32 H44 M18 40 H46 M16 48 H48" stroke="#334155" stroke-width="0.8" opacity="0.6"/>
+    <path d="M26 20 V54 M32 20 V54 M38 20 V54" stroke="#334155" stroke-width="0.6" opacity="0.5"/>
+  </g>
+</svg>

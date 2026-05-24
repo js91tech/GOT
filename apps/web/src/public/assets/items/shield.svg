@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Round shield">
+  <defs>
+    <radialGradient id="shG" cx="40%" cy="35%"><stop stop-color="#78716c"/><stop stop-color="#292524"/></radialGradient>
+    <filter id="shS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#shS)">
+    <circle cx="32" cy="32" r="22" fill="url(#shG)" stroke="#57534e"/>
+    <circle cx="32" cy="32" r="14" fill="none" stroke="#44403c" stroke-width="2"/>
+    <circle cx="32" cy="32" r="5" fill="#78350f" stroke="#92400e"/>
+    <path d="M32 10 L36 20 L32 24 L28 20 Z" fill="#64748b"/>
+  </g>
+</svg>

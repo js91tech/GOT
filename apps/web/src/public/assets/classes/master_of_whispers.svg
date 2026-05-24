@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Master of Whispers">
+  <defs>
+    <linearGradient id="mwS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#4c1d95"/><stop stop-color="#1e1b4b"/></linearGradient>
+    <linearGradient id="mwM" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e2e8f0"/><stop stop-color="#94a3b8"/></linearGradient>
+    <filter id="mwF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#mwF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#mwS)" stroke="#7c3aed"/>
+    <line x1="32" y1="16" x2="32" y2="48" stroke="#c4b5fd" stroke-width="0.75" opacity="0.6"/>
+    <line x1="16" y1="32" x2="48" y2="32" stroke="#c4b5fd" stroke-width="0.75" opacity="0.6"/>
+    <line x1="20" y1="20" x2="44" y2="44" stroke="#c4b5fd" stroke-width="0.75" opacity="0.6"/>
+    <line x1="44" y1="20" x2="20" y2="44" stroke="#c4b5fd" stroke-width="0.75" opacity="0.6"/>
+    <ellipse cx="32" cy="32" rx="14" ry="14" fill="none" stroke="#c4b5fd" stroke-width="0.75" opacity="0.5"/>
+    <ellipse cx="32" cy="32" rx="8" ry="8" fill="none" stroke="#c4b5fd" stroke-width="0.75" opacity="0.5"/>
+    <ellipse cx="32" cy="38" rx="8" ry="10" fill="url(#mwM)" stroke="#64748b"/>
+    <ellipse cx="28" cy="36" rx="2" ry="1.5" fill="#1e293b"/>
+    <ellipse cx="36" cy="36" rx="2" ry="1.5" fill="#1e293b"/>
+    <path d="M28 42 Q32 44 36 42" fill="none" stroke="#475569" stroke-width="1"/>
+  </g>
+</svg>

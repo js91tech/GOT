@@ -1,5 +1,4 @@
 <%- include('partials/head', { loggedIn: true, title: 'Armory', pageClass: 'page-realm page-dashboard' }) %>
-<link rel="stylesheet" href="/public/dashboard-studio.css" />
 <%- include('partials/realm-shell-open') %>
 
 <div class="dash-page dash-studio">
@@ -13,7 +12,7 @@
     <% weapons.forEach(function(item) { %>
     <article class="realm-panel shop-card armory-card <%= item.locked ? 'armory-locked' : '' %>">
       <div class="shop-card-head">
-        <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="64" height="64" />
+        <div class="shop-icon-frame shop-icon-frame--<%= item.rarity %>"><img class="shop-item-icon" src="<%= item.iconUrl %>" alt="<%= item.name %>" width="64" height="64" /></div>
         <div class="shop-item-meta">
           <strong><%= item.name %></strong>
           <span class="shop-type-tag weapon-tag">Weapon · Lv<%= item.min_level %></span>
@@ -34,7 +33,7 @@
     <% armor.forEach(function(item) { %>
     <article class="realm-panel shop-card armory-card <%= item.locked ? 'armory-locked' : '' %>">
       <div class="shop-card-head">
-        <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="64" height="64" />
+        <div class="shop-icon-frame shop-icon-frame--<%= item.rarity %>"><img class="shop-item-icon" src="<%= item.iconUrl %>" alt="<%= item.name %>" width="64" height="64" /></div>
         <div class="shop-item-meta">
           <strong><%= item.name %></strong>
           <span class="shop-type-tag armor-tag">Armor · Lv<%= item.min_level %></span>

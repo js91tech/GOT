@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Knight Errant">
+  <defs>
+    <linearGradient id="keS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92400e"/><stop stop-color="#451a03"/></linearGradient>
+    <linearGradient id="keH" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d6d3d1"/><stop stop-color="#78716c"/></linearGradient>
+    <filter id="keF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#keF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#keS)" stroke="#b45309"/>
+    <path d="M18 34 Q22 22 32 20 Q42 22 46 34 Q44 40 38 42 Q32 44 26 42 Q20 40 18 34 Z" fill="url(#keH)" stroke="#a8a29e"/>
+    <circle cx="38" cy="28" r="2" fill="#1e293b"/>
+    <path d="M42 26 Q48 20 52 14" fill="none" stroke="#57534e" stroke-width="2"/>
+    <path d="M52 14 L54 10 L50 12" fill="#78716c"/>
+    <path d="M20 36 L14 48" stroke="#44403c" stroke-width="2"/>
+    <rect x="12" y="46" width="4" height="6" rx="1" fill="#57534e"/>
+  </g>
+</svg>

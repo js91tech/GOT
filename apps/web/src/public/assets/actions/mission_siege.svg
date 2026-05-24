@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Siege mission">
+  <defs>
+    <radialGradient id="gBg" cx="50%" cy="28%" r="75%"><stop offset="0%" stop-color="#374151"/><stop offset="100%" stop-color="#0a0a0a"/></radialGradient>
+    <linearGradient id="gStone" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94a3b8"/><stop stop-color="#1e293b"/></linearGradient>
+    <linearGradient id="gWood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#78716c"/><stop stop-color="#292524"/></linearGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#92400e"/></linearGradient>
+    <linearGradient id="gRock" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#64748b"/><stop stop-color="#334155"/></linearGradient>
+    <filter id="gSh"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.6"/></filter>
+  </defs>
+  <rect width="256" height="256" rx="20" fill="url(#gBg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="14" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.3"/>
+  <path d="M128 200 L80 240 H176 Z" fill="#0f172a" opacity="0.45"/>
+  <path d="M0 196 Q64 188 128 194 Q192 200 256 192 L256 240 L0 240 Z" fill="#1e293b" opacity="0.5"/>
+  <g filter="url(#gSh)">
+    <rect x="148" y="80" width="88" height="116" fill="url(#gStone)" stroke="#64748b" stroke-width="2"/>
+    <rect x="156" y="88" width="72" height="12" fill="url(#gStone)" stroke="#475569" stroke-width="1"/>
+    <rect x="160" y="108" width="20" height="24" rx="2" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+    <rect x="196" y="108" width="20" height="24" rx="2" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+    <rect x="160" y="148" width="20" height="24" rx="2" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+    <rect x="196" y="148" width="20" height="24" rx="2" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+    <rect x="148" y="72" width="88" height="12" rx="2" fill="url(#gStone)" stroke="#64748b" stroke-width="2"/>
+    <rect x="176" y="52" width="32" height="24" fill="url(#gStone)" stroke="#64748b" stroke-width="2"/>
+    <path d="M168 52 L192 28 L216 52 Z" fill="url(#gStone)" stroke="#64748b" stroke-width="2"/>
+    <rect x="188" y="32" width="8" height="22" fill="url(#gWood)" stroke="#57534e" stroke-width="1"/>
+    <rect x="52" y="120" width="72" height="76" fill="url(#gWood)" stroke="#57534e" stroke-width="2"/>
+    <rect x="44" y="112" width="88" height="12" rx="2" fill="url(#gWood)" stroke="#57534e" stroke-width="2"/>
+    <rect x="60" y="88" width="56" height="28" fill="url(#gWood)" stroke="#57534e" stroke-width="2"/>
+    <line x1="68" y1="96" x2="68" y2="108" stroke="#44403c" stroke-width="2"/>
+    <line x1="84" y1="96" x2="84" y2="108" stroke="#44403c" stroke-width="2"/>
+    <line x1="100" y1="96" x2="100" y2="108" stroke="#44403c" stroke-width="2"/>
+    <rect x="72" y="132" width="32" height="8" rx="2" fill="#44403c"/>
+    <path d="M124 148 L148 132" stroke="#57534e" stroke-width="4" stroke-linecap="round"/>
+    <path d="M124 148 Q108 140 96 148" stroke="#57534e" stroke-width="3" fill="none"/>
+    <ellipse cx="108" cy="148" rx="14" ry="10" fill="url(#gRock)" stroke="#475569" stroke-width="1.5"/>
+    <path d="M36 196 L52 168 L68 196 L52 204 Z" fill="url(#gWood)" stroke="#57534e" stroke-width="2"/>
+    <rect x="48" y="148" width="8" height="24" fill="url(#gWood)" stroke="#57534e" stroke-width="1.5"/>
+    <circle cx="52" cy="196" r="10" fill="url(#gWood)" stroke="#57534e" stroke-width="2"/>
+    <circle cx="52" cy="196" r="4" fill="#44403c"/>
+    <rect x="56" y="176" width="56" height="6" rx="2" fill="#57534e" stroke="#44403c" stroke-width="1"/>
+    <path d="M88 176 L104 160" stroke="#64748b" stroke-width="2"/>
+    <circle cx="192" cy="40" r="5" fill="url(#gGold)" stroke="#fde68a" stroke-width="1"/>
+  </g>
+  <circle cx="128" cy="128" r="76" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.22"/>
+</svg>

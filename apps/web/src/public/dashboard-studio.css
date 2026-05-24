@@ -333,17 +333,17 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .tile-art--train {
   opacity: 0.82;
-  background-image: url('/public/assets/actions/train.svg?v=3');
+  background-image: url('/public/assets/actions/train.svg?v=4');
 }
 
 .dash-studio .tile-art--mission {
   opacity: 0.82;
-  background-image: url('/public/assets/actions/mission.svg?v=3');
+  background-image: url('/public/assets/actions/mission.svg?v=4');
 }
 
 .dash-studio .tile-art--worker {
   opacity: 0.82;
-  background-image: url('/public/assets/actions/work.svg?v=3');
+  background-image: url('/public/assets/actions/work.svg?v=4');
 }
 
 .dash-studio .action-tile--wheel {
@@ -354,7 +354,7 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .wheel-disc {
   border-color: var(--studio-accent-dim);
-  background: url('/public/assets/icons/wheel.svg?v=3') center / 92% no-repeat,
+  background: url('/public/assets/icons/wheel.svg?v=4') center / 92% no-repeat,
     conic-gradient(from 0deg, #78350f 0deg 45deg, #a16207 45deg 90deg, #57534e 90deg 135deg, #a16207 135deg 180deg, #78350f 180deg 225deg, #44403c 225deg 270deg, #a16207 270deg 315deg, #78350f 315deg 360deg);
   box-shadow: 0 0 24px rgba(212, 175, 55, 0.25), inset 0 0 16px rgba(0, 0, 0, 0.5);
   animation: wheel-idle 18s linear infinite;
@@ -782,8 +782,10 @@ body.page-dashboard .site-nav a:hover {
   gap: 0.5rem;
 }
 .class-card-icon {
-  font-size: 2rem;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
 }
 .class-path-line {
   font-size: 1.1rem;
@@ -800,4 +802,101 @@ body.page-dashboard .site-nav a:hover {
 .class-tree li {
   padding: 0.35rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Resource meters */
+.dash-studio .resource-meter {
+  height: 4px;
+  margin: 0.35rem 0.5rem 0;
+  background: rgba(0, 0, 0, 0.45);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.dash-studio .resource-meter-fill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.35s ease;
+}
+
+.dash-studio .resource-meter-fill--morale {
+  background: linear-gradient(90deg, #ea580c, #fb923c);
+  box-shadow: 0 0 8px rgba(251, 146, 60, 0.45);
+}
+
+.dash-studio .resource-meter-fill--focus {
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  box-shadow: 0 0 8px rgba(167, 139, 250, 0.35);
+}
+
+/* Inventory rarity */
+.dash-studio .inv-rarity--uncommon {
+  border-color: rgba(34, 197, 94, 0.25) !important;
+}
+
+.dash-studio .inv-rarity--rare {
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  box-shadow: inset 0 0 12px rgba(59, 130, 246, 0.08);
+}
+
+.dash-studio .inv-rarity--epic {
+  border-color: rgba(168, 85, 247, 0.4) !important;
+  box-shadow: inset 0 0 14px rgba(168, 85, 247, 0.12);
+}
+
+.dash-studio .inv-rarity--legendary {
+  border-color: rgba(212, 175, 55, 0.5) !important;
+  box-shadow: inset 0 0 16px rgba(212, 175, 55, 0.15), 0 0 12px rgba(212, 175, 55, 0.1);
+}
+
+/* Shop / armory icon frames */
+.dash-studio .shop-icon-frame,
+.shop-icon-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  background: radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0.45));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+}
+
+.shop-icon-frame--uncommon { border-color: rgba(34, 197, 94, 0.35); }
+.shop-icon-frame--rare { border-color: rgba(59, 130, 246, 0.4); }
+.shop-icon-frame--epic { border-color: rgba(168, 85, 247, 0.45); }
+.shop-icon-frame--legendary { border-color: rgba(212, 175, 55, 0.55); box-shadow: 0 0 16px rgba(212, 175, 55, 0.15); }
+
+.dash-studio .shop-item-icon {
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* Class page icons */
+.class-crumb-icon {
+  vertical-align: middle;
+  margin-right: 0.2rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
+}
+
+.class-card-icon img {
+  display: block;
+  margin: 0 auto;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+
+/* House vignette tints */
+.dash-house-stark .profile-inner--crest { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(107, 127, 143, 0.06); }
+.dash-house-lannister .profile-inner--crest { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(185, 28, 28, 0.08); }
+.dash-house-targaryen .profile-inner--crest { box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 0 40px rgba(220, 38, 38, 0.08); }
+
+/* Wheel spin on submit */
+.wheel-disc--spinning {
+  animation: wheel-spin 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+}
+
+@keyframes wheel-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(720deg); }
 }

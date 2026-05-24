@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Champion">
+  <defs>
+    <linearGradient id="chS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#78716c"/><stop stop-color="#292524"/></linearGradient>
+    <linearGradient id="chG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="chF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#chF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#chS)" stroke="#a8a29e"/>
+    <path d="M22 44 L32 16 L42 44" fill="none" stroke="url(#chG)" stroke-width="3" stroke-linecap="round"/>
+    <path d="M42 44 L32 16 L22 44" fill="none" stroke="url(#chG)" stroke-width="3" stroke-linecap="round"/>
+    <rect x="30" y="14" width="4" height="6" rx="1" fill="#78350f" stroke="#fde68a"/>
+    <rect x="30" y="42" width="4" height="6" rx="1" fill="#78350f" stroke="#fde68a"/>
+    <circle cx="32" cy="32" r="4" fill="#b45309" stroke="#fde68a"/>
+  </g>
+</svg>

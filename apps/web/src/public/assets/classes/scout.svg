@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Scout">
+  <defs>
+    <linearGradient id="scS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#365314"/><stop stop-color="#14532d"/></linearGradient>
+    <linearGradient id="scW" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#78716c"/><stop stop-color="#44403c"/></linearGradient>
+    <filter id="scF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#scF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#scS)" stroke="#4ade80"/>
+    <ellipse cx="32" cy="26" rx="10" ry="7" fill="#fef3c7" stroke="#78350f"/>
+    <circle cx="32" cy="26" r="4" fill="#1e293b"/>
+    <circle cx="33" cy="25" r="1.5" fill="#fef3c7"/>
+    <path d="M14 40 Q32 24 50 40" fill="none" stroke="url(#scW)" stroke-width="2.5"/>
+    <path d="M50 40 L54 36 L50 32" fill="none" stroke="#78716c" stroke-width="2"/>
+    <line x1="32" y1="20" x2="32" y2="44" stroke="#57534e" stroke-width="1"/>
+    <path d="M28 44 L36 44 L34 50 L30 50 Z" fill="#44403c"/>
+  </g>
+</svg>

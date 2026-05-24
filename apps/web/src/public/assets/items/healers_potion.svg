@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Healer's kit">
+  <defs>
+    <linearGradient id="hpB" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#166534"/><stop stop-color="#052e16"/></linearGradient>
+    <filter id="hpS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#hpS)">
+    <rect x="16" y="20" width="32" height="28" rx="3" fill="url(#hpB)" stroke="#22c55e"/>
+    <path d="M32 26 V42 M24 34 H40" stroke="#bbf7d0" stroke-width="3" stroke-linecap="round"/>
+    <rect x="20" y="14" width="24" height="8" rx="2" fill="#15803d" stroke="#22c55e"/>
+  </g>
+</svg>

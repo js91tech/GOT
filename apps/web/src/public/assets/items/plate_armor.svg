@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Plate armor">
+  <defs>
+    <linearGradient id="plA" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cbd5e1"/><stop stop-color="#475569"/></linearGradient>
+    <filter id="plS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#plS)">
+    <path d="M16 14 L48 14 L52 54 L12 54 Z" fill="url(#plA)" stroke="#94a3b8"/>
+    <path d="M20 20 H44 M18 30 H46 M16 40 H48" stroke="#64748b" stroke-width="1.5"/>
+    <path d="M32 14 L36 24 L32 34 L28 24 Z" fill="#334155" stroke="#475569"/>
+    <ellipse cx="32" cy="18" rx="8" ry="3" fill="#fff" opacity="0.25"/>
+  </g>
+</svg>

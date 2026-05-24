@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Focus crown relic">
+  <defs>
+    <linearGradient id="rcG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#ca8a04"/></linearGradient>
+    <filter id="rcS"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#d97706" flood-opacity="0.4"/></filter>
+  </defs>
+  <g filter="url(#rcS)">
+    <path d="M16 40 H48 L44 28 L40 36 L32 22 L24 36 L20 28 Z" fill="url(#rcG)" stroke="#fde68a"/>
+    <circle cx="32" cy="24" r="4" fill="#7c3aed" stroke="#c4b5fd"/>
+    <rect x="18" y="40" width="28" height="6" rx="2" fill="#78350f"/>
+  </g>
+</svg>

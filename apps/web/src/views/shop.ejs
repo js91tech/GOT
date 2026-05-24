@@ -1,4 +1,4 @@
-<%- include('partials/head', { loggedIn: true, title: 'Shop', pageClass: 'page-realm' }) %>
+<%- include('partials/head', { loggedIn: true, title: 'Shop', pageClass: 'page-realm page-dashboard' }) %>
 <%- include('partials/realm-shell-open') %>
 
 <% if (flash) { %><div class="flash"><%= flash %></div><% } %>
@@ -9,7 +9,7 @@
 <% items.forEach(function(item) { %>
   <article class="realm-panel wood-panel shop-card">
     <div class="shop-card-head">
-      <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="56" height="56" loading="lazy" />
+      <div class="shop-icon-frame shop-icon-frame--<%= item.rarity %>"><img class="shop-item-icon" src="<%= item.iconUrl %>" alt="<%= item.name %>" width="56" height="56" loading="lazy" /></div>
       <div class="shop-item-meta">
         <strong><%= item.name %></strong>
         <span class="price"><%= item.shop_price.toLocaleString() %> gold</span>

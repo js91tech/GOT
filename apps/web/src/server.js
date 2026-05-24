@@ -4,10 +4,11 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
 import { GameService, gotLabel } from '@westeros/game-core';
-import { gifForAction, HERO_IMAGE, MISSION_IMAGE, crestUrl } from './action-media.js';
+import { gifForAction, HERO_IMAGE, MISSION_IMAGE, missionImageUrl, crestUrl } from './action-media.js';
 import { assetUrl } from './assets.js';
 import { classIconUrl } from './class-icons.js';
 import { itemIconUrl } from './item-icons.js';
+import { itemRarityTier } from './item-rarity.js';
 import { portraitUrl } from './portraits.js';
 import { fetchGuildMemberUsers } from './discord-guild.js';
 import { createApiProxy, resolveApiProxyTarget } from './api-proxy.js';
@@ -171,7 +172,8 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const confinement = GameService.confinement(id, name);
   const crimes = GameService.crimes(id, name).map((c) => ({
     ...c,
-    name: gotLabel(c.id, c.name)
+    name: gotLabel(c.id, c.name),
+    imageUrl: missionImageUrl(c.id)
   }));
   const action = req.query.action || '';
   const flashOk = req.query.ok !== '0';
@@ -180,7 +182,8 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const inventoryWithIcons = inventory.map((i) => ({
     ...i,
     name: gotLabel(i.item_id, i.name),
-    iconUrl: itemIconUrl(i.item_id, i.item_type)
+    iconUrl: itemIconUrl(i.item_id, i.item_type),
+    rarity: itemRarityTier(i.item_id, i.item_type, i.shop_price)
   }));
   const equippable = inventoryWithIcons.filter(
     (i) => i.equip_slot || ['weapon', 'armor', 'gear'].includes(i.item_type)
@@ -198,7 +201,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
     factions,
     house,
     houseCrest: house ? crestUrl(house.crest_key) : null,
-    playerPortrait: portraitUrl(id, name),
+    playerPortrait: portraitUrl(id, name, player.class_id || 'squire'),
     classInfo: classProgress.current,
     classIcon: classIconUrl(player.class_id || 'squire'),
     flash: req.query.msg,
@@ -299,7 +302,8 @@ app.post('/bank', requireAuth, (req, res) => {
 app.get('/shop', requireAuth, (req, res) => {
   const items = GameService.shop().map((item) => ({
     ...item,
-    iconUrl: itemIconUrl(item.id, item.item_type)
+    iconUrl: itemIconUrl(item.id, item.item_type),
+    rarity: itemRarityTier(item.id, item.item_type, item.shop_price)
   }));
   res.render('shop', { items, flash: req.query.msg });
 });
@@ -307,7 +311,8 @@ app.get('/shop', requireAuth, (req, res) => {
 function mapArmoryItems(items) {
   return items.map((item) => ({
     ...item,
-    iconUrl: itemIconUrl(item.id, item.item_type)
+    iconUrl: itemIconUrl(item.id, item.item_type),
+    rarity: itemRarityTier(item.id, item.item_type, item.shop_price)
   }));
 }
 
@@ -338,9 +343,19 @@ app.get('/character', requireAuth, (req, res) => {
 app.get('/class', requireAuth, (req, res) => {
   const { player } = GameService.profile(req.session.discordId, req.session.username);
   const progress = GameService.classProgress(req.session.discordId, req.session.username);
+  const pathWithIcons = progress.path.map((c) => ({ ...c, iconUrl: classIconUrl(c.id) }));
+  const milestone = progress.milestone
+    ? {
+        ...progress.milestone,
+        options: progress.milestone.options.map((opt) => ({
+          ...opt,
+          iconUrl: classIconUrl(opt.id)
+        }))
+      }
+    : progress.milestone;
   res.render('class', {
     player,
-    progress,
+    progress: { ...progress, path: pathWithIcons, milestone },
     bonusSummary: progress.bonusSummary || '',
     flash: req.query.msg
   });
@@ -366,7 +381,7 @@ app.get('/pvp', requireAuth, async (req, res) => {
   const targets = GameService.listPvpTargets(req.session.discordId, guildMembers);
   const players = targets.map((p) => ({
     ...p,
-    portraitUrl: portraitUrl(p.discord_id, p.username)
+    portraitUrl: portraitUrl(p.discord_id, p.username, p.class_id)
   }));
   const flashOk = req.query.ok !== '0';
   res.render('pvp', {

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Lord Commander">
+  <defs>
+    <linearGradient id="lcS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#64748b"/><stop stop-color="#1e293b"/></linearGradient>
+    <linearGradient id="lcG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="lcF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#lcF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#lcS)" stroke="#94a3b8"/>
+    <path d="M20 20 H44 V24 H20 Z" fill="url(#lcG)" stroke="#fde68a"/>
+    <path d="M22 20 V16 H26 V20 M30 20 V14 H34 V20 M38 20 V16 H42 V20" fill="url(#lcG)" stroke="#fde68a"/>
+    <circle cx="32" cy="22" r="2" fill="#b45309"/>
+    <path d="M32 30 L38 36 L32 48 L26 36 Z" fill="#334155" stroke="#64748b"/>
+    <path d="M32 34 L34 38 L32 44 L30 38 Z" fill="url(#lcG)" stroke="#fde68a"/>
+  </g>
+</svg>

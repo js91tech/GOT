@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Grand Maester">
+  <defs>
+    <linearGradient id="gmS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#1e3a5f"/><stop stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="gmT" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94a3b8"/><stop stop-color="#475569"/></linearGradient>
+    <filter id="gmF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#gmF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#gmS)" stroke="#334155"/>
+    <rect x="24" y="36" width="16" height="14" fill="url(#gmT)" stroke="#64748b"/>
+    <rect x="22" y="32" width="20" height="6" fill="#475569" stroke="#64748b"/>
+    <path d="M26 32 V28 H38 V32" fill="#64748b"/>
+    <ellipse cx="26" cy="24" rx="4" ry="3" fill="#64748b" stroke="#94a3b8"/>
+    <ellipse cx="38" cy="24" rx="4" ry="3" fill="#64748b" stroke="#94a3b8"/>
+    <ellipse cx="32" cy="20" rx="5" ry="4" fill="#64748b" stroke="#94a3b8"/>
+    <rect x="30" y="40" width="4" height="6" fill="#334155"/>
+    <path d="M20 50 H44" stroke="#475569" stroke-width="2"/>
+  </g>
+</svg>

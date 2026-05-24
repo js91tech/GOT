@@ -21,6 +21,16 @@ export const ACTION_IMAGES = {
 
 export const HERO_IMAGE = assetUrl('/public/assets/hero-realm.svg');
 export const MISSION_IMAGE = assetUrl(`${A}/mission.svg`);
+export const MISSION_IMAGES = {
+  petty_raid: assetUrl(`${A}/mission_raid.svg`),
+  border_patrol: assetUrl(`${A}/mission_patrol.svg`),
+  sack_village: assetUrl(`${A}/mission_sack.svg`),
+  siege_assault: assetUrl(`${A}/mission_siege.svg`)
+};
+
+export function missionImageUrl(missionId) {
+  return MISSION_IMAGES[missionId] || MISSION_IMAGE;
+}
 export const TRAIN_IMAGE = assetUrl(`${A}/train.svg`);
 export const WORK_IMAGE = assetUrl(`${A}/work.svg`);
 export const WHEEL_IMAGE = assetUrl('/public/assets/icons/wheel.svg');

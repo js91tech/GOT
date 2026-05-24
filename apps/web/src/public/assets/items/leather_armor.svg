@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Leather jerkin">
+  <defs>
+    <linearGradient id="laL" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92400e"/><stop stop-color="#451a03"/></linearGradient>
+    <filter id="laS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#laS)">
+    <path d="M20 18 L44 18 L48 52 L16 52 Z" fill="url(#laL)" stroke="#78350f"/>
+    <path d="M24 22 H40 M22 32 H42 M20 42 H44" stroke="#451a03" stroke-width="1" opacity="0.5"/>
+    <path d="M32 18 V52" stroke="#451a03" stroke-width="1" opacity="0.4"/>
+    <circle cx="32" cy="28" r="2" fill="#fde68a" opacity="0.6"/>
+  </g>
+</svg>

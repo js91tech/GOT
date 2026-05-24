@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Valyrian steel">
+  <defs>
+    <linearGradient id="vbB" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e0f2fe"/><stop stop-color="#64748b"/></linearGradient>
+    <filter id="vbS"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#38bdf8" flood-opacity="0.45"/></filter>
+  </defs>
+  <g filter="url(#vbS)">
+    <path d="M30 6 L34 6 L36 44 L32 50 L28 44 Z" fill="url(#vbB)" stroke="#bae6fd"/>
+    <path d="M26 44 L38 44 L34 54 L30 54 Z" fill="#1e293b" stroke="#475569"/>
+    <circle cx="32" cy="56" r="3" fill="#0ea5e9"/>
+    <path d="M31 10 L33 10 L32 18 Z" fill="#0c4a6e"/>
+    <path d="M28 24 L36 32 M28 32 L36 24" stroke="#7dd3fc" stroke-width="0.8"/>
+  </g>
+</svg>

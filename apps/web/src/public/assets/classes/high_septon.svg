@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="High Septon">
+  <defs>
+    <linearGradient id="hsS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fef3c7"/><stop stop-color="#92400e"/></linearGradient>
+    <linearGradient id="hsG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="hsF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#hsF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#hsS)" stroke="#fde68a"/>
+    <polygon points="32,17 34.2,23.5 40.6,21.2 36.9,26.9 38.8,30.4 35.1,31.1 33,38.1 32,33 27.2,38.1 28.9,31.1 25.1,30.4 27.1,26.9 23.4,21.2 29.8,23.5" fill="url(#hsG)" stroke="#fde68a"/>
+    <circle cx="32" cy="28" r="2.5" fill="#78350f"/>
+  </g>
+</svg>

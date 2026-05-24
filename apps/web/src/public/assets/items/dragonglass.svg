@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Dragonglass">
+  <defs>
+    <linearGradient id="dgG" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1e1b4b"/><stop stop-color="#0f172a"/></linearGradient>
+    <filter id="dgS"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#6366f1" flood-opacity="0.4"/></filter>
+  </defs>
+  <g filter="url(#dgS)">
+    <path d="M32 8 L44 28 L38 56 L32 52 L26 56 L20 28 Z" fill="url(#dgG)" stroke="#818cf8"/>
+    <path d="M32 16 L36 28 L32 44 L28 28 Z" fill="#312e81" opacity="0.6"/>
+    <path d="M24 32 L40 32 M28 24 L36 40" stroke="#a5b4fc" stroke-width="0.8" opacity="0.5"/>
+  </g>
+</svg>

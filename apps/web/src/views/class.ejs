@@ -1,5 +1,4 @@
 <%- include('partials/head', { loggedIn: true, title: 'Class Path', pageClass: 'page-realm page-dashboard' }) %>
-<link rel="stylesheet" href="/public/dashboard-studio.css" />
 <%- include('partials/realm-shell-open') %>
 
 <div class="dash-page dash-studio">
@@ -17,7 +16,7 @@
   <h2>Your path</h2>
   <p class="class-path-line">
     <% progress.path.forEach(function(c, i) { %>
-      <span class="class-crumb"><%= c.icon %> <%= c.name %></span><% if (i < progress.path.length - 1) { %> → <% } %>
+      <span class="class-crumb"><img class="class-crumb-icon" src="<%= c.iconUrl %>" alt="" width="20" height="20" /> <%= c.name %></span><% if (i < progress.path.length - 1) { %> → <% } %>
     <% }); %>
   </p>
   <p class="stat"><%= progress.current.description %></p>
@@ -32,7 +31,7 @@
     <% progress.milestone.options.forEach(function(opt) { %>
     <form method="post" action="/class" class="class-card">
       <input type="hidden" name="classId" value="<%= opt.id %>" />
-      <div class="class-card-icon"><%= opt.icon %></div>
+      <div class="class-card-icon"><img src="<%= opt.iconUrl %>" alt="<%= opt.name %>" width="48" height="48" /></div>
       <h3><%= opt.name %></h3>
       <p><%= opt.description %></p>
       <p class="stat class-effect-line"><%= opt.effectSummary %></p>

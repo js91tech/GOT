@@ -1,7 +1,7 @@
 <%- include('partials/head', { loggedIn: true, title: 'Dashboard', pageClass: 'page-realm page-dashboard' }) %>
 <%- include('partials/realm-shell-open') %>
 
-<div class="dash-page dash-studio">
+<div class="dash-page dash-studio<%= typeof house !== 'undefined' && house ? ' dash-house-' + house.id : '' %>">
   <% if (flash) { %>
   <div class="flash-wrap <%= flashOk ? '' : 'error' %>">
     <% if (flashGif) { %><img class="flash-gif" src="<%= flashGif %>" alt="" loading="lazy" /><% } %>
@@ -56,6 +56,10 @@
   </section>
 
   <section class="resource-row" aria-label="Resources">
+    <% var moraleCap = player.ce > status.morale_regen_cap ? status.morale_overflow_cap : status.morale_regen_cap; %>
+    <% var moralePct = moraleCap ? Math.min(100, Math.round((player.ce / moraleCap) * 100)) : 0; %>
+    <% var focusCap = player.focus > status.focus_regen_cap ? status.focus_overflow_cap : status.focus_regen_cap; %>
+    <% var focusPct = focusCap ? Math.min(100, Math.round((player.focus / focusCap) * 100)) : 0; %>
     <div class="resource-stone" data-icon="coins">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/gold.svg') %>" alt="Gold coins" width="40" height="40" /></div>
       <span class="resource-label">Coins</span>
@@ -69,12 +73,14 @@
     <div class="resource-stone resource-stone--ce<%= player.ce <= status.morale_regen_cap * 0.25 ? ' resource-stone--ce-low' : '' %>" data-icon="ce">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/morale.svg') %>" alt="Morale" width="40" height="40" /></div>
       <span class="resource-label">Morale</span>
-      <span class="resource-value"><%= player.ce %>/<%= player.ce > status.morale_regen_cap ? status.morale_overflow_cap : status.morale_regen_cap %></span>
+      <span class="resource-value"><%= player.ce %>/<%= moraleCap %></span>
+      <div class="resource-meter" aria-hidden="true"><span class="resource-meter-fill resource-meter-fill--morale" style="width:<%= moralePct %>%"></span></div>
     </div>
     <div class="resource-stone" data-icon="focus">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/focus.svg') %>" alt="Focus" width="40" height="40" /></div>
       <span class="resource-label">Focus</span>
-      <span class="resource-value"><%= player.focus %>/<%= player.focus > status.focus_regen_cap ? status.focus_overflow_cap : status.focus_regen_cap %></span>
+      <span class="resource-value"><%= player.focus %>/<%= focusCap %></span>
+      <div class="resource-meter" aria-hidden="true"><span class="resource-meter-fill resource-meter-fill--focus" style="width:<%= focusPct %>%"></span></div>
     </div>
     <div class="resource-stone" data-icon="wheel">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/wheel.svg') %>" alt="Wheel of fate" width="40" height="40" /></div>
@@ -118,11 +124,11 @@
 
     <article class="action-tile action-tile--mission">
       <h3>Realm mission</h3>
-      <div class="tile-art tile-art--mission" aria-hidden="true"></div>
+      <div class="tile-art tile-art--mission" data-default="<%= missionImage %>" aria-hidden="true"></div>
       <form method="post" action="/crime" class="tile-form">
         <select name="mission">
           <% crimes.forEach(function(c) { %>
-            <option value="<%= c.id %>" <%= c.locked ? 'disabled' : '' %>><%= c.name %> (Lv<%= c.min_level %>)<%= c.locked ? ' 🔒' : '' %></option>
+            <option value="<%= c.id %>" data-image="<%= c.imageUrl %>" <%= c.locked ? 'disabled' : '' %>><%= c.name %> (Lv<%= c.min_level %>)<%= c.locked ? ' 🔒' : '' %></option>
           <% }); %>
         </select>
         <button type="submit" class="btn-realm">Run</button>
@@ -224,8 +230,8 @@
       <h3>Inventory</h3>
       <ul class="inventory-list">
         <% inventory.forEach(function(i) { %>
-          <li>
-            <img class="inv-icon-img" src="<%= i.iconUrl %>" alt="" width="36" height="36" loading="lazy" />
+          <li class="inv-rarity inv-rarity--<%= i.rarity %>">
+            <img class="inv-icon-img" src="<%= i.iconUrl %>" alt="<%= i.name %>" width="36" height="36" loading="lazy" />
             <span class="inv-text"><%= i.name %> ×<%= i.quantity %><% if (i.equip_slot) { %> <em>(<%= i.equip_slot %>)</em><% } %></span>
           </li>
         <% }); %>
@@ -238,4 +244,5 @@
 </div>
 
 <%- include('partials/realm-shell-close') %>
+<script src="/public/dashboard-interactions.js?v=4" defer></script>
 <%- include('partials/foot') %>

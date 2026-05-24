@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Sack mission">
+  <defs>
+    <radialGradient id="sBg" cx="50%" cy="28%" r="75%"><stop offset="0%" stop-color="#451a03"/><stop offset="100%" stop-color="#0a0705"/></radialGradient>
+    <linearGradient id="sFlame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#dc2626"/><stop stop-color="#fde68a"/></linearGradient>
+    <linearGradient id="sSmoke" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#44403c" stop-opacity="0.6"/><stop stop-color="#78716c" stop-opacity="0"/></linearGradient>
+    <linearGradient id="sSack" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#d6b56a"/><stop stop-color="#78350f"/></linearGradient>
+    <linearGradient id="sGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#92400e"/></linearGradient>
+    <linearGradient id="sRoof" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#57534e"/><stop stop-color="#292524"/></linearGradient>
+    <radialGradient id="sGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f97316" stop-opacity="0.65"/><stop offset="100%" stop-color="#f97316" stop-opacity="0"/></radialGradient>
+    <filter id="sSh"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.6"/></filter>
+    <filter id="sFire"><feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#dc2626" flood-opacity="0.45"/></filter>
+  </defs>
+  <rect width="256" height="256" rx="20" fill="url(#sBg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="14" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.3"/>
+  <path d="M128 200 L80 240 H176 Z" fill="#0f172a" opacity="0.45"/>
+  <g filter="url(#sSh)">
+    <g filter="url(#sFire)">
+      <circle cx="72" cy="120" r="28" fill="url(#sGlow)"/>
+      <path d="M56 128 L72 88 L88 128 L72 140 Z" fill="url(#sRoof)" stroke="#44403c" stroke-width="1.5"/>
+      <rect x="60" y="128" width="24" height="28" fill="#57534e" stroke="#44403c" stroke-width="1.5"/>
+      <path d="M72 96 Q80 108 72 120 Q64 108 72 96 Z" fill="url(#sFlame)"/>
+      <path d="M72 104 Q76 112 72 116 Q68 112 72 104 Z" fill="#fde68a" opacity="0.75"/>
+      <circle cx="184" cy="112" r="32" fill="url(#sGlow)"/>
+      <path d="M164 124 L184 76 L204 124 L184 140 Z" fill="url(#sRoof)" stroke="#44403c" stroke-width="1.5"/>
+      <rect x="170" y="124" width="28" height="32" fill="#57534e" stroke="#44403c" stroke-width="1.5"/>
+      <path d="M184 84 Q194 100 184 116 Q174 100 184 84 Z" fill="url(#sFlame)"/>
+      <path d="M184 92 Q188 102 184 108 Q180 102 184 92 Z" fill="#fde68a" opacity="0.75"/>
+      <ellipse cx="128" cy="72" rx="40" ry="16" fill="url(#sSmoke)"/>
+    </g>
+    <ellipse cx="128" cy="188" rx="52" ry="14" fill="#1c1917" opacity="0.6"/>
+    <path d="M96 148 Q128 132 160 148 Q168 172 160 196 Q128 208 96 196 Q88 172 96 148 Z" fill="url(#sSack)" stroke="#92400e" stroke-width="2"/>
+    <path d="M108 148 Q128 140 148 148" fill="none" stroke="#78350f" stroke-width="2"/>
+    <circle cx="116" cy="168" r="6" fill="url(#sGold)" stroke="#fde68a" stroke-width="1"/>
+    <circle cx="140" cy="176" r="5" fill="url(#sGold)" stroke="#fde68a" stroke-width="1"/>
+    <circle cx="128" cy="160" r="4" fill="url(#sGold)" stroke="#fde68a" stroke-width="1"/>
+    <rect x="120" y="148" width="16" height="6" rx="2" fill="#57534e" stroke="#44403c" stroke-width="1"/>
+    <path d="M120 148 H136 Q132 142 128 142 Q124 142 120 148 Z" fill="#44403c"/>
+    <path d="M148 168 L168 156 L172 168 L160 180 Z" fill="url(#sGold)" stroke="#fde68a" stroke-width="1.5" opacity="0.9"/>
+    <path d="M108 180 L88 192 L92 184 L104 176 Z" fill="#78350f" stroke="#92400e" stroke-width="1"/>
+  </g>
+  <circle cx="128" cy="128" r="76" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.22"/>
+</svg>

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Raid mission">
+  <defs>
+    <radialGradient id="rBg" cx="50%" cy="28%" r="75%"><stop offset="0%" stop-color="#3f2e1e"/><stop offset="100%" stop-color="#0a0705"/></radialGradient>
+    <linearGradient id="rTorch" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#92400e"/></linearGradient>
+    <linearGradient id="rFlame" x1="0" y1="1" x2="0" y2="0"><stop stop-color="#dc2626"/><stop stop-color="#fde68a"/></linearGradient>
+    <linearGradient id="rSil" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#475569"/><stop stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="rGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#92400e"/></linearGradient>
+    <radialGradient id="rGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f97316" stop-opacity="0.7"/><stop offset="100%" stop-color="#f97316" stop-opacity="0"/></radialGradient>
+    <filter id="rSh"><feDropShadow dx="0" dy="6" stdDeviation="6" flood-opacity="0.6"/></filter>
+    <filter id="rFire"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#f97316" flood-opacity="0.55"/></filter>
+  </defs>
+  <rect width="256" height="256" rx="20" fill="url(#rBg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="14" fill="none" stroke="#d4af37" stroke-width="2" opacity="0.3"/>
+  <path d="M128 200 L80 240 H176 Z" fill="#0f172a" opacity="0.45"/>
+  <ellipse cx="128" cy="210" rx="90" ry="12" fill="#1c1917" opacity="0.5"/>
+  <g filter="url(#rSh)">
+    <g fill="url(#rSil)" stroke="#64748b" stroke-width="1.5">
+      <path d="M72 168 L76 140 L80 168 Z"/>
+      <rect x="74" y="168" width="4" height="18" rx="1"/>
+      <path d="M88 172 L92 148 L96 172 Z"/>
+      <rect x="90" y="172" width="4" height="16" rx="1"/>
+      <path d="M104 170 L108 144 L112 170 Z"/>
+      <rect x="106" y="170" width="4" height="17" rx="1"/>
+      <path d="M120 168 L124 142 L128 168 Z"/>
+      <rect x="122" y="168" width="4" height="18" rx="1"/>
+      <path d="M136 170 L140 146 L144 170 Z"/>
+      <rect x="138" y="170" width="4" height="17" rx="1"/>
+      <path d="M152 172 L156 150 L160 172 Z"/>
+      <rect x="154" y="172" width="4" height="16" rx="1"/>
+      <path d="M168 168 L172 138 L176 168 Z"/>
+      <rect x="170" y="168" width="4" height="18" rx="1"/>
+      <path d="M184 170 L188 144 L192 170 Z"/>
+      <rect x="186" y="170" width="4" height="17" rx="1"/>
+    </g>
+    <g filter="url(#rFire)">
+      <circle cx="56" cy="118" r="22" fill="url(#rGlow)"/>
+      <rect x="52" y="128" width="8" height="52" rx="2" fill="url(#rTorch)" stroke="#92400e" stroke-width="1.5"/>
+      <path d="M56 72 Q68 88 64 108 Q56 100 48 108 Q44 88 56 72 Z" fill="url(#rFlame)"/>
+      <path d="M56 80 Q62 92 58 102 Q54 96 50 102 Q48 92 56 80 Z" fill="#fde68a" opacity="0.7"/>
+      <circle cx="200" cy="118" r="22" fill="url(#rGlow)"/>
+      <rect x="196" y="128" width="8" height="52" rx="2" fill="url(#rTorch)" stroke="#92400e" stroke-width="1.5"/>
+      <path d="M200 72 Q212 88 208 108 Q200 100 192 108 Q188 88 200 72 Z" fill="url(#rFlame)"/>
+      <path d="M200 80 Q206 92 202 102 Q198 96 194 102 Q192 92 200 80 Z" fill="#fde68a" opacity="0.7"/>
+    </g>
+    <path d="M128 56 L140 72 L128 88 L116 72 Z" fill="url(#rGold)" stroke="#fde68a" stroke-width="1.5"/>
+    <path d="M128 88 L132 168 L128 176 L124 168 Z" fill="url(#rSil)" stroke="#94a3b8" stroke-width="1.5"/>
+    <ellipse cx="128" cy="56" rx="14" ry="6" fill="#1e293b" stroke="#64748b" stroke-width="1"/>
+  </g>
+  <circle cx="128" cy="128" r="76" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-dasharray="8 6" opacity="0.22"/>
+</svg>

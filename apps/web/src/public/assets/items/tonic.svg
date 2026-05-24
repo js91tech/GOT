@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Morale tonic">
+  <defs>
+    <linearGradient id="tnL" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fb923c"/><stop stop-color="#9a3412"/></linearGradient>
+    <filter id="tnS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#tnS)">
+    <path d="M26 18 H38 V22 H26 Z" fill="#78350f"/>
+    <path d="M24 22 H40 L38 50 H26 Z" fill="url(#tnL)" stroke="#fdba74"/>
+    <ellipse cx="32" cy="36" rx="6" ry="8" fill="#fff" opacity="0.2"/>
+    <rect x="28" y="44" width="8" height="4" rx="1" fill="#451a03"/>
+  </g>
+</svg>

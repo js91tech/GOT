@@ -32,7 +32,8 @@ function formatTarget(row, db, discordName) {
     inHospital,
     inJail,
     enrolled: true,
-    canAttack: !inHospital && !inJail
+    canAttack: !inHospital && !inJail,
+    class_id: row.class_id || 'squire'
   };
 }
 
@@ -68,7 +69,7 @@ export function listPvpTargets(excludeDiscordId, guildMembers = null) {
   const db = getDb();
   const baseSql = `
     SELECT id, discord_id, username, level, coins, hp, max_hp,
-           hospital_until, jail_until, last_login_date
+           hospital_until, jail_until, last_login_date, class_id
     FROM players WHERE banned = 0 AND discord_id != ?`;
 
   const nameById = guildMembers
