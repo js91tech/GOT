@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M16 4 L28 10 L28 22 C28 26 16 30 16 30 C16 30 4 26 4 22 L4 10 Z" fill="none" stroke="#fb923c" stroke-width="2"/><path d="M16 10 L16 22 M12 16 L16 22 L20 16" stroke="#fb923c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Rally morale">
+  <defs>
+    <linearGradient id="rHorn" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbbf24"/><stop stop-color="#92400e"/></linearGradient>
+    <linearGradient id="rWave" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#f97316" stop-opacity="0"/><stop stop-color="#fbbf24" stop-opacity="0.8"/><stop stop-color="#f97316" stop-opacity="0"/></linearGradient>
+    <filter id="rSh"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.4"/></filter>
+  </defs>
+  <g filter="url(#rSh)">
+    <path d="M12 38c6-2 10-8 12-16 0 6 4 12 10 14 6 2 12 0 16-4-4 8 0 16 8 20H12z" fill="url(#rHorn)" stroke="#fde68a" stroke-width="1"/>
+    <path d="M16 36c3-1 6-5 7-9" fill="none" stroke="#fff" opacity="0.3"/>
+    <circle cx="18" cy="26" r="2" fill="#451a03"/>
+    <path d="M38 18c8 0 14 4 16 10M40 14c10 2 16 8 18 16M42 22c6 2 10 6 12 12" fill="none" stroke="url(#rWave)" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M46 12 L50 8 M52 16 L56 14 M48 20 L52 22" stroke="#fde68a" stroke-width="1.5" stroke-linecap="round"/>
+    <ellipse cx="30" cy="52" rx="16" ry="3" fill="#000" opacity="0.2"/>
+  </g>
+</svg>

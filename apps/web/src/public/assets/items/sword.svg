@@ -1,22 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Longsword">
   <defs>
-    <linearGradient id="b" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#f8fafc"/>
-      <stop offset="45%" stop-color="#94a3b8"/>
-      <stop offset="100%" stop-color="#475569"/>
-    </linearGradient>
-    <linearGradient id="h" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="100%" stop-color="#92400e"/>
-    </linearGradient>
-    <filter id="sh"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.35"/></filter>
+    <linearGradient id="swB" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8fafc"/><stop stop-color="#475569"/></linearGradient>
+    <linearGradient id="swG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#78350f"/></linearGradient>
+    <linearGradient id="swFuller" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fff" stop-opacity="0.4"/><stop stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="swS"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.45"/></filter>
   </defs>
-  <g filter="url(#sh)">
-    <path d="M32 4 L36 46 L32 52 L28 46 Z" fill="url(#b)" stroke="#e2e8f0" stroke-width="1"/>
-    <path d="M30 8 L32 44 L34 8 Z" fill="rgba(255,255,255,0.35)"/>
-    <rect x="24" y="42" width="16" height="6" rx="1" fill="url(#h)" stroke="#fde68a"/>
-    <rect x="22" y="46" width="20" height="10" rx="2" fill="url(#h)" stroke="#b8860b"/>
-    <rect x="28" y="52" width="8" height="8" rx="1" fill="#451a03"/>
-    <circle cx="32" cy="48" r="2" fill="#fde68a"/>
+  <g filter="url(#swS)">
+    <path d="M32 2 L36 44 L32 50 L28 44 Z" fill="url(#swB)" stroke="#e2e8f0"/>
+    <path d="M30 6 L32 44 L34 6 Z" fill="url(#swFuller)"/>
+    <path d="M31 8 L32 40 L33 8 Z" fill="none" stroke="#64748b" stroke-width="0.5" opacity="0.5"/>
+    <rect x="22" y="42" width="20" height="5" rx="1" fill="url(#swG)" stroke="#fde68a"/>
+    <path d="M20 46 H44 L42 52 H22 Z" fill="url(#swG)" stroke="#b45309"/>
+    <rect x="28" y="50" width="8" height="10" rx="1" fill="#292524" stroke="#57534e"/>
+    <circle cx="32" cy="46" r="2.5" fill="#fde68a" stroke="#b45309"/>
+    <circle cx="32" cy="58" r="2" fill="#78716c"/>
   </g>
 </svg>

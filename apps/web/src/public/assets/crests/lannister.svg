@@ -1,11 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="House Lannister">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="House Lannister">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#d4af37"/>
-      <stop offset="100%" stop-color="#8b6914"/>
-    </linearGradient>
+    <linearGradient id="laSh" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#991b1b"/><stop stop-color="#450a0a"/></linearGradient>
+    <linearGradient id="laG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#ca8a04"/></linearGradient>
+    <filter id="laF"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.5"/></filter>
   </defs>
-  <path d="M32 4 L58 18 V46 L32 60 L6 46 V18 Z" fill="#7a1010" stroke="#d4af37" stroke-width="2"/>
-  <path d="M20 42 C22 30 26 20 32 14 C38 20 42 30 44 42 C40 38 36 36 32 36 C28 36 24 38 20 42 Z" fill="url(#g)"/>
-  <path d="M32 18 L34 28 L44 28 L36 34 L39 44 L32 38 L25 44 L28 34 L20 28 L30 28 Z" fill="#5c0a0a" opacity="0.35"/>
+  <g filter="url(#laF)">
+    <path d="M48 6 L84 24 V66 L48 90 L12 66 V24 Z" fill="url(#laSh)" stroke="#dc2626" stroke-width="2.5"/>
+    <path d="M48 28 C56 32 62 42 62 52 C62 62 56 68 48 72 C40 68 34 62 34 52 C34 42 40 32 48 28 Z" fill="url(#laG)" stroke="#fde68a"/>
+    <path d="M48 34 C52 38 56 44 56 50 C56 58 52 64 48 66 C44 64 40 58 40 50 C40 44 44 38 48 34 Z" fill="#b45309" opacity="0.5"/>
+    <circle cx="44" cy="46" r="2" fill="#451a03"/>
+    <circle cx="52" cy="46" r="2" fill="#451a03"/>
+    <path d="M44 54 Q48 58 52 54" stroke="#451a03" stroke-width="1.5" fill="none"/>
+    <path d="M36 58 L42 52 M60 58 L54 52" stroke="#fde68a" stroke-width="2" stroke-linecap="round"/>
+    <path d="M48 38 L50 48 L48 52 L46 48 Z" fill="#fde68a" opacity="0.7"/>
+  </g>
 </svg>

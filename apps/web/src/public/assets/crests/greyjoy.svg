@@ -1,7 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="House Greyjoy">
-  <path d="M32 4 L58 18 V46 L32 60 L6 46 V18 Z" fill="#2a3038" stroke="#8a9098" stroke-width="2"/>
-  <path d="M18 36 C22 28 28 22 32 20 C36 22 42 28 46 36 C42 34 37 32 32 32 C27 32 22 34 18 36 Z" fill="#5a6068"/>
-  <path d="M14 40 Q20 34 26 38 Q32 42 38 38 Q44 34 50 40" stroke="#c8d0d8" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <path d="M16 44 Q24 38 32 42 Q40 38 48 44" stroke="#c8d0d8" stroke-width="2" fill="none" stroke-linecap="round"/>
-  <path d="M18 48 Q28 42 32 46 Q36 42 46 48" stroke="#c8d0d8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="House Greyjoy">
+  <defs>
+    <linearGradient id="grSh" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#334155"/><stop stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="grK" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94a3b8"/><stop stop-color="#475569"/></linearGradient>
+    <filter id="grF"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#grF)">
+    <path d="M48 6 L84 24 V66 L48 90 L12 66 V24 Z" fill="url(#grSh)" stroke="#64748b" stroke-width="2.5"/>
+    <path d="M48 28 L58 38 L54 58 L48 68 L42 58 L38 38 Z" fill="url(#grK)" stroke="#cbd5e1"/>
+    <path d="M48 32 L52 40 L48 62 L44 40 Z" fill="#1e293b" opacity="0.4"/>
+    <circle cx="48" cy="44" r="4" fill="#334155" stroke="#94a3b8"/>
+    <path d="M32 52 Q48 60 64 52" fill="none" stroke="#64748b" stroke-width="2"/>
+  </g>
 </svg>

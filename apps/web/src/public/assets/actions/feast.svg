@@ -1,11 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Feast">
-  <rect width="320" height="180" fill="#1a1008"/>
-  <ellipse cx="160" cy="130" rx="100" ry="20" fill="#2a2018"/>
-  <rect x="80" y="90" width="160" height="12" fill="#5c4033"/>
-  <rect x="70" y="102" width="12" height="40" fill="#5c4033"/>
-  <rect x="238" y="102" width="12" height="40" fill="#5c4033"/>
-  <circle cx="120" cy="85" r="14" fill="#8b4513"/>
-  <circle cx="160" cy="80" r="16" fill="#a0522d"/>
-  <circle cx="200" cy="85" r="14" fill="#8b4513"/>
-  <path d="M150 60 L160 40 L170 60" fill="#d4af37"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="War camp feast">
+  <defs>
+    <radialGradient id="afBg" cx="50%" cy="40%" r="65%"><stop offset="0%" stop-color="#292524"/><stop offset="100%" stop-color="#0c0a09"/></radialGradient>
+    <linearGradient id="afFire" x1="0.5" y1="1" x2="0.5" y2="0"><stop stop-color="#ea580c"/><stop stop-color="#fde68a"/></linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="14" fill="url(#afBg)"/>
+  <ellipse cx="64" cy="96" rx="36" ry="8" fill="#000" opacity="0.3"/>
+  <path d="M48 88c8-16 24-16 32 0H48z" fill="#451a03" stroke="#78350f"/>
+  <path d="M52 84c6-10 18-10 24 0" fill="#92400e"/>
+  <g>
+    <path d="M64 48c-6 12-6 24 0 36 6-12 6-24 0-36z" fill="url(#afFire)" opacity="0.9"/>
+    <path d="M58 56c-3 8-3 16 0 22M70 56c3 8 3 16 0 22" fill="none" stroke="#fef08a" stroke-width="2" opacity="0.7"/>
+  </g>
+  <circle cx="40" cy="72" r="10" fill="#78716c" stroke="#57534e"/>
+  <circle cx="88" cy="72" r="10" fill="#78716c" stroke="#57534e"/>
 </svg>

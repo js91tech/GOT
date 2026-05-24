@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M20 50 L28 14 L36 50 Z" fill="#57534e" stroke="#94a3b8" stroke-width="2"/><path d="M36 50 L44 14 L52 50 Z" fill="#6b7280" stroke="#94a3b8" stroke-width="2"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Iron ingot">
+  <defs>
+    <linearGradient id="irM" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#cbd5e1"/><stop stop-color="#475569"/></linearGradient>
+    <linearGradient id="irH" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fff" stop-opacity="0.35"/><stop stop-color="#fff" stop-opacity="0"/></linearGradient>
+    <filter id="irS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.45"/></filter>
+  </defs>
+  <g filter="url(#irS)">
+    <path d="M12 28 L52 28 L48 44 L16 44 Z" fill="url(#irM)" stroke="#94a3b8"/>
+    <path d="M14 30 L50 30 L47 42 L17 42 Z" fill="url(#irH)"/>
+    <path d="M16 32 H48 M18 36 H46 M20 40 H44" stroke="#64748b" stroke-width="0.6" opacity="0.5"/>
+    <path d="M20 24 L44 24 L42 28 H22 Z" fill="#64748b" stroke="#475569"/>
+    <ellipse cx="32" cy="48" rx="18" ry="3" fill="#000" opacity="0.2"/>
+  </g>
+</svg>

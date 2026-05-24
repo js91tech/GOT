@@ -1,8 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Battle">
-  <rect width="320" height="180" fill="#120c10"/>
-  <rect y="130" width="320" height="50" fill="#2a2018"/>
-  <path d="M80 130 L100 70 L120 130 Z" fill="#4a5568" stroke="#8a9098"/>
-  <path d="M200 130 L220 70 L240 130 Z" fill="#7a1010" stroke="#d4af37"/>
-  <path d="M155 95 L165 55 L175 95 L195 95 L180 115 L185 140 L165 125 L145 140 L150 115 L135 95 Z" fill="#d4af37" opacity="0.8"/>
-  <line x1="120" y1="100" x2="200" y2="100" stroke="#e8c878" stroke-width="2" stroke-dasharray="6 4"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Battle">
+  <defs>
+    <radialGradient id="bBg" cx="50%" cy="35%" r="70%"><stop offset="0%" stop-color="#450a0a"/><stop offset="100%" stop-color="#0a0a0a"/></radialGradient>
+    <linearGradient id="bBlade" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e2e8f0"/><stop stop-color="#475569"/></linearGradient>
+    <linearGradient id="bMoon" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fecaca"/><stop stop-color="#991b1b"/></linearGradient>
+    <filter id="bSh"><feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#dc2626" flood-opacity="0.35"/></filter>
+  </defs>
+  <rect width="128" height="128" rx="14" fill="url(#bBg)"/>
+  <circle cx="64" cy="36" r="18" fill="url(#bMoon)" opacity="0.85"/>
+  <circle cx="58" cy="32" r="14" fill="#450a0a" opacity="0.4"/>
+  <g filter="url(#bSh)">
+    <path d="M64 40 L74 96 L64 108 L54 96 Z" fill="url(#bBlade)" stroke="#cbd5e1" transform="rotate(-35 64 74)"/>
+    <path d="M64 40 L74 96 L64 108 L54 96 Z" fill="url(#bBlade)" stroke="#cbd5e1" transform="rotate(35 64 74)"/>
+    <path d="M58 88 L64 100 L70 88 Z" fill="#b45309" stroke="#fde68a"/>
+    <path d="M56 88 L72 88 L68 96 L60 96 Z" fill="#78350f"/>
+  </g>
+  <path d="M20 100 Q40 80 64 88 Q88 96 108 76" fill="none" stroke="#7f1d1d" stroke-width="2" opacity="0.5"/>
 </svg>

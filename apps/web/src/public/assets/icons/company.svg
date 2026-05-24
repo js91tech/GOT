@@ -1,16 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Company guild">
   <defs>
-    <linearGradient id="shield" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#64748b"/>
-      <stop offset="100%" stop-color="#1e293b"/>
+    <linearGradient id="cBanner" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dc2626"/>
+      <stop offset="100%" stop-color="#450a0a"/>
     </linearGradient>
-    <filter id="g"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.4"/></filter>
+    <linearGradient id="cGold" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </linearGradient>
+    <linearGradient id="cPole" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#78716c"/>
+      <stop offset="100%" stop-color="#292524"/>
+    </linearGradient>
+    <filter id="cSh"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.4"/></filter>
   </defs>
-  <g filter="url(#g)">
-    <circle cx="22" cy="28" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
-    <circle cx="42" cy="28" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
-    <circle cx="32" cy="44" r="10" fill="#475569" stroke="#94a3b8" stroke-width="2"/>
-    <path d="M32 12 L38 36 L32 32 L26 36 Z" fill="url(#shield)" stroke="#d4af37" stroke-width="1.5"/>
-    <circle cx="32" cy="24" r="4" fill="#d4af37"/>
+  <g filter="url(#cSh)">
+    <ellipse cx="32" cy="56" rx="20" ry="3" fill="#000" opacity="0.2"/>
+    <rect x="30" y="10" width="4" height="44" rx="1" fill="url(#cPole)"/>
+    <path d="M34 12h18l-2 28-16 4V12z" fill="url(#cBanner)" stroke="#991b1b"/>
+    <path d="M34 12h18l-2 28-16 4V12z" fill="none" stroke="#fde68a" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="42" cy="24" r="6" fill="none" stroke="url(#cGold)" stroke-width="2"/>
+    <path d="M42 20v8M38 24h8" stroke="url(#cGold)" stroke-width="1.5"/>
+    <path d="M14 18h14l-1 22-13 3V18z" fill="#1e3a5f" stroke="#0c4a6e"/>
+    <path d="M20 24l4 6 4-6-4-3z" fill="url(#cGold)" opacity="0.9"/>
+    <path d="M8 22h10l-1 18-9 2V22z" fill="#14532d" stroke="#166534"/>
+    <circle cx="12" cy="28" r="3" fill="url(#cGold)" opacity="0.8"/>
+    <path d="M34 44l16-4v4l-16 4z" fill="#450a0a"/>
   </g>
 </svg>

@@ -1,1 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><path d="M12 28 C12 18 22 10 32 10 C42 10 52 18 52 28 V40 H12 Z" fill="#57534e" stroke="#d4af37" stroke-width="2"/><rect x="18" y="40" width="28" height="14" rx="2" fill="#44403c"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Gauntlets">
+  <defs>
+    <linearGradient id="gaM" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#94a3b8"/><stop stop-color="#334155"/></linearGradient>
+    <linearGradient id="gaL" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#78716c"/><stop stop-color="#1c1917"/></linearGradient>
+    <filter id="gaS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.4"/></filter>
+  </defs>
+  <g filter="url(#gaS)">
+    <path d="M14 28c0-6 4-10 10-10h4v28h-6c-4 0-8-4-8-10v-8z" fill="url(#gaM)" stroke="#cbd5e1"/>
+    <path d="M36 18h4c6 0 10 4 10 10v8c0 6-4 10-8 10h-6V18z" fill="url(#gaM)" stroke="#cbd5e1"/>
+    <path d="M18 22h6M40 22h6M18 30h6M40 30h6M18 38h6M40 38h6" stroke="#64748b" stroke-width="1"/>
+    <rect x="24" y="20" width="16" height="8" rx="2" fill="url(#gaL)" stroke="#57534e"/>
+    <path d="M26 24h12" stroke="#a8a29e" stroke-width="1"/>
+  </g>
+</svg>

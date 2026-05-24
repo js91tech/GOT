@@ -105,7 +105,7 @@ body.page-dashboard .site-nav a:hover {
   background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
   border: 2px solid var(--studio-border);
   border-radius: 16px;
-  filter: drop-shadow(0 4px 12px rgba(212, 175, 55, 0.25));
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.2));
 }
 
 .dash-studio .profile-name {
@@ -185,10 +185,16 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .resource-icon-img {
   display: block;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   margin: 0 auto 0.4rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 8px rgba(212, 175, 55, 0.15));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.dash-studio .resource-stone:hover .resource-icon-img {
+  transform: scale(1.08);
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.35));
 }
 
 .dash-studio .resource-label {
@@ -252,12 +258,16 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .tile-art {
   inset: 2.75rem 0.75rem 4rem;
-  opacity: 0.45;
+  opacity: 0.72;
   border-radius: 8px;
+  background-size: contain !important;
+  background-position: center !important;
+  background-repeat: no-repeat !important;
+  filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.45));
 }
 
 .dash-studio .tile-art--train {
-  opacity: 0.55;
+  opacity: 0.78;
 }
 
 .dash-studio .action-tile--wheel {
@@ -268,7 +278,9 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .wheel-disc {
   border-color: var(--studio-accent-dim);
-  box-shadow: 0 0 24px rgba(212, 175, 55, 0.2), inset 0 0 16px rgba(0, 0, 0, 0.5);
+  background: url('/public/assets/icons/wheel.svg') center / 92% no-repeat,
+    conic-gradient(from 0deg, #78350f 0deg 45deg, #a16207 45deg 90deg, #57534e 90deg 135deg, #a16207 135deg 180deg, #78350f 180deg 225deg, #44403c 225deg 270deg, #a16207 270deg 315deg, #78350f 315deg 360deg);
+  box-shadow: 0 0 24px rgba(212, 175, 55, 0.25), inset 0 0 16px rgba(0, 0, 0, 0.5);
 }
 
 /* Bottom panels */
@@ -317,9 +329,10 @@ body.page-dashboard .site-nav a:hover {
 }
 
 .dash-studio .lounge-icon {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.45));
 }
 
 .dash-studio .shelf-deco,
@@ -352,13 +365,14 @@ body.page-dashboard .site-nav a:hover {
 }
 
 .dash-studio .inv-icon-img {
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   padding: 4px;
   background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5)) drop-shadow(0 0 6px rgba(212, 175, 55, 0.12));
 }
 
 .dash-studio .inv-text {

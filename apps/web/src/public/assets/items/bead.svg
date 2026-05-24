@@ -1,1 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="16" fill="#d4af37" stroke="#8b6914" stroke-width="2"/><circle cx="32" cy="32" r="6" fill="#fde68a"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Noble seal">
+  <defs>
+    <radialGradient id="bdG" cx="40%" cy="35%" r="60%"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></radialGradient>
+    <linearGradient id="bdR" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#dc2626"/><stop stop-color="#450a0a"/></linearGradient>
+    <filter id="bdS"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#d4af37" flood-opacity="0.4"/></filter>
+  </defs>
+  <g filter="url(#bdS)">
+    <circle cx="32" cy="30" r="18" fill="url(#bdG)" stroke="#fde68a" stroke-width="2"/>
+    <circle cx="32" cy="30" r="12" fill="url(#bdR)" stroke="#991b1b"/>
+    <path d="M32 22 L36 30 L32 34 L28 30 Z" fill="#fde68a"/>
+    <circle cx="32" cy="30" r="3" fill="#fde68a"/>
+    <path d="M24 46c4 6 16 6 16 0l-2-6H26l-2 6z" fill="#78350f" stroke="#451a03"/>
+    <path d="M26 44h12" stroke="#fde68a" stroke-width="1"/>
+  </g>
+</svg>

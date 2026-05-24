@@ -1,5 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Realm event">
-  <rect width="320" height="180" fill="#120c10"/>
-  <path d="M32 4 L58 18 V46 L32 60 L6 46 V18 Z" transform="translate(130 50) scale(1.8)" fill="#7a1010" stroke="#d4af37" stroke-width="1.5"/>
-  <text x="160" y="150" text-anchor="middle" fill="#d4af37" font-family="Georgia, serif" font-size="18">The Realm</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Realm sigil">
+  <defs>
+    <radialGradient id="dBg" cx="50%" cy="35%" r="70%"><stop offset="0%" stop-color="#1e293b"/><stop offset="100%" stop-color="#020617"/></radialGradient>
+    <linearGradient id="dShield" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#475569"/><stop stop-color="#0f172a"/></linearGradient>
+    <linearGradient id="dGold" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="dSh"><feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.45"/></filter>
+  </defs>
+  <rect width="128" height="128" rx="14" fill="url(#dBg)"/>
+  <g filter="url(#dSh)">
+    <path d="M64 20 L96 36 V68 C96 88 64 108 64 108 C64 108 32 88 32 68 V36 Z" fill="url(#dShield)" stroke="url(#dGold)" stroke-width="3"/>
+    <path d="M64 32 L80 40 V64 C80 78 64 92 64 92 C64 92 48 78 48 64 V40 Z" fill="none" stroke="#94a3b8" stroke-width="1.5" opacity="0.5"/>
+    <path d="M64 44 L68 60 L64 76 L60 60 Z" fill="url(#dGold)"/>
+    <circle cx="64" cy="58" r="6" fill="#1e293b" stroke="#fde68a" stroke-width="1.5"/>
+  </g>
 </svg>

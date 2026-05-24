@@ -1,18 +1,30 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Treasury vault">
   <defs>
-    <linearGradient id="v" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="vStone" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#64748b"/>
-      <stop offset="100%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#1e293b"/>
     </linearGradient>
-    <linearGradient id="d" x1="0" y1="0" x2="0" y2="1">
+    <linearGradient id="vDoor" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#475569"/>
+      <stop offset="50%" stop-color="#334155"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="vGold" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="100%" stop-color="#b8860b"/>
+      <stop offset="100%" stop-color="#b45309"/>
     </linearGradient>
+    <filter id="vSh"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-opacity="0.5"/></filter>
   </defs>
-  <rect x="10" y="28" width="44" height="28" rx="4" fill="url(#v)" stroke="#94a3b8" stroke-width="2"/>
-  <path d="M10 28 L32 14 L54 28 Z" fill="url(#v)" stroke="#94a3b8" stroke-width="2"/>
-  <rect x="26" y="38" width="12" height="18" rx="2" fill="#1e293b" stroke="#475569"/>
-  <circle cx="32" cy="47" r="2" fill="url(#d)"/>
-  <rect x="18" y="32" width="8" height="6" rx="1" fill="rgba(253,230,138,0.3)"/>
-  <rect x="38" y="32" width="8" height="6" rx="1" fill="rgba(253,230,138,0.3)"/>
+  <g filter="url(#vSh)">
+    <path d="M8 52V22l24-12 24 12v30H8z" fill="url(#vStone)" stroke="#94a3b8" stroke-width="1"/>
+    <path d="M14 48V26l18-9 18 9v22H14z" fill="url(#vDoor)" stroke="#64748b"/>
+    <path d="M20 44V30l12-6 12 6v14H20z" fill="#0f172a" stroke="#475569"/>
+    <circle cx="32" cy="36" r="9" fill="#1e293b" stroke="url(#vGold)" stroke-width="2.5"/>
+    <circle cx="32" cy="36" r="5" fill="none" stroke="#fde68a" stroke-width="1.5" stroke-dasharray="2 1.5"/>
+    <rect x="30" y="34" width="4" height="8" rx="1" fill="url(#vGold)"/>
+    <rect x="28" y="36" width="8" height="2" rx="1" fill="#fde68a"/>
+    <path d="M12 24h40M16 20h32" stroke="#94a3b8" stroke-width="1.5" opacity="0.6"/>
+    <rect x="10" y="50" width="44" height="4" rx="1" fill="#334155"/>
+    <ellipse cx="32" cy="54" rx="20" ry="2" fill="#000" opacity="0.2"/>
+  </g>
 </svg>

@@ -1,15 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Focus">
   <defs>
-    <linearGradient id="e" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#a78bfa"/>
+    <radialGradient id="fEye" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="45%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#312e81"/>
+    </radialGradient>
+    <linearGradient id="fLens" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#e9d5ff"/>
       <stop offset="100%" stop-color="#6d28d9"/>
     </linearGradient>
+    <linearGradient id="fFrame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="100%" stop-color="#92400e"/>
+    </linearGradient>
+    <filter id="fSh"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#7c3aed" flood-opacity="0.4"/></filter>
   </defs>
-  <circle cx="32" cy="32" r="24" fill="none" stroke="url(#e)" stroke-width="3"/>
-  <circle cx="32" cy="32" r="16" fill="rgba(167,139,250,0.15)" stroke="#c4b5fd" stroke-width="1.5"/>
-  <circle cx="32" cy="32" r="4" fill="#e9d5ff"/>
-  <line x1="32" y1="8" x2="32" y2="16" stroke="#c4b5fd" stroke-width="2"/>
-  <line x1="32" y1="48" x2="32" y2="56" stroke="#c4b5fd" stroke-width="2"/>
-  <line x1="8" y1="32" x2="16" y2="32" stroke="#c4b5fd" stroke-width="2"/>
-  <line x1="48" y1="32" x2="56" y2="32" stroke="#c4b5fd" stroke-width="2"/>
+  <g filter="url(#fSh)">
+    <circle cx="32" cy="32" r="24" fill="#1e1b4b" stroke="url(#fFrame)" stroke-width="2.5"/>
+    <circle cx="32" cy="32" r="18" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3 2"/>
+    <circle cx="32" cy="32" r="12" fill="url(#fLens)" stroke="#ddd6fe" stroke-width="1.5"/>
+    <ellipse cx="32" cy="32" rx="8" ry="10" fill="url(#fEye)"/>
+    <circle cx="32" cy="32" r="3.5" fill="#0f0a1a"/>
+    <circle cx="29" cy="29" r="1.5" fill="#fff" opacity="0.85"/>
+    <path d="M32 8v6M32 50v6M8 32h6M50 32h6" stroke="#fde68a" stroke-width="1.5" stroke-linecap="round"/>
+    <path d="M14 14l4 4M46 46l4 4M50 14l-4 4M18 46l-4 4" stroke="#c4b5fd" stroke-width="1.2" stroke-linecap="round"/>
+    <path d="M24 44c2-6 8-10 14-8" fill="none" stroke="#fde68a" stroke-width="1" opacity="0.6"/>
+  </g>
 </svg>

@@ -1,15 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Relic chest">
   <defs>
-    <linearGradient id="c" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#475569"/>
-      <stop offset="100%" stop-color="#1e293b"/>
-    </linearGradient>
-    <linearGradient id="gem" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="100%" stop-color="#78350f"/>
-    </linearGradient>
+    <linearGradient id="cxW" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92400e"/><stop stop-color="#451a03"/></linearGradient>
+    <linearGradient id="cxG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="cxS"><feDropShadow dx="0" dy="3" stdDeviation="2.5" flood-opacity="0.45"/></filter>
   </defs>
-  <path d="M20 8 L44 8 L48 56 L16 56 Z" fill="url(#c)" stroke="#64748b" stroke-width="2"/>
-  <rect x="22" y="4" width="20" height="8" rx="2" fill="#334155" stroke="#64748b"/>
-  <polygon points="32,22 38,34 32,46 26,34" fill="url(#gem)" stroke="#fde68a" stroke-width="1"/>
+  <g filter="url(#cxS)">
+    <path d="M10 28 H54 L52 54 C52 58 48 60 32 60 C16 60 12 58 12 54 L10 28 Z" fill="url(#cxW)" stroke="#78350f"/>
+    <path d="M10 28 H54 V36 H10 Z" fill="#78350f" stroke="#fde68a" stroke-width="0.8"/>
+    <rect x="28" y="32" width="8" height="10" rx="1" fill="url(#cxG)" stroke="#fde68a"/>
+    <path d="M14 32 H50" stroke="#451a03" stroke-width="1"/>
+    <path d="M16 40 H48 M18 46 H46" stroke="#451a03" stroke-width="0.6" opacity="0.5"/>
+    <circle cx="32" cy="37" r="2" fill="#451a03"/>
+    <path d="M20 24 L44 24 L42 28 H22 Z" fill="#b45309" stroke="#fde68a"/>
+  </g>
 </svg>

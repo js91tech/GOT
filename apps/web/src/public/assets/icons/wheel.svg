@@ -1,9 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <circle cx="32" cy="32" r="28" fill="#1a1410" stroke="#5c4033" stroke-width="3"/>
-  <path d="M32 4 A28 28 0 0 1 60 32 L32 32 Z" fill="#a16207"/>
-  <path d="M60 32 A28 28 0 0 1 32 60 L32 32 Z" fill="#1e40af"/>
-  <path d="M32 60 A28 28 0 0 1 4 32 L32 32 Z" fill="#15803d"/>
-  <path d="M4 32 A28 28 0 0 1 32 4 L32 32 Z" fill="#78350f"/>
-  <circle cx="32" cy="32" r="7" fill="#fde68a" stroke="#5c4033" stroke-width="2"/>
-  <polygon points="32,8 34,16 30,16" fill="#fde68a"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Wheel of fate">
+  <defs>
+    <linearGradient id="wRim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#b45309"/>
+      <stop offset="100%" stop-color="#451a03"/>
+    </linearGradient>
+    <linearGradient id="wSeg1" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#7c2d12"/><stop offset="1" stop-color="#431407"/></linearGradient>
+    <linearGradient id="wSeg2" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#92400e"/><stop offset="1" stop-color="#451a03"/></linearGradient>
+    <filter id="wSh"><feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-opacity="0.45"/></filter>
+  </defs>
+  <g filter="url(#wSh)">
+    <circle cx="32" cy="32" r="26" fill="url(#wRim)" stroke="#fde68a" stroke-width="2"/>
+    <g transform="translate(32 32)">
+      <path d="M0-22 L4-6 L22-6 Z" fill="url(#wSeg1)" stroke="#451a03" stroke-width="0.5"/>
+      <path d="M0-22 L22-6 L14 14 Z" fill="url(#wSeg2)" stroke="#451a03" stroke-width="0.5"/>
+      <path d="M0-22 L14 14 L-14 14 Z" fill="#78350f" stroke="#451a03" stroke-width="0.5"/>
+      <path d="M0-22 L-14 14 L-22-6 Z" fill="url(#wSeg1)" stroke="#451a03" stroke-width="0.5"/>
+      <path d="M0-22 L-22-6 L-4-6 Z" fill="url(#wSeg2)" stroke="#451a03" stroke-width="0.5"/>
+      <path d="M0-22 L-4-6 L4-6 Z" fill="#451a03"/>
+    </g>
+    <circle cx="32" cy="32" r="8" fill="#1c1917" stroke="url(#wRim)" stroke-width="2"/>
+    <circle cx="32" cy="32" r="3" fill="#fde68a"/>
+    <path d="M32 6 L34 12 L32 10 L30 12 Z" fill="#ef4444" stroke="#7f1d1d"/>
+    <text x="32" y="18" text-anchor="middle" font-size="5" fill="#fde68a" font-family="serif">☩</text>
+    <text x="44" y="36" text-anchor="middle" font-size="4" fill="#fde68a" font-family="serif" opacity="0.8">⚜</text>
+    <text x="20" y="36" text-anchor="middle" font-size="4" fill="#fde68a" font-family="serif" opacity="0.8">♞</text>
+  </g>
 </svg>
