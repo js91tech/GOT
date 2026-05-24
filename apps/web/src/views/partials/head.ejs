@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><%= typeof title !== 'undefined' ? title : 'Westeros Bot' %></title>
   <link rel="stylesheet" href="/public/style.css" />
-  <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-realm') || String(pageClass).includes('page-jjk') || pageClass === 'page-dashboard')) { %>
+  <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-realm') || pageClass === 'page-dashboard')) { %>
   <link rel="stylesheet" href="/public/theme.css" />
   <% } %>
   <link rel="icon" href="/public/assets/crests/stark.svg" type="image/svg+xml" />

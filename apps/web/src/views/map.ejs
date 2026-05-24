@@ -1,6 +1,6 @@
 <%- include('partials/head', { loggedIn: true, title: 'Realm Map', pageClass: 'page-realm page-map' }) %>
 <link rel="stylesheet" href="/public/map/map.css" />
-<%- include('partials/jjk-shell-open') %>
+<%- include('partials/realm-shell-open') %>
 
 <div class="dash-page">
   <% if (msg) { %><div class="map-flash"><%= msg %></div><% } %>
@@ -37,5 +37,5 @@
 </script>
 <script src="/public/map/map.js" defer></script>
 
-<%- include('partials/jjk-shell-close') %>
+<%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

@@ -82,15 +82,23 @@ if (service === 'botweb') {
 } else if (service === 'stack') {
   console.log('stack: bot + web + API in one container (one volume; web uses PORT, API uses API_PORT)');
   console.log('stack: expose ONE public URL → dashboard + Discord URL mapping /api → same host');
-  const apiPort = process.env.API_PORT || '3848';
+  const publicPort = String(process.env.PORT || '8080');
+  let apiPort = process.env.API_PORT || '3848';
+  if (String(apiPort) === publicPort) {
+    console.warn(
+      `stack: API_PORT (${apiPort}) matches public PORT (${publicPort}); binding API on internal port 3848`
+    );
+    apiPort = '3848';
+  }
   process.env.API_PORT = apiPort;
+  const stackEnv = { ...process.env, SERVICE: 'stack', API_PORT: apiPort };
   runMany([
-    { workspace: '@westeros/discord-bot', label: 'bot' },
-    { workspace: '@westeros/web', label: 'web' },
+    { workspace: '@westeros/discord-bot', label: 'bot', env: stackEnv },
+    { workspace: '@westeros/web', label: 'web', env: stackEnv },
     {
       workspace: '@westeros/api',
       label: 'api',
-      env: { ...process.env, API_PORT: apiPort, PORT: apiPort }
+      env: { ...stackEnv, PORT: apiPort }
     }
   ]);
 } else {

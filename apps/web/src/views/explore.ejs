@@ -1,15 +1,15 @@
 <%- include('partials/head', { loggedIn: true, title: 'Explore', pageClass: 'page-realm' }) %>
-<%- include('partials/jjk-shell-open') %>
+<%- include('partials/realm-shell-open') %>
 
 <% if (flash) { %><div class="flash"><%= flash %></div><% } %>
-<h1 class="page-title">Explore</h1>
-<p class="page-lead">Navigate Tokyo High, colonies, and hidden rooms.</p>
+<h1 class="page-title">Explore the Realm</h1>
+<p class="page-lead">March through castles, wild lands, and hidden keeps across Westeros.</p>
 
 <pre class="explore-box"><%= exploreText %></pre>
 
-<div class="jjk-grid">
-  <article class="jjk-panel stone-frame">
-    <h3>Move</h3>
+<div class="realm-grid">
+  <article class="realm-panel stone-frame">
+    <h3>March</h3>
     <form method="post" action="/explore">
       <input type="hidden" name="action" value="move" />
       <select name="direction">
@@ -19,34 +19,34 @@
         <option value="west">West</option>
         <option value="up">Up</option>
       </select>
-      <button type="submit" class="btn-curse">Go</button>
+      <button type="submit" class="btn-realm">Go</button>
     </form>
   </article>
-  <article class="jjk-panel wood-panel">
+  <article class="realm-panel wood-panel">
     <h3>Travel</h3>
     <form method="post" action="/explore">
       <input type="hidden" name="action" value="travel" />
       <select name="area">
-        <option value="tokyo_jujutsu_high">Tokyo Jujutsu High</option>
-        <option value="shibuya_district">Shibuya</option>
-        <option value="jujutsu_high_kyoto">Kyoto</option>
-        <option value="sakurajima_colony">Sakurajima</option>
+        <option value="tokyo_jujutsu_high">Winterfell</option>
+        <option value="shibuya_district">King's Landing</option>
+        <option value="jujutsu_high_kyoto">Oldtown</option>
+        <option value="sakurajima_colony">The Wall</option>
       </select>
-      <button type="submit" class="btn-curse">Travel</button>
+      <button type="submit" class="btn-realm">Travel</button>
     </form>
   </article>
-  <article class="jjk-panel vine-panel">
-    <h3>Mine / Talk</h3>
-    <form method="post" action="/explore"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood">Mine room</button></form>
+  <article class="realm-panel vine-panel">
+    <h3>Mine / Parley</h3>
+    <form method="post" action="/explore"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood">Prospect land</button></form>
     <form method="post" action="/explore" style="margin-top:8px">
       <input type="hidden" name="action" value="talk" />
-      <select name="npc"><option value="gojo">Gojo</option><option value="yaga">Yaga</option><option value="nanami">Nanami</option><option value="maki">Maki</option></select>
-      <button type="submit" class="btn-curse">Talk</button>
+      <select name="npc"><option value="gojo">Maester</option><option value="yaga">Goldcloak Captain</option><option value="nanami">Septon</option><option value="maki">Hedge Knight</option></select>
+      <button type="submit" class="btn-realm">Parley</button>
     </form>
   </article>
 </div>
 
-<a class="jjk-back" href="/dashboard">← Dashboard</a>
+<a class="realm-back" href="/dashboard">← Dashboard</a>
 
-<%- include('partials/jjk-shell-close') %>
+<%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

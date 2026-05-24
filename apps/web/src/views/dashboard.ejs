@@ -1,5 +1,5 @@
 <%- include('partials/head', { loggedIn: true, title: 'Dashboard', pageClass: 'page-realm page-dashboard' }) %>
-<%- include('partials/jjk-shell-open') %>
+<%- include('partials/realm-shell-open') %>
 
 <div class="dash-page">
   <span class="dash-ornament dash-ornament--tl" aria-hidden="true"></span>
@@ -104,7 +104,7 @@
           <option value="dexterity">Dexterity</option>
         </select>
         <input type="number" name="sets" value="5" min="1" max="20" aria-label="Sets" />
-        <button type="submit" class="btn-curse">Train</button>
+        <button type="submit" class="btn-realm">Train</button>
       </form>
     </article>
 
@@ -117,7 +117,7 @@
             <option value="<%= c.id %>" <%= c.locked ? 'disabled' : '' %>><%= c.name %> (Lv<%= c.min_level %>)<%= c.locked ? ' 🔒' : '' %></option>
           <% }); %>
         </select>
-        <button type="submit" class="btn-curse">Run</button>
+        <button type="submit" class="btn-realm">Run</button>
       </form>
     </article>
 
@@ -196,7 +196,7 @@
       </form>
       <form method="post" action="/equip" class="tile-form">
         <input name="item" placeholder="item id" />
-        <button type="submit" class="btn-curse">Equip</button>
+        <button type="submit" class="btn-realm">Equip</button>
       </form>
     </article>
 
@@ -217,5 +217,5 @@
   </section>
 </div>
 
-<%- include('partials/jjk-shell-close') %>
+<%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

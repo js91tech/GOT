@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Greyjoy lord">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a2830"/>
+      <stop offset="100%" stop-color="#081018"/>
+    </linearGradient>
+  </defs>
+  <rect width="96" height="96" rx="8" fill="url(#bg)"/>
+  <rect x="4" y="4" width="88" height="88" rx="6" fill="none" stroke="#64748b" stroke-width="2"/>
+  <circle cx="48" cy="34" r="14" fill="#cbd5e1"/>
+  <path d="M28 78 C28 58 38 48 48 48 C58 48 68 58 68 78 Z" fill="#334155"/>
+  <path d="M36 28 Q48 18 60 28 L56 36 Q48 30 40 36 Z" fill="#64748b"/>
+</svg>

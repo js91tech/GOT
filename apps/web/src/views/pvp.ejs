@@ -1,5 +1,5 @@
 <%- include('partials/head', { loggedIn: true, title: 'PvP', pageClass: 'page-realm' }) %>
-<%- include('partials/jjk-shell-open') %>
+<%- include('partials/realm-shell-open') %>
 
 <% if (flash) { %>
 <div class="flash-wrap <%= flashOk ? '' : 'error' %>">
@@ -13,7 +13,7 @@
 
 <div class="pvp-grid">
 <% players.forEach(function(p) { %>
-  <article class="jjk-panel vine-panel pvp-card">
+  <article class="realm-panel vine-panel pvp-card">
     <img class="pvp-portrait" src="<%= p.portraitUrl %>" alt="<%= p.username %>" width="96" height="96" loading="lazy" />
     <div class="pvp-card-body">
       <div class="target-name"><strong><%= p.username %></strong></div>
@@ -21,7 +21,7 @@
       <div class="pvp-actions">
         <form method="post" action="/pvp">
           <input type="hidden" name="target" value="<%= p.discord_id %>" />
-          <button name="action" value="attack" class="btn-curse">Attack</button>
+          <button name="action" value="attack" class="btn-realm">Attack</button>
           <button name="action" value="mug" class="btn-wood">Mug</button>
           <button name="action" value="rob" class="danger">Rob</button>
         </form>
@@ -35,7 +35,7 @@
 <% }); %>
 </div>
 
-<a class="jjk-back" href="/dashboard">← Dashboard</a>
+<a class="realm-back" href="/dashboard">← Dashboard</a>
 
-<%- include('partials/jjk-shell-close') %>
+<%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

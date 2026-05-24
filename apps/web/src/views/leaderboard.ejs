@@ -1,5 +1,5 @@
 <%- include('partials/head', { loggedIn: false, title: 'Leaderboard', pageClass: 'page-realm' }) %>
-<%- include('partials/jjk-shell-open') %>
+<%- include('partials/realm-shell-open') %>
 
 <h1 class="page-title">Leaderboard — <%= type %></h1>
 <nav class="tab-bar" aria-label="Leaderboard sort">
@@ -13,7 +13,7 @@
   <a href="/leaderboard?type=pvp">PvP</a>
 </nav>
 
-<article class="jjk-panel vine-panel">
+<article class="realm-panel vine-panel">
   <ol class="rank-list">
     <% rows.forEach(function(r, i) { %>
       <li>
@@ -27,7 +27,7 @@
   </ol>
 </article>
 
-<a class="jjk-back" href="/">← Home</a>
+<a class="realm-back" href="/">← Home</a>
 
-<%- include('partials/jjk-shell-close') %>
+<%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

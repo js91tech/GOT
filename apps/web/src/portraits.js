@@ -10,5 +10,5 @@ function hashString(s) {
 export function portraitUrl(discordId, username) {
   const key = String(discordId || username || '0');
   const idx = hashString(key) % COUNT;
-  return `/public/assets/portraits/portrait-${idx}.png`;
+  return `/public/assets/portraits/portrait-${idx}.svg`;
 }

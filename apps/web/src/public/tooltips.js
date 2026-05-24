@@ -22,7 +22,7 @@
       submit: 'Run training and spend focus.'
     },
     '/crime': {
-      panel: 'Run a curse mission for coins and XP. Failed missions can send you to the infirmary or jail.',
+      panel: 'Run a realm mission for coins and XP. Failure may land you in the maester\'s tent or the black cells.',
       mission: 'Missions locked until you reach the listed level.',
       submit: 'Start the selected mission.'
     },
@@ -35,13 +35,13 @@
       submit: 'Spin once (uses a daily spin if available).'
     },
     '/lounge': {
-      panel: 'CE Lounge: restore or boost cursed energy between missions.',
-      tea: 'Tea — restore a portion of CE.',
-      vow: 'Binding vow — special CE bonus (cooldown may apply).',
-      refill: 'Refill — top up your CE pool.'
+      panel: 'War camp: restore or boost morale between missions.',
+      tea: 'Feast — restore a portion of morale.',
+      vow: 'Oath of fealty — special morale bonus (cooldown may apply).',
+      refill: 'Rally — top up your morale pool.'
     },
     '/escape': {
-      panel: 'Leave the infirmary or Prison Realm early.',
+      panel: 'Leave the maester\'s tent or black cells early.',
       submit: 'Attempt escape with the chosen method.'
     },
     '/bank': {
@@ -58,11 +58,11 @@
     },
     '/gym': {
       panel: 'Set your active gym (affects training bonuses).',
-      submit: 'Switch to Cursed Pit gym.'
+      submit: 'Switch to the war yard training ground.'
     },
     '/equip': {
       panel: 'Equip a weapon or relic from inventory by item ID.',
-      item: 'Item id from your inventory list (e.g. cursed_blade).',
+      item: 'Item id from your inventory list (e.g. valyrian_steel).',
       submit: 'Equip that item.'
     },
     '/shop/buy': {
@@ -79,7 +79,7 @@
       submit: 'Attempt bust.'
     },
     '/drug': {
-      panel: 'Use a drug consumable (default CE Shot boosts CE).',
+      panel: 'Use a battle tonic consumable (default boosts morale).',
       drugId: 'Drug item id from inventory or shop.',
       submit: 'Take the drug.'
     },
@@ -90,33 +90,33 @@
   };
 
   const ADVANCED_TYPE = {
-    joinClan: 'Join a sorcerer clan by id (listed above).',
+    joinClan: 'Swear fealty to a Great House by id (listed above).',
     buyEstate: 'Buy a property tier for passive benefits.',
     enroll: 'Enroll in an education course by course id.',
     joinCompany: 'Join a company to unlock work shifts on the dashboard.',
     forge: 'Craft an item from a recipe id if you have materials.',
     delve: 'Start a delve run for rare loot.',
     endDelve: 'End your active delve and collect results.',
-    grabbag: 'Open a capsule / grab bag from inventory.',
+    grabbag: 'Open a relic chest from inventory.',
     commodity: 'Buy or sell commodities at the current market price.'
   };
 
   const STAT = {
     Coins: 'Cash on hand — lost partially when mugged or robbed.',
     Bank: 'Stored coins — safer from PvP theft.',
-    CE: 'Cursed Energy — spent on techniques and hospital CE escape.',
+    CE: 'Morale — spent on war actions and rallying out of the maester\'s tent.',
     Focus: 'Spent when training combat or worker stats.',
     'Wheel spins': 'Daily wheel attempts remaining.',
     Company: 'Your employer id — required to clock in at work.'
   };
 
   const ESCAPE_BUTTON = {
-    'Pay medical bill': 'Pay coins to leave Shoko\'s infirmary immediately.',
-    'CE escape (40 CE)': 'Spend 40 CE to walk out of the infirmary.',
+    'Pay medical bill': 'Pay coins to leave the maester\'s tent immediately.',
+    'Rally morale (40)': 'Spend 40 morale to walk out of the maester\'s tent.',
     'Use Reversal Kit': 'Consume a Reversal Kit from inventory.',
-    'Pay bail': 'Pay coins to leave Prison Realm early.',
-    'Prison Key': 'Use a Prison Key item from inventory.',
-    'Ask ally to bust you': 'Open PvP so a friend can bust you out.'
+    'Pay bail': 'Pay coins to leave the black cells early.',
+    'Prison Key': 'Use a prison key item from inventory.',
+    'Ask ally to bust you': 'Open PvP so an ally can break you out.'
   };
 
   const PVP_ACTION = {
@@ -220,9 +220,9 @@
           if (name === 'clanId') bind(el, 'Clan id, e.g. tokyo');
           if (name === 'tier') bind(el, 'Estate tier number to purchase');
           if (name === 'courseId') bind(el, 'Course id from the list above');
-          if (name === 'companyId') bind(el, 'Company id, e.g. jujutsu_ops');
-          if (name === 'recipeId') bind(el, 'Recipe id, e.g. cursed_blade');
-          if (name === 'commId') bind(el, 'Commodity id, e.g. cursed_rice');
+          if (name === 'companyId') bind(el, 'Company id, e.g. kings_guard');
+          if (name === 'recipeId') bind(el, 'Recipe id, e.g. valyrian_steel');
+          if (name === 'commId') bind(el, 'Commodity id, e.g. grain_sack');
           if (name === 'qty') bind(el, 'Quantity to trade');
         });
         return;
@@ -241,7 +241,7 @@
       }
       const spec = FORM[path];
       if (!spec) return;
-      const panel = form.closest('.panel, .jjk-panel, .action-card, .action-tile, .shelf-panel, .lounge-panel, .escape-actions, .shop-card, .pvp-card');
+      const panel = form.closest('.panel, .realm-panel, .action-card, .action-tile, .shelf-panel, .lounge-panel, .escape-actions, .shop-card, .pvp-card');
       if (panel) {
         const h3 = panel.querySelector('h3');
         if (h3 && spec.panel) bind(h3, spec.panel);
