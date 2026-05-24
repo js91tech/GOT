@@ -39,7 +39,7 @@ Same application as your bot.
 | Step | Action |
 |------|--------|
 | 1 | **Activities** → enable **Embedded App** |
-| 2 | **URL Mappings** → Root URL = **web `/activity`** (step 3), e.g. `https://westeros-web-production.up.railway.app/activity` (must be **Embedded App**, not “commands only”) |
+| 2 | **URL Mappings** → Root URL = **web `/activity`**, e.g. `https://westeros-web-production.up.railway.app/activity` (must be **Embedded App**, not “commands only”). Discord may also request `/activity/login` — the web app serves that path. |
 | 3 | **Application ID** → `DISCORD_CLIENT_ID` on API + `VITE_DISCORD_CLIENT_ID` on 2D build |
 | 4 | **OAuth2** → redirects: `http://127.0.0.1/callback` (Activity desktop — **required**), `https://127.0.0.1`, `https://<web>/oauth/callback` (browser login) |
 | 5 | **(Optional Phaser client only)** URL Mappings → prefix **`/api`** → API host. The embedded dashboard uses **`POST /activity/auth`** on web, not `/api`. |

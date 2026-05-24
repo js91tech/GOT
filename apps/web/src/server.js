@@ -193,14 +193,18 @@ app.get('/logout', (req, res) => {
 });
 
 /** Discord Activity entry — embedded SDK auth → web session → dashboard. */
-app.get('/activity', (req, res) => {
+function renderActivityEntry(req, res) {
   if (req.session.discordId) return res.redirect('/dashboard');
   const discordClientId = process.env.DISCORD_CLIENT_ID;
   if (!discordClientId) {
     return res.status(500).send('Set DISCORD_CLIENT_ID on the web service.');
   }
   res.render('activity', { discordClientId, baseUrl });
-});
+}
+
+app.get('/activity', renderActivityEntry);
+// Discord URL mapping to …/activity makes OAuth navigate to /activity/login (prefix + /login).
+app.get('/activity/login', renderActivityEntry);
 
 app.post('/activity/auth', async (req, res) => {
   const { code } = req.body || {};
