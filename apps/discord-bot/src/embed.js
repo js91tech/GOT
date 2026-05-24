@@ -33,19 +33,34 @@ function formatDrugCooldowns(drugCooldowns) {
 
 export function formatStatusContent(s) {
   const moraleCap = s.morale_regen_cap ?? 100;
+  const focusCap = s.focus_regen_cap ?? 100;
   let lines =
-    `**${s.grade}** Lv.${s.level} (${s.xp_current}/${s.xp_needed || 'MAX'} XP) | Morale ${s.ce}/${moraleCap} | Wheel: ${s.wheel_spins_left}\n` +
-    `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity} | HP ${s.hp}/${s.max_hp}\n` +
+    `**${s.grade}** Lv.${s.level} (${s.xp_current}/${s.xp_needed || 'MAX'} XP) | Morale ${s.ce}/${moraleCap} | Focus ${s.focus}/${focusCap} | Wheel: ${s.wheel_spins_left}\n` +
+    `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity} | HP ${s.hp}/${s.max_hp} | Resolve ${s.resolve} | Bravery ${s.bravery}\n` +
     `Worker: LAB ${s.manual_labor} INT ${s.intelligence} END ${s.endurance} TEC ${s.technique}\n` +
     `Job: ${s.job_name || 'Stable Hand'} | Yard: ${s.gym_name || s.gym_id}${s.company_name ? ` | Company: ${s.company_name}` : ''}\n` +
     (s.work_ready ? 'Work: ready\n' : `Work: ${s.work_minutes_left}m cooldown\n`);
   if (s.morale_regen_in > 0 && s.ce < moraleCap) {
     lines += `Morale regen: +5 in ${s.morale_regen_in}m\n`;
   }
+  if (s.focus_regen_in > 0 && s.focus < focusCap) {
+    lines += `Focus regen: +2 in ${s.focus_regen_in}m\n`;
+  }
   if (s.investment_amount) {
+    const tier = s.investment_tier_id ? ` (${s.investment_tier_id} ×${s.investment_return_mult})` : '';
     lines += s.investment_mature
-      ? `Investment: ${s.investment_amount.toLocaleString()} ready to collect\n`
-      : `Investment: ${s.investment_amount.toLocaleString()} matures in ${s.investment_minutes_left}m\n`;
+      ? `Investment: ${s.investment_amount.toLocaleString()}${tier} ready to collect\n`
+      : `Investment: ${s.investment_amount.toLocaleString()}${tier} matures in ${s.investment_minutes_left}m\n`;
+  }
+  if (s.delve_active) {
+    lines += `Crypt delve: depth ${s.delve_depth}\n`;
+  }
+  if (s.daily_quests?.length) {
+    lines += '**Daily quests**\n';
+    for (const q of s.daily_quests) {
+      const state = q.claimed ? 'claimed' : q.done ? 'ready to claim' : `${q.progress}/${q.target}`;
+      lines += `• ${q.label} — ${state}\n`;
+    }
   }
   lines += formatDrugCooldowns(s.drug_cooldowns);
   if (s.login_streak > 1) lines += `Login streak: ${s.login_streak} days\n`;

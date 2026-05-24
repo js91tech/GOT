@@ -1074,3 +1074,252 @@ body.page-dashboard .site-nav a:hover {
   font-size: 0.72rem;
   color: var(--studio-muted);
 }
+
+/* Daily quests strip */
+.daily-quests-strip {
+  margin: 0 0 1rem;
+  padding: 12px 14px;
+  border-radius: var(--studio-radius);
+  border: 1px solid var(--studio-border);
+  background: var(--studio-panel);
+}
+
+.daily-quests-title {
+  margin: 0 0 10px;
+  font-size: 0.85rem;
+  color: var(--studio-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.daily-quests-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.daily-quest-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.daily-quest-card--done {
+  border-color: rgba(72, 187, 120, 0.45);
+}
+
+.daily-quest-card--claimed {
+  opacity: 0.55;
+}
+
+.daily-quest-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--studio-text);
+}
+
+.daily-quest-progress {
+  font-size: 0.72rem;
+  color: var(--studio-muted);
+}
+
+.daily-quest-status {
+  font-size: 0.68rem;
+  color: var(--studio-muted);
+}
+
+.daily-quest-claim {
+  margin: 0;
+}
+
+/* Drug quick-use row */
+.drug-quick-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.drug-quick-form {
+  margin: 0;
+}
+
+/* Mini leaderboard */
+.mini-leaderboard-panel {
+  grid-column: span 1;
+}
+
+.mini-leaderboard {
+  margin: 0 0 8px;
+  padding-left: 1.2rem;
+  font-size: 0.78rem;
+  color: var(--studio-text);
+}
+
+.mini-leaderboard li {
+  margin-bottom: 4px;
+}
+
+.lb-rank {
+  display: inline-block;
+  min-width: 1.2em;
+  color: var(--studio-accent-dim);
+  font-weight: 700;
+}
+
+/* Bank investment tier picker */
+.invest-tier-wrap {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.invest-tier-wrap select {
+  font-size: 0.72rem;
+}
+
+.invest-preview {
+  margin: 0;
+  font-size: 0.68rem;
+  color: var(--studio-accent);
+}
+
+.work-hint {
+  margin-bottom: 4px;
+}
+
+/* Explore location card */
+.explore-location-card {
+  margin-bottom: 1.25rem;
+  padding: 16px 18px;
+  border-radius: var(--studio-radius);
+  border: 1px solid var(--studio-border);
+  background: var(--studio-panel);
+}
+
+.explore-location-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.explore-location-emoji {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.explore-location-title {
+  margin: 0 0 4px;
+  font-size: 1.1rem;
+  color: var(--studio-accent);
+}
+
+.explore-location-risk {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--studio-muted);
+}
+
+.explore-location-desc {
+  margin: 0 0 12px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--studio-text);
+}
+
+.explore-location-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.explore-chip {
+  font-size: 0.68rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--studio-muted);
+}
+
+.explore-chip--ok {
+  border-color: rgba(72, 187, 120, 0.4);
+  color: #9ae6b4;
+}
+
+.explore-chip--muted {
+  opacity: 0.7;
+}
+
+/* Toast notifications */
+.realm-toast {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 9999;
+  max-width: min(360px, calc(100vw - 2rem));
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--studio-border, rgba(212, 175, 55, 0.35));
+  background: rgba(18, 22, 32, 0.96);
+  color: #e8edf5;
+  font-size: 0.85rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+.realm-toast--show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.realm-toast--ok {
+  border-color: rgba(72, 187, 120, 0.5);
+}
+
+@media (max-width: 900px) {
+  .daily-quests-row {
+    grid-template-columns: 1fr;
+  }
+
+  .resource-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .bottom-row {
+    grid-template-columns: 1fr;
+  }
+
+  .action-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .resource-row {
+    grid-template-columns: 1fr;
+  }
+
+  .action-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-strip {
+    gap: 6px;
+  }
+
+  .drug-quick-row {
+    flex-direction: column;
+  }
+}

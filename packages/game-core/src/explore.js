@@ -47,6 +47,8 @@ export function exploreStatus(discordId, username) {
     .join(', ');
   const npcs = (room.npcs || []).map((id) => loadNpcs()[id]?.name || id).join(', ') || 'none';
   const riskLine = formatRiskLine(areaId, room);
+  const exitsList = Object.entries(room.exits || {}).map(([dir, dest]) => ({ dir, dest }));
+  const npcList = (room.npcs || []).map((id) => ({ id, name: loadNpcs()[id]?.name || id }));
   const pending = getPendingEncounter(player);
   let message =
     `**${area.name}** — ${room.emoji || ''} ${room.name}\n${room.description}\n` +
@@ -62,7 +64,18 @@ export function exploreStatus(discordId, username) {
     areaId,
     roomId,
     pendingEncounter: pending,
-    encounterPending: Boolean(pending)
+    encounterPending: Boolean(pending),
+    view: {
+      areaName: area.name,
+      areaId,
+      roomName: room.name,
+      roomEmoji: room.emoji || '',
+      description: room.description,
+      exits: exitsList,
+      npcs: npcList,
+      mineable: Boolean(room.mineable),
+      riskLine
+    }
   };
 }
 

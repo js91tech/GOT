@@ -132,6 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /** Optional light refresh from /me every 90s on dashboard. */
   if (document.querySelector('.page-dashboard')) {
+    let prevWorkReady = document.querySelector('.status-chip--ok')?.textContent?.includes('Work ready') ?? false;
+    let prevQuestReady = document.querySelectorAll('.daily-quest-card--done:not(.daily-quest-card--claimed)').length;
+
     setInterval(async () => {
       try {
         const res = await fetch('/me', { credentials: 'same-origin' });
@@ -147,10 +150,53 @@ document.addEventListener('DOMContentLoaded', () => {
           const cap = s.focus_regen_cap;
           el.textContent = `${data.player.focus}/${cap}`;
         });
+        if (s.work_ready && !prevWorkReady && window.realmToast) {
+          window.realmToast('Work shift is ready — clock in!', 'ok');
+        }
+        prevWorkReady = s.work_ready;
+        const questReady = (s.daily_quests || []).filter((q) => q.done && !q.claimed).length;
+        if (questReady > prevQuestReady && window.realmToast) {
+          window.realmToast('Daily quest ready to claim!', 'ok');
+        }
+        prevQuestReady = questReady;
       } catch {
         /* ignore poll errors */
       }
     }, 90000);
+  }
+
+  const bankAction = document.getElementById('bankAction');
+  const bankAmount = document.getElementById('bankAmount');
+  const investWrap = document.getElementById('investTierWrap');
+  const investGuide = document.getElementById('investTierGuide');
+  const investPreview = document.getElementById('investPreview');
+
+  function updateInvestPreview() {
+    if (!investGuide || !investPreview) return;
+    const opt = investGuide.selectedOptions[0];
+    if (!opt) return;
+    const min = Number(opt.dataset.min) || 0;
+    const days = Number(opt.dataset.days) || 0;
+    const mult = Number(opt.dataset.mult) || 1;
+    const amount = Math.max(Number(bankAmount?.value) || 0, min);
+    const payout = Math.floor(amount * mult);
+    const pct = Math.round((mult - 1) * 100);
+    investPreview.textContent =
+      amount >= min
+        ? `${opt.value} tier: ${days} days · ~${pct}% return · payout ~${payout.toLocaleString()}c`
+        : `Minimum ${min.toLocaleString()}c for ${opt.value} tier`;
+  }
+
+  if (bankAction && investWrap) {
+    const syncInvest = () => {
+      const show = bankAction.value === 'invest';
+      investWrap.hidden = !show;
+      if (show) updateInvestPreview();
+    };
+    bankAction.addEventListener('change', syncInvest);
+    bankAmount?.addEventListener('input', updateInvestPreview);
+    investGuide?.addEventListener('change', updateInvestPreview);
+    syncInvest();
   }
 
   const guardedForms =

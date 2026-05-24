@@ -219,5 +219,17 @@ export async function handleAutocomplete(interaction) {
     );
   }
 
+  if (cmd === 'dailyquest' && focused.name === 'id') {
+    const action = interaction.options.getString('action');
+    if (action && action !== 'claim') return [];
+    const quests = GameService.dailyQuests(uid, name).filter((quest) => quest.done && !quest.claimed);
+    return filterChoices(
+      quests,
+      q,
+      (quest) => `${quest.label} (+${quest.coins}c)`,
+      (quest) => quest.id
+    );
+  }
+
   return [];
 }

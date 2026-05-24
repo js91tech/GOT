@@ -1,14 +1,36 @@
 <%- include('partials/head', { loggedIn: true, title: 'Explore', pageClass: 'page-realm page-dashboard' }) %>
-<link rel="stylesheet" href="/public/dashboard-studio.css" />
+<link rel="stylesheet" href="<%= assetUrl('/public/dashboard-studio.css') %>" />
 <%- include('partials/realm-shell-open') %>
 
-<div class="dash-page dash-studio">
+<div class="dash-page dash-studio explore-page">
 <% if (flash) { %><div class="map-flash explore-battle-log"><%= flash %></div><% } %>
 
 <h1 class="page-title">Explore the Realm</h1>
 <p class="page-lead">March through castles and wild lands — when a mob appears, choose to fight or flee.</p>
 
+<% if (exploreView) { %>
+<section class="explore-location-card" aria-label="Current location">
+  <div class="explore-location-head">
+    <span class="explore-location-emoji"><%= exploreView.roomEmoji || '🏰' %></span>
+    <div>
+      <h2 class="explore-location-title"><%= exploreView.areaName %> — <%= exploreView.roomName %></h2>
+      <p class="explore-location-risk"><%= exploreView.riskLine %></p>
+    </div>
+  </div>
+  <p class="explore-location-desc"><%= exploreView.description %></p>
+  <div class="explore-location-meta">
+    <% if (exploreView.exits && exploreView.exits.length) { %>
+    <span class="explore-chip">Exits: <% exploreView.exits.forEach(function(e, i) { %><%= i ? ', ' : '' %><%= e.dir %>→<%= e.dest %><% }); %></span>
+    <% } %>
+    <% if (exploreView.npcs && exploreView.npcs.length) { %>
+    <span class="explore-chip">NPCs: <% exploreView.npcs.map(function(n) { return n.name; }).join(', ') %></span>
+    <% } %>
+    <span class="explore-chip explore-chip--<%= exploreView.mineable ? 'ok' : 'muted' %>"><%= exploreView.mineable ? 'Prospectable' : 'No ore here' %></span>
+  </div>
+</section>
+<% } else { %>
 <pre class="explore-box"><%= exploreText %></pre>
+<% } %>
 
 <% if (pendingEncounter) { %>
 <section class="realm-panel encounter-panel">
@@ -56,10 +78,10 @@
     <form method="post" action="/explore">
       <input type="hidden" name="action" value="travel" />
       <select name="area" <%= pendingEncounter ? 'disabled' : '' %>>
-        <option value="winterfell">Winterfell (Lv1)</option>
-        <option value="kings_landing">King's Landing (Lv5)</option>
-        <option value="oldtown">Oldtown (Lv10)</option>
-        <option value="the_wall">The Wall (Lv15)</option>
+        <option value="winterfell" <%= exploreView && exploreView.areaId === 'winterfell' ? 'selected' : '' %>>Winterfell (Lv1)</option>
+        <option value="kings_landing" <%= exploreView && exploreView.areaId === 'kings_landing' ? 'selected' : '' %>>King's Landing (Lv5)</option>
+        <option value="oldtown" <%= exploreView && exploreView.areaId === 'oldtown' ? 'selected' : '' %>>Oldtown (Lv10)</option>
+        <option value="the_wall" <%= exploreView && exploreView.areaId === 'the_wall' ? 'selected' : '' %>>The Wall (Lv15)</option>
       </select>
       <button type="submit" class="btn-realm" <%= pendingEncounter ? 'disabled' : '' %>>Travel</button>
     </form>
@@ -67,14 +89,20 @@
   <article class="realm-panel vine-panel">
     <h3>Hunt &amp; gather</h3>
     <form method="post" action="/explore"><input type="hidden" name="action" value="hunt" /><button type="submit" class="btn-realm" <%= pendingEncounter ? 'disabled' : '' %>>Hunt mobs</button></form>
-    <form method="post" action="/explore" style="margin-top:8px"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood" <%= pendingEncounter ? 'disabled' : '' %>>Prospect land</button></form>
+    <form method="post" action="/explore" style="margin-top:8px"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood" <%= pendingEncounter ? 'disabled' : '' %> <%= exploreView && !exploreView.mineable ? 'title="Not mineable here"' : '' %>>Prospect land</button></form>
     <form method="post" action="/explore" style="margin-top:8px">
       <input type="hidden" name="action" value="talk" />
       <select name="npc" <%= pendingEncounter ? 'disabled' : '' %>>
+        <% if (exploreView && exploreView.npcs && exploreView.npcs.length) { %>
+          <% exploreView.npcs.forEach(function(n) { %>
+          <option value="<%= n.id %>"><%= n.name %></option>
+          <% }); %>
+        <% } else { %>
         <option value="maester">Maester</option>
         <option value="goldcloak">Goldcloak Captain</option>
         <option value="septon">Septon</option>
         <option value="hedge_knight">Hedge Knight</option>
+        <% } %>
       </select>
       <button type="submit" class="btn-wood" <%= pendingEncounter ? 'disabled' : '' %>>Parley</button>
     </form>

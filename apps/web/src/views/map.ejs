@@ -1,12 +1,28 @@
 <%- include('partials/head', { loggedIn: true, title: 'Realm Map', pageClass: 'page-realm page-map' }) %>
-<link rel="stylesheet" href="/public/map/map.css" />
+<link rel="stylesheet" href="<%= assetUrl('/public/map/map.css') %>" />
 <%- include('partials/realm-shell-open') %>
 
-<div class="dash-page">
+<div class="dash-page map-page">
   <% if (msg) { %><div class="map-flash"><%= msg %></div><% } %>
 
+  <section class="map-status-strip" aria-label="Realm status">
+    <% if (house) { %>
+    <span class="map-status-chip"><%= house.name %></span>
+    <% } else { %>
+    <span class="map-status-chip map-status-chip--warn">No house pledged</span>
+    <% } %>
+    <% if (guild) { %>
+    <span class="map-status-chip">Guild: [<%= guild.tag %>] <%= guild.name %></span>
+    <% } else { %>
+    <span class="map-status-chip map-status-chip--muted">No guild</span>
+    <% } %>
+    <% if (war && war.siege) { %>
+    <span class="map-status-chip map-status-chip--siege">Siege: <%= war.siege.display_name %></span>
+    <% } %>
+  </section>
+
   <% if (!player.faction_id) { %>
-  <section class="map-panel house-pick" style="max-width:400px;margin-bottom:1rem">
+  <section class="map-panel house-pick">
     <h2>Choose your Great House</h2>
     <form method="post" action="/map/join-house">
       <select name="faction_id" required>
@@ -16,6 +32,25 @@
       </select>
       <button type="submit" class="btn-stone">Pledge allegiance</button>
     </form>
+  </section>
+  <% } %>
+
+  <% if (guild && war && war.siege) { %>
+  <section class="map-war-panel map-panel">
+    <h2>Siege in progress</h2>
+    <p class="map-war-target"><strong><%= war.siege.display_name %></strong></p>
+    <div class="map-siege-bar" aria-label="Siege progress">
+      <span class="map-siege-fill" style="width:<%= Math.min(100, Math.round((war.siege.progress / war.siege.target) * 100)) %>%"></span>
+    </div>
+    <p class="map-war-meta"><%= war.siege.progress %> / <%= war.siege.target %> · ends <%= war.siege.ends_at %></p>
+    <form method="post" action="/map/reinforce">
+      <button type="submit" class="btn-realm">Reinforce siege</button>
+    </form>
+  </section>
+  <% } else if (guild) { %>
+  <section class="map-war-panel map-panel map-war-panel--idle">
+    <h2>Guild war</h2>
+    <p class="map-war-meta">No active siege. Click a holding on the map to declare war (guild required).</p>
   </section>
   <% } %>
 
@@ -34,7 +69,7 @@
     </aside>
   </div>
 
-  <p style="margin-top:1rem"><a href="/dashboard">← Dashboard</a></p>
+  <p class="map-back-link"><a href="/dashboard">← Dashboard</a></p>
 </div>
 
 <script>

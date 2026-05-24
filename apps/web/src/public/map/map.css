@@ -158,3 +158,82 @@
   width: 100%;
   margin: 0.5rem 0;
 }
+
+.map-status-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1rem;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.map-status-chip {
+  font-size: 0.72rem;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid #8a7048;
+  background: #1a1410;
+  color: #fde68a;
+}
+
+.map-status-chip--warn {
+  border-color: rgba(229, 62, 62, 0.5);
+  color: #fca5a5;
+}
+
+.map-status-chip--muted {
+  color: #b0a898;
+}
+
+.map-status-chip--siege {
+  border-color: rgba(220, 38, 38, 0.55);
+  color: #fecaca;
+}
+
+.map-war-panel {
+  max-width: 900px;
+  margin: 0 auto 1rem;
+  padding: 12px 14px;
+  border-radius: 8px;
+  border: 1px solid #8a7048;
+  background: #1a1410;
+}
+
+.map-war-panel--idle {
+  opacity: 0.9;
+}
+
+.map-war-panel h2 {
+  margin: 0 0 8px;
+  font-size: 0.95rem;
+  color: #fde68a;
+}
+
+.map-siege-bar {
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid #6a5840;
+  overflow: hidden;
+  margin: 8px 0;
+}
+
+.map-siege-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #7f1d1d, #dc2626);
+  border-radius: 999px;
+}
+
+.map-war-meta {
+  margin: 0 0 8px;
+  font-size: 0.75rem;
+  color: #b0a898;
+}
+
+.map-back-link {
+  max-width: 900px;
+  margin: 1rem auto 0;
+}

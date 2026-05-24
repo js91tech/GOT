@@ -12,3 +12,7 @@ export function pickInvestmentTier(amount) {
     returnMult: 2.2
   };
 }
+
+export function listInvestmentTiers() {
+  return [...(balance.investmentTiers || [])].sort((a, b) => a.min - b.min);
+}

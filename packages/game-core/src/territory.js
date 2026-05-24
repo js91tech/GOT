@@ -197,7 +197,7 @@ export function contributeSiege(discordId, username) {
 export function warStatus(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
-  if (!player.guild_id) return { ok: false, message: 'Not in a guild.' };
+  if (!player.guild_id) return { ok: false, message: 'Not in a guild.', siege: null };
   const siege = db
     .prepare(
       `SELECT s.*, t.display_name
@@ -207,10 +207,18 @@ export function warStatus(discordId, username) {
        ORDER BY s.id DESC LIMIT 1`
     )
     .get(player.guild_id);
-  if (!siege) return { ok: true, message: 'No active siege.' };
+  if (!siege) return { ok: true, message: 'No active siege.', siege: null };
+  const siegeData = {
+    territory_id: siege.territory_id,
+    display_name: siege.display_name,
+    progress: siege.progress,
+    target: SIEGE_TARGET,
+    ends_at: siege.ends_at
+  };
   return {
     ok: true,
-    message: `Siege on **${siege.display_name}**: ${siege.progress}/${SIEGE_TARGET} (ends ${siege.ends_at})`
+    message: `Siege on **${siege.display_name}**: ${siege.progress}/${SIEGE_TARGET} (ends ${siege.ends_at})`,
+    siege: siegeData
   };
 }
 

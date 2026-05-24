@@ -56,6 +56,26 @@ export async function handleCommand(interaction) {
     return { content: formatStatusContent(s) };
   }
 
+  if (cmd === 'dailyquest') {
+    const action = interaction.options.getString('action') || 'list';
+    if (action === 'claim') {
+      const questId = interaction.options.getString('id');
+      if (!questId) {
+        return { content: 'Pick a quest id — run `/dailyquest` to list today\'s quests.', ephemeral: true };
+      }
+      return reply(GameService.claimDailyQuest(uid, name, questId), interaction);
+    }
+    const quests = GameService.dailyQuests(uid, name);
+    if (!quests.length) return { content: 'No daily quests today.' };
+    const lines = quests
+      .map((q) => {
+        const state = q.claimed ? '✅ claimed' : q.done ? '🎁 ready' : `${q.progress}/${q.target}`;
+        return `\`${q.id}\` **${q.label}** — ${state} (+${q.coins}c, +${q.xp ?? 30} XP)`;
+      })
+      .join('\n');
+    return { content: `**Daily quests**\n${lines}\n\nClaim with \`/dailyquest action:claim id:…\`` };
+  }
+
   if (cmd === 'train') {
     return reply(
       GameService.train(

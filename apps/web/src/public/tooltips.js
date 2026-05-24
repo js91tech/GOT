@@ -27,11 +27,11 @@
       submit: 'Start the selected mission.'
     },
     '/work': {
-      panel: 'Clock in at your job for coins and XP. Set your job with the job picker or /job.',
+      panel: 'Clock in for coins and XP. Company members run a company shift; otherwise you work your selected job.',
       submit: 'Complete a work shift.'
     },
     '/job': {
-      panel: 'Choose which job you work when you clock in (separate from company membership).',
+      panel: 'Set your job — used for work shifts when you are not in a company.',
       jobId: 'Job — each has level requirements and different payouts.',
       submit: 'Set your active job.'
     },
@@ -119,7 +119,7 @@
     Resolve: 'Used for some missions and oath actions.',
     Bravery: 'Spent on realm missions — restore via War Camp oath.',
     'Wheel spins': 'Daily wheel attempts remaining.',
-    Company: 'Your employer — join a company for boosted work shifts.'
+    Company: 'Your employer — company shifts replace job work when joined.'
   };
 
   const ESCAPE_BUTTON = {

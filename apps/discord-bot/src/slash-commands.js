@@ -8,6 +8,21 @@ export function buildSlashCommands() {
     new SlashCommandBuilder().setName('profile').setDescription('Your lord profile'),
     new SlashCommandBuilder().setName('status').setDescription('Morale, timers, blockers'),
     new SlashCommandBuilder()
+      .setName('dailyquest')
+      .setDescription('View and claim daily quests')
+      .addStringOption((o) =>
+        o
+          .setName('action')
+          .setDescription('List quests or claim a reward')
+          .addChoices(
+            { name: 'list', value: 'list' },
+            { name: 'claim', value: 'claim' }
+          )
+      )
+      .addStringOption((o) =>
+        o.setName('id').setDescription('Quest id to claim (use list first)').setAutocomplete(true)
+      ),
+    new SlashCommandBuilder()
       .setName('train')
       .setDescription('Train combat stats at your yard')
       .addStringOption((o) =>

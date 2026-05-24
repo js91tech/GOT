@@ -226,6 +226,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const guilds = GameService.guilds(20);
   const playerGuild = GameService.playerGuild(player);
   const miniLeaderboard = GameService.leaderboard('level').slice(0, 5);
+  const investmentTiers = (balance.investmentTiers || []).slice().sort((a, b) => a.min - b.min);
   const trainCosts = {
     ce: balance.trainCeCost,
     focus: balance.trainFocusCost,
@@ -255,6 +256,8 @@ app.get('/dashboard', requireAuth, (req, res) => {
     guilds,
     playerGuild,
     miniLeaderboard,
+    investmentTiers,
+    dailyLoginBonus: { coins: balance.dailyLoginCoins, xp: balance.dailyLoginXp },
     trainCosts,
     flash: req.query.msg,
     flashAction: action,
@@ -620,6 +623,7 @@ app.get('/explore', requireAuth, (req, res) => {
   const r = GameService.explore(req.session.discordId, req.session.username);
   res.render('explore', {
     exploreText: r.message,
+    exploreView: r.view || null,
     flash: req.query.msg,
     pendingEncounter: r.pendingEncounter || null
   });
@@ -651,6 +655,10 @@ app.get('/map', requireAuth, (req, res) => {
   const id = req.session.discordId;
   const name = req.session.username;
   const bootstrap = GameService.mapBootstrap(id, name);
+  const war = GameService.warStatus(id, name);
+  const house = bootstrap.player.faction_id
+    ? bootstrap.factions.find((f) => f.id === bootstrap.player.faction_id)
+    : null;
   const msg = req.query.msg || '';
   res.render('map', {
     baseUrl,
@@ -658,6 +666,8 @@ app.get('/map', requireAuth, (req, res) => {
     factions: bootstrap.factions,
     player: bootstrap.player,
     guild: bootstrap.guild,
+    house,
+    war,
     msg
   });
 });
