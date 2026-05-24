@@ -42,6 +42,43 @@ if (serviceMode !== 'stack') {
 client.on('error', (err) => console.error('Discord client error:', err));
 process.on('unhandledRejection', (err) => console.error('Unhandled rejection:', err));
 
+function webActivityUrl() {
+  const raw =
+    process.env.WEB_BASE_URL ||
+    (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
+  const base = String(raw).trim().replace(/\/$/, '');
+  return base ? `${base}/activity` : 'https://YOUR-WEB-URL/activity';
+}
+
+function play2dFailureMessage(launchErr) {
+  const code = launchErr?.code ?? launchErr?.rawError?.code;
+  const activityUrl = webActivityUrl();
+
+  if (code === 50234) {
+    return (
+      '**Embedded App is not enabled** on this Discord application (error 50234).\n\n' +
+      'In the [Discord Developer Portal](https://discord.com/developers/applications) → your app:\n' +
+      '1. **Activities** → turn on **Embedded App**\n' +
+      '2. **URL Mappings** → root `/` → `' +
+      activityUrl +
+      '`\n' +
+      '3. **OAuth2** redirects include `http://127.0.0.1/callback` and `https://127.0.0.1/callback`\n\n' +
+      `Until Activities are configured, open the dashboard in a browser: ${activityUrl}\n` +
+      'Or join a voice channel → **Activities** (rocket) after step 1–2.'
+    );
+  }
+
+  if (code === 50035 || /activity|embedded|mapping/i.test(launchErr?.message || '')) {
+    return (
+      'Could not launch the Activity. Check Discord portal: **Activities ON**, URL mapping root → `' +
+      activityUrl +
+      '`. Join a voice channel and try **Activities** (rocket) or `/play2d` again.'
+    );
+  }
+
+  return `Could not launch Activity: ${launchErr?.message || 'Unknown error'}\n\nDashboard: ${activityUrl}`;
+}
+
 async function launchPlay2dActivity(interaction) {
   if (typeof interaction.launchActivity === 'function') {
     await interaction.launchActivity();
@@ -106,15 +143,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
         await launchPlay2dActivity(interaction);
       } catch (launchErr) {
         console.error('play2d failed:', launchErr?.raw ?? launchErr);
-        const hint =
-          launchErr?.code === 50035 || /activity|embedded|mapping/i.test(launchErr?.message || '')
-            ? 'Check Discord portal: Activities ON, URL Mapping root → your web URL `/activity` (e.g. https://your-web.up.railway.app/activity). Join a voice channel and try again.'
-            : launchErr?.message || 'Unknown error';
+        const content = play2dFailureMessage(launchErr);
         if (!interaction.replied && !interaction.deferred) {
-          await interaction.reply({
-            content: `Could not launch Activity: ${hint}`,
-            flags: MessageFlags.Ephemeral
-          });
+          await interaction
+            .reply({ content, flags: MessageFlags.Ephemeral })
+            .catch((e) => console.error('play2d reply failed:', e.message));
         }
       }
       return;
@@ -130,9 +163,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
     console.error('Command error:', interaction.commandName, err);
     const msg = err.message || 'Something went wrong.';
     if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({ content: msg, flags: MessageFlags.Ephemeral });
+      await interaction.followUp({ content: msg, flags: MessageFlags.Ephemeral }).catch(() => {});
     } else {
-      await interaction.reply({ content: msg, flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: msg, flags: MessageFlags.Ephemeral }).catch(() => {});
     }
   }
 });
