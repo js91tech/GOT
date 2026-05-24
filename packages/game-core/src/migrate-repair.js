@@ -26,6 +26,40 @@ export function ensureSchemaPatches(db) {
     if (!String(e.message).includes('duplicate column')) throw e;
   }
 
+  // v13 columns (idempotent — fixes partial failed migrations on production)
+  try {
+    db.exec('ALTER TABLE players ADD COLUMN focus_updated_at TEXT');
+  } catch (e) {
+    if (!String(e.message).includes('duplicate column')) throw e;
+  }
+  try {
+    db.exec('ALTER TABLE players ADD COLUMN daily_quest_date TEXT');
+  } catch (e) {
+    if (!String(e.message).includes('duplicate column')) throw e;
+  }
+  try {
+    db.exec('ALTER TABLE players ADD COLUMN daily_quest_state_json TEXT');
+  } catch (e) {
+    if (!String(e.message).includes('duplicate column')) throw e;
+  }
+  try {
+    db.exec('ALTER TABLE players ADD COLUMN investment_return_mult REAL');
+  } catch (e) {
+    if (!String(e.message).includes('duplicate column')) throw e;
+  }
+  try {
+    db.prepare(
+      `UPDATE players SET focus_updated_at = energy_updated_at
+       WHERE focus_updated_at IS NULL OR focus_updated_at = ''`
+    ).run();
+    db.prepare(
+      `UPDATE players SET daily_quest_state_json = '{}'
+       WHERE daily_quest_state_json IS NULL OR daily_quest_state_json = ''`
+    ).run();
+  } catch {
+    /* players table may not exist yet on fresh install before migrate */
+  }
+
   const upsertItem = db.prepare(
     `INSERT INTO item_definitions (id, name, description, shop_price, item_type, effects_json, min_level)
      VALUES (?, ?, ?, ?, ?, ?, ?)
