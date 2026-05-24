@@ -238,6 +238,12 @@ export function buildSlashCommands() {
       )
       .addIntegerOption((o) => o.setName('sets').setDescription('Sets 1-20').setMinValue(1).setMaxValue(20)),
     new SlashCommandBuilder()
+      .setName('class')
+      .setDescription('View or choose your GoT class path (Squire → Knight/Maester/Ranger…)')
+      .addStringOption((o) =>
+        o.setName('choose').setDescription('Swear a class oath when available').setAutocomplete(true)
+      ),
+    new SlashCommandBuilder()
       .setName('character')
       .setDescription('View combat power, gear bonuses, and what your stats do'),
     new SlashCommandBuilder()

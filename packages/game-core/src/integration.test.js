@@ -7,9 +7,15 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const testDb = path.join(__dirname, '../../../data/test-westeros.db');
 
-before(() => {
+before(async () => {
   process.env.DATABASE_PATH = testDb;
   if (fs.existsSync(testDb)) fs.unlinkSync(testDb);
+  try {
+    const { closeDb } = await import('./db.js');
+    closeDb();
+  } catch {
+    /* first import */
+  }
 });
 
 after(async () => {

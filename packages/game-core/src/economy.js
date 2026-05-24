@@ -1,11 +1,12 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer, getInventory, addItem, removeItem } from './player.js';
-import { applyLevelUps, audit, isBlocked, requireLevel } from './util.js';
+import { applyLevelUps, audit, isBlocked, requireLevel, computeScaledXp } from './util.js';
 import { openGrabBag } from './phase3.js';
 import { companyWork } from './company.js';
 import { equipItem, slotForItem } from './equip.js';
 import { getEffectiveWorkerStats, getWorkCooldownReduction } from './stats.js';
+import { canBuyCapBonus, clampMorale, clampFocus } from './energy.js';
 
 const JOB_WORKER_STAT = {
   janitor: 'manual_labor',
@@ -128,6 +129,43 @@ export function shopBuy(discordId, username, itemId, quantity = 1) {
   quantity = Math.max(1, Math.min(99, quantity));
   const cost = item.shop_price * quantity;
   if (player.coins < cost) return { ok: false, message: `Need ${cost} coins.` };
+  const effects = JSON.parse(item.effects_json || '{}');
+  if (effects.ceCapBonus) {
+    if (quantity !== 1) return { ok: false, message: 'Cap relics can only be bought one at a time.' };
+    const bonus = balance.capBonusAmount ?? 25;
+    if (!canBuyCapBonus(player, 'ce')) {
+      return { ok: false, message: 'You already hold a Battlehorn — morale cap is maxed (+25).' };
+    }
+    db.prepare('UPDATE players SET coins = coins - ?, ce_cap_bonus = ? WHERE id = ?').run(
+      cost,
+      bonus,
+      player.id
+    );
+    audit(db, player.id, 'shop_cap_upgrade', cost, { itemId, kind: 'morale' });
+    return {
+      ok: true,
+      message: `Purchased ${item.name}! Morale regen cap ${100 + bonus}, overflow cap ${200 + bonus}.`,
+      player: getOrCreatePlayer(discordId, username)
+    };
+  }
+  if (effects.focusCapBonus) {
+    if (quantity !== 1) return { ok: false, message: 'Cap relics can only be bought one at a time.' };
+    const bonus = balance.capBonusAmount ?? 25;
+    if (!canBuyCapBonus(player, 'focus')) {
+      return { ok: false, message: "You already wear the Maester's Focus Crown — focus cap is maxed (+25)." };
+    }
+    db.prepare('UPDATE players SET coins = coins - ?, focus_cap_bonus = ? WHERE id = ?').run(
+      cost,
+      bonus,
+      player.id
+    );
+    audit(db, player.id, 'shop_cap_upgrade', cost, { itemId, kind: 'focus' });
+    return {
+      ok: true,
+      message: `Purchased ${item.name}! Focus regen cap ${100 + bonus}, overflow cap ${200 + bonus}.`,
+      player: getOrCreatePlayer(discordId, username)
+    };
+  }
   db.prepare('UPDATE players SET coins = coins - ? WHERE id = ?').run(cost, player.id);
   addItem(player.id, itemId, quantity);
   audit(db, player.id, 'shop_buy', cost, { itemId, quantity });
@@ -172,7 +210,11 @@ export function work(discordId, username) {
   const statVal = getEffectiveWorkerStats(player, db)[workerStat] ?? 10;
   const statFactor = balance.stats?.workStatFactor ?? 0.008;
   const coinPayout = Math.floor(job.coin_payout * (1 + statVal * statFactor));
-  const xpPayout = Math.floor(job.xp_payout * (1 + statVal * (statFactor * 0.5)));
+  const xpPayout = computeScaledXp(
+    Math.floor(job.xp_payout * (1 + statVal * (statFactor * 0.5))),
+    player,
+    'work'
+  );
   db.prepare(
     `UPDATE players SET coins = coins + ?, xp = xp + ?, last_work_at = datetime('now') WHERE id = ?`
   ).run(coinPayout, xpPayout, player.id);
@@ -214,6 +256,17 @@ export function useItem(discordId, username, itemId) {
   }
   if (effects.grabBag) {
     return openGrabBag(discordId, username, true);
+  }
+  const fresh = db.prepare('SELECT * FROM players WHERE id = ?').get(player.id);
+  if (effects.ce) {
+    removeItem(player.id, itemId, 1);
+    db.prepare('UPDATE players SET ce = ? WHERE id = ?').run(clampMorale(fresh.ce + effects.ce, fresh), player.id);
+    return { ok: true, message: `Used ${inv.name}. +${effects.ce} morale.`, player: getOrCreatePlayer(discordId, username) };
+  }
+  if (effects.focus) {
+    removeItem(player.id, itemId, 1);
+    db.prepare('UPDATE players SET focus = ? WHERE id = ?').run(clampFocus(fresh.focus + effects.focus, fresh), player.id);
+    return { ok: true, message: `Used ${inv.name}. +${effects.focus} focus.`, player: getOrCreatePlayer(discordId, username) };
   }
   return { ok: false, message: 'This item cannot be used right now.' };
 }

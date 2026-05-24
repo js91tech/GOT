@@ -4,6 +4,7 @@ import { getOrCreatePlayer } from './player.js';
 import {
   applyLevelUps,
   audit,
+  computeScaledXp,
   getCritChance,
   getTrainMultiplier,
   isBlocked,
@@ -48,7 +49,7 @@ export function train(discordId, username, sets = 1, stat = 'strength') {
       crits++;
     }
     totalGain += gain;
-    totalXp += balance.trainXpGain;
+    totalXp += computeScaledXp(balance.trainXpGain, player, 'train');
   }
   if (totalGain === 0) {
     return { ok: false, message: 'Not enough morale or focus. Rest at the war camp or wait for regen.' };

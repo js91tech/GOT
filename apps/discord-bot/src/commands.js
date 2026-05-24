@@ -136,16 +136,45 @@ export async function handleCommand(interaction) {
     const c = sheet.combat;
     const w = sheet.worker;
     const lines = [
-      `**Combat power ${sheet.power}** · HP ${sheet.hp}/${sheet.max_hp}`,
+      `${sheet.class.current.icon} **${sheet.class.current.name}** · Combat power ${sheet.power} · HP ${sheet.hp}/${sheet.max_hp}`,
       `STR ${c.effective.strength} · DEF ${c.effective.defense} · SPD ${c.effective.speed} · DEX ${c.effective.dexterity}`,
       `Worker — LAB ${w.effective.manual_labor} · INT ${w.effective.intelligence} · END ${w.effective.endurance} · TEC ${w.effective.technique}`,
       '',
-      `Mission fail −${sheet.modifiers.missionFailReduction}% · coins +${sheet.modifiers.missionCoinBonus}% · mug +${sheet.modifiers.mugBonus}% · work cd −${sheet.modifiers.workCooldownReduction}%`
+      sheet.class.bonusSummary,
+      `Mission fail −${sheet.modifiers.missionFailReduction}% · coins +${sheet.modifiers.missionCoinBonus}% · mug +${sheet.modifiers.mugBonus}%`
     ];
+    if (sheet.class.milestone?.due) {
+      lines.push('', '_Class choice available — use `/class choose:<name>`_');
+    }
     if (sheet.equipped.length) {
       lines.push('', '**Equipped**', ...sheet.equipped.map((e) => `${e.slot}: ${e.name} (${e.effects})`));
     } else {
       lines.push('', '_No gear equipped — `/armory list`_');
+    }
+    return { content: lines.join('\n') };
+  }
+  if (cmd === 'class') {
+    const pick = interaction.options.getString('choose');
+    if (pick) return reply(GameService.chooseClass(uid, name, pick), interaction);
+    const progress = GameService.classProgress(uid, name);
+    const lines = [
+      `**${progress.current.icon} ${progress.current.name}** — ${progress.current.description}`,
+      `Path: ${progress.path.map((c) => `${c.icon} ${c.name}`).join(' → ')}`,
+      progress.bonusSummary
+    ];
+    if (progress.milestone?.due) {
+      lines.push(
+        '',
+        `**Choose at Lv.${progress.milestone.nextLevel}+:**`,
+        ...progress.milestone.options.map(
+          (o) => `\`${o.id}\` ${o.icon} **${o.name}** — ${o.description}\n_${o.effectSummary}_`
+        )
+      );
+      lines.push('', '_Use `/class choose:<id>`_');
+    } else if (progress.atMaxClass) {
+      lines.push('', '_You have mastered your class path._');
+    } else if (progress.nextSpecializationLevel) {
+      lines.push('', `Next oath at **Lv.${progress.nextSpecializationLevel}**`);
     }
     return { content: lines.join('\n') };
   }

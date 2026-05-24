@@ -1,6 +1,7 @@
 import { getDb } from './db.js';
 import { getOrCreatePlayer } from './player.js';
 import { audit } from './util.js';
+import { clampMorale, clampFocus } from './energy.js';
 
 export function listDrugs() {
   return getDb().prepare('SELECT * FROM drug_definitions ORDER BY cost').all();
@@ -21,13 +22,14 @@ export function useDrug(discordId, username, drugId) {
   const effects = JSON.parse(drug.effects_json || '{}');
   const updates = ['coins = coins - ?'];
   const params = [drug.cost];
+  const fresh = db.prepare('SELECT * FROM players WHERE id = ?').get(player.id);
   if (effects.ce) {
-    updates.push('ce = MIN(100, ce + ?)');
-    params.push(effects.ce);
+    updates.push('ce = ?');
+    params.push(clampMorale(fresh.ce + effects.ce, fresh));
   }
   if (effects.focus) {
-    updates.push('focus = MIN(100, focus + ?)');
-    params.push(effects.focus);
+    updates.push('focus = ?');
+    params.push(clampFocus(fresh.focus + effects.focus, fresh));
   }
   if (effects.resolve) {
     updates.push('resolve = MIN(100, resolve + ?)');

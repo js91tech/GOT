@@ -1,7 +1,7 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer } from './player.js';
-import { applyLevelUps, audit, isBlocked, roll } from './util.js';
+import { applyLevelUps, audit, isBlocked, roll, computeScaledXp } from './util.js';
 
 export const WORKER_STATS = ['manual_labor', 'intelligence', 'endurance', 'technique'];
 
@@ -36,7 +36,7 @@ export function trainWorker(discordId, username, stat, sets = 1) {
     let gain = gainBase;
     if (roll(0.05)) gain = Math.floor(gain * 1.5);
     totalGain += gain;
-    totalXp += balance.trainXpGain;
+    totalXp += computeScaledXp(balance.trainXpGain, player, 'train');
   }
   if (totalGain === 0) return { ok: false, message: 'Not enough Morale for worker training.' };
   db.prepare(`UPDATE players SET ce = ?, ${workerStat} = ${workerStat} + ?, xp = xp + ? WHERE id = ?`).run(

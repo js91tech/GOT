@@ -16,7 +16,8 @@ import {
   listNpcsInRoom
 } from './explore.js';
 import { exploreHunt as exploreHuntAction, pveAttack as pveAttackAction, pveFlee as pveFleeAction } from './explore-pve.js';
-import { listRecipes, forgeRecipe as forgeRecipeAction } from './recipes.js';
+import { listPvpTargets } from './pvp-targets.js';
+import { chooseClass, listClassOptions } from './classes.js';
 import {
   escapeHospital,
   escapeJail,
@@ -159,6 +160,12 @@ export class GameService {
   static characterSheet(discordId, username) {
     const player = getOrCreatePlayer(discordId, username);
     return { ok: true, player, sheet: getCharacterSheet(player, getDb()) };
+  }
+  static classProgress(discordId, username) {
+    return listClassOptions(discordId, username);
+  }
+  static chooseClass(discordId, username, classId) {
+    return chooseClass(discordId, username, classId);
   }
   static work(discordId, username) {
     return workAction(discordId, username);
@@ -322,6 +329,10 @@ export class GameService {
         'SELECT id, discord_id, username, level, coins FROM players WHERE banned = 0 ORDER BY level DESC LIMIT ?'
       )
       .all(limit);
+  }
+
+  static listPvpTargets(excludeDiscordId, guildMembers = null) {
+    return listPvpTargets(excludeDiscordId, guildMembers);
   }
 
   static getPlayerByDiscord(discordId) {

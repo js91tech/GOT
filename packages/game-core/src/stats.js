@@ -1,4 +1,5 @@
 import balance from './balance.json' with { type: 'json' };
+import { getClassStatBonuses, getClassModifier, getClassProgress, formatClassBonuses } from './classes.js';
 
 export const TRAIN_STATS = ['strength', 'defense', 'speed', 'dexterity'];
 export const WORKER_STATS = ['manual_labor', 'intelligence', 'endurance', 'technique'];
@@ -82,9 +83,10 @@ export function getGearWorkerBonuses(player, db) {
 
 export function getEffectiveStats(player, db) {
   const bonuses = getGearStatBonuses(player, db);
+  const classBonuses = getClassStatBonuses(player);
   const stats = {};
   for (const stat of TRAIN_STATS) {
-    stats[stat] = (player[stat] ?? 10) + (bonuses[stat] || 0);
+    stats[stat] = (player[stat] ?? 10) + (bonuses[stat] || 0) + (classBonuses[stat] || 0);
   }
   stats.total = stats.strength + stats.defense + stats.speed + stats.dexterity;
   return stats;
@@ -92,15 +94,16 @@ export function getEffectiveStats(player, db) {
 
 export function getEffectiveWorkerStats(player, db) {
   const bonuses = getGearWorkerBonuses(player, db);
+  const classBonuses = getClassStatBonuses(player);
   const stats = {};
   for (const stat of WORKER_STATS) {
-    stats[stat] = (player[stat] ?? 10) + (bonuses[stat] || 0);
+    stats[stat] = (player[stat] ?? 10) + (bonuses[stat] || 0) + (classBonuses[stat] || 0);
   }
   return stats;
 }
 
 export function getGearMaxHpBonus(player, db) {
-  let bonus = 0;
+  let bonus = getClassStatBonuses(player).max_hp || 0;
   for (const g of equippedRows(player, db)) {
     const e = parseEffects(g.effects_json);
     if (e.max_hp) bonus += e.max_hp;
@@ -150,7 +153,7 @@ export function getMissionFailReduction(player, db) {
 export function getMissionCoinMultiplier(player, db) {
   const str = getEffectiveStats(player, db).strength;
   const factor = balance.stats?.crimeStrCoinBonus ?? 0.004;
-  return 1 + str * factor;
+  return (1 + str * factor) * getClassModifier(player, 'crimeCoinMult', 1);
 }
 
 /** Endurance reduces hospital chance on failed missions. */
@@ -164,7 +167,7 @@ export function getMissionHospitalReduction(player, db) {
 export function getMugBonus(player, db) {
   const dex = getEffectiveStats(player, db).dexterity;
   const factor = balance.stats?.mugDexBonus ?? 0.005;
-  return 1 + dex * factor;
+  return (1 + dex * factor) * getClassModifier(player, 'mugMult', 1);
 }
 
 /** Speed shaves minutes off work cooldown. */
@@ -184,10 +187,14 @@ export function formatItemEffects(effectsJson) {
   if (e.trainMult) parts.push(`+${Math.round((e.trainMult - 1) * 100)}% train`);
   if (e.hospitalClear) parts.push('Clears maester tent');
   if (e.jailClear) parts.push('Frees from cells');
+  if (e.ceCapBonus) parts.push(`+${e.ceCapBonus} morale cap (permanent)`);
+  if (e.focusCapBonus) parts.push(`+${e.focusCapBonus} focus cap (permanent)`);
   return parts.join(' · ') || 'No stat bonus';
 }
 
 export function getCharacterSheet(player, db) {
+  const classInfo = getClassProgress(player);
+  const classBonuses = getClassStatBonuses(player);
   const combatGear = getGearStatBonuses(player, db);
   const workerGear = getGearWorkerBonuses(player, db);
   const combatEffective = getEffectiveStats(player, db);
@@ -198,14 +205,23 @@ export function getCharacterSheet(player, db) {
     effects: formatItemEffects(row.effects_json)
   }));
   return {
+    class: {
+      current: classInfo.current,
+      path: classInfo.path,
+      milestone: classInfo.milestone,
+      bonusSummary: formatClassBonuses(classInfo.bonuses),
+      statBonuses: classBonuses
+    },
     combat: {
       base: Object.fromEntries(TRAIN_STATS.map((s) => [s, player[s] ?? 10])),
       gear: combatGear,
+      class: Object.fromEntries(TRAIN_STATS.map((s) => [s, classBonuses[s] || 0])),
       effective: combatEffective
     },
     worker: {
       base: Object.fromEntries(WORKER_STATS.map((s) => [s, player[s] ?? 10])),
       gear: workerGear,
+      class: Object.fromEntries(WORKER_STATS.map((s) => [s, classBonuses[s] || 0])),
       effective: workerEffective
     },
     max_hp: getEffectiveMaxHp(player, db),

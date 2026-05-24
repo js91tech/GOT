@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getDb } from './db.js';
 import { getOrCreatePlayer, addItem } from './player.js';
-import { audit, minutesFromNow, roll, applyLevelUps, requireLevel } from './util.js';
+import { audit, minutesFromNow, roll, applyLevelUps, requireLevel, computeScaledXp } from './util.js';
 import { EXPLORE_AREAS, EXPLORE_NPCS, resolveLegacyId } from './got-theme.js';
 import { tryPveEncounter, formatRiskLine, getPendingEncounter, mustResolveEncounter } from './explore-pve.js';
 
@@ -144,8 +144,9 @@ export function exploreMine(discordId, username) {
   const qty = roll(0.2) ? 2 : 1;
   addItem(player.id, itemId, qty);
   const coins = Math.floor(50 + Math.random() * 150);
-  db.prepare('UPDATE players SET coins = coins + ?, xp = xp + 5 WHERE id = ?').run(coins, player.id);
-  applyLevelUps(db, { ...player, xp: player.xp + 5 });
+  const mineXp = computeScaledXp(5, player, 'general');
+  db.prepare('UPDATE players SET coins = coins + ?, xp = xp + ? WHERE id = ?').run(coins, mineXp, player.id);
+  applyLevelUps(db, { ...player, xp: player.xp + mineXp });
   audit(db, player.id, 'explore_mine', coins, { room: roomId, item: itemId });
   return {
     ok: true,
@@ -175,8 +176,10 @@ export function talkNpc(discordId, username, npcId, responseIndex = 0) {
   db.prepare('UPDATE players SET npc_progress_json = ? WHERE id = ?').run(JSON.stringify(progress), player.id);
   let bonus = '';
   if (nextStep >= 3 && step < 3) {
-    db.prepare('UPDATE players SET coins = coins + 200, xp = xp + 25 WHERE id = ?').run(player.id);
-    bonus = ' Quest bonus: +200 coins, +25 XP!';
+    const questXp = computeScaledXp(25, player, 'general');
+    db.prepare('UPDATE players SET coins = coins + 200, xp = xp + ? WHERE id = ?').run(questXp, player.id);
+    applyLevelUps(db, { ...player, xp: player.xp + questXp });
+    bonus = ` Quest bonus: +200 coins, +${questXp} XP!`;
   }
   const responses = (dialogue.responses || []).map((r, i) => `[${i + 1}] ${r}`).join('\n');
   return {

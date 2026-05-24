@@ -65,10 +65,17 @@
   stroke: none;
 }
 .hotspot-ring {
-  fill: rgba(212, 175, 55, 0.08);
-  stroke: rgba(212, 175, 55, 0.45);
+  fill: none;
+  stroke: transparent;
+  opacity: 0;
+  transition: opacity 0.2s, fill 0.2s, stroke 0.2s, stroke-width 0.2s;
+}
+.map-hotspot:hover .hotspot-ring,
+.map-hotspot.selected .hotspot-ring {
+  opacity: 1;
+  fill: rgba(212, 175, 55, 0.12);
+  stroke: rgba(212, 175, 55, 0.55);
   stroke-width: 2;
-  transition: fill 0.2s, stroke 0.2s, stroke-width 0.2s;
 }
 .map-hotspot:hover .hotspot-ring {
   fill: rgba(212, 175, 55, 0.18);
@@ -81,13 +88,20 @@
   stroke-width: 3.5;
   filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.75));
 }
-.map-hotspot.owner-faction-stark .hotspot-ring { stroke: #8ab0d0; fill: rgba(74, 106, 138, 0.2); }
-.map-hotspot.owner-faction-lannister .hotspot-ring { stroke: #d4af37; fill: rgba(154, 122, 26, 0.2); }
-.map-hotspot.owner-faction-baratheon .hotspot-ring { stroke: #6a9ad0; fill: rgba(45, 90, 138, 0.2); }
-.map-hotspot.owner-faction-tyrell .hotspot-ring { stroke: #7cb868; fill: rgba(61, 122, 61, 0.2); }
-.map-hotspot.owner-faction-greyjoy .hotspot-ring { stroke: #9aa0a8; fill: rgba(90, 90, 90, 0.2); }
-.map-hotspot.owner-faction-targaryen .hotspot-ring { stroke: #e85050; fill: rgba(139, 42, 42, 0.2); }
-.map-hotspot.owner-guild .hotspot-ring { stroke: #a878d8; fill: rgba(107, 74, 154, 0.2); }
+.map-hotspot.owner-faction-stark:hover .hotspot-ring,
+.map-hotspot.owner-faction-stark.selected .hotspot-ring { stroke: #8ab0d0; fill: rgba(74, 106, 138, 0.2); }
+.map-hotspot.owner-faction-lannister:hover .hotspot-ring,
+.map-hotspot.owner-faction-lannister.selected .hotspot-ring { stroke: #d4af37; fill: rgba(154, 122, 26, 0.2); }
+.map-hotspot.owner-faction-baratheon:hover .hotspot-ring,
+.map-hotspot.owner-faction-baratheon.selected .hotspot-ring { stroke: #6a9ad0; fill: rgba(45, 90, 138, 0.2); }
+.map-hotspot.owner-faction-tyrell:hover .hotspot-ring,
+.map-hotspot.owner-faction-tyrell.selected .hotspot-ring { stroke: #7cb868; fill: rgba(61, 122, 61, 0.2); }
+.map-hotspot.owner-faction-greyjoy:hover .hotspot-ring,
+.map-hotspot.owner-faction-greyjoy.selected .hotspot-ring { stroke: #9aa0a8; fill: rgba(90, 90, 90, 0.2); }
+.map-hotspot.owner-faction-targaryen:hover .hotspot-ring,
+.map-hotspot.owner-faction-targaryen.selected .hotspot-ring { stroke: #e85050; fill: rgba(139, 42, 42, 0.2); }
+.map-hotspot.owner-guild:hover .hotspot-ring,
+.map-hotspot.owner-guild.selected .hotspot-ring { stroke: #a878d8; fill: rgba(107, 74, 154, 0.2); }
 .map-panel {
   background: linear-gradient(165deg, #2a2218, #1a1410);
   border: 2px solid #8a7048;

@@ -3,10 +3,11 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
-import { GameService } from '@westeros/game-core';
+import { GameService, gotLabel } from '@westeros/game-core';
 import { gifForAction, HERO_IMAGE, MISSION_IMAGE, crestUrl } from './action-media.js';
 import { itemIconUrl } from './item-icons.js';
 import { portraitUrl } from './portraits.js';
+import { fetchGuildMemberUsers } from './discord-guild.js';
 import { createApiProxy, resolveApiProxyTarget } from './api-proxy.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -165,13 +166,17 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const name = req.session.username;
   const { player, status, inventory } = GameService.profile(id, name);
   const confinement = GameService.confinement(id, name);
-  const crimes = GameService.crimes(id, name);
+  const crimes = GameService.crimes(id, name).map((c) => ({
+    ...c,
+    name: gotLabel(c.id, c.name)
+  }));
   const action = req.query.action || '';
   const flashOk = req.query.ok !== '0';
   const factions = GameService.factions();
   const house = player.faction_id ? factions.find((f) => f.id === player.faction_id) : null;
   const inventoryWithIcons = inventory.map((i) => ({
     ...i,
+    name: gotLabel(i.item_id, i.name),
     iconUrl: itemIconUrl(i.item_id, i.item_type)
   }));
   const equippable = inventoryWithIcons.filter(
@@ -323,6 +328,22 @@ app.get('/character', requireAuth, (req, res) => {
   res.render('character', { player, sheet, flash: req.query.msg });
 });
 
+app.get('/class', requireAuth, (req, res) => {
+  const { player } = GameService.profile(req.session.discordId, req.session.username);
+  const progress = GameService.classProgress(req.session.discordId, req.session.username);
+  res.render('class', {
+    player,
+    progress,
+    bonusSummary: progress.bonusSummary || '',
+    flash: req.query.msg
+  });
+});
+
+app.post('/class', requireAuth, (req, res) => {
+  const r = GameService.chooseClass(req.session.discordId, req.session.username, req.body.classId);
+  res.redirect('/class?msg=' + encodeURIComponent(r.message));
+});
+
 app.post('/unequip', requireAuth, (req, res) => {
   const r = GameService.unequip(req.session.discordId, req.session.username, req.body.slot);
   res.redirect('/character?msg=' + encodeURIComponent(r.message));
@@ -333,16 +354,17 @@ app.post('/shop/buy', requireAuth, (req, res) => {
   res.redirect('/shop?msg=' + encodeURIComponent(r.message));
 });
 
-app.get('/pvp', requireAuth, (req, res) => {
-  const players = GameService.listPlayers(30)
-    .filter((p) => p.discord_id !== req.session.discordId)
-    .map((p) => ({
-      ...p,
-      portraitUrl: portraitUrl(p.discord_id, p.username)
-    }));
+app.get('/pvp', requireAuth, async (req, res) => {
+  const guildMembers = await fetchGuildMemberUsers();
+  const targets = GameService.listPvpTargets(req.session.discordId, guildMembers);
+  const players = targets.map((p) => ({
+    ...p,
+    portraitUrl: portraitUrl(p.discord_id, p.username)
+  }));
   const flashOk = req.query.ok !== '0';
   res.render('pvp', {
     players,
+    guildMode: Boolean(guildMembers?.length),
     flash: req.query.msg,
     flashGif: gifForAction(req.query.action || 'attack', flashOk),
     flashOk
@@ -370,10 +392,10 @@ app.post('/bust', requireAuth, (req, res) => {
 
 app.get('/advanced', requireAuth, (req, res) => {
   res.render('advanced', {
-    clans: GameService.clans(),
-    estates: GameService.estates(),
-    education: GameService.educationList(),
-    commodities: GameService.commodities(),
+    clans: GameService.clans().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
+    estates: GameService.estates().map((e) => ({ ...e, name: gotLabel(e.name, e.name) })),
+    education: GameService.educationList().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
+    commodities: GameService.commodities().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
     market: GameService.marketBrowse(),
     gold: GameService.goldBrowse(),
     flash: req.query.msg

@@ -16,12 +16,13 @@ export function resourceIcon(type) {
   return RESOURCE_ICONS[type] || '📦';
 }
 
-/** Lord rank from level (replaces JJK grade tiers). */
+/** Lord rank from level (cap 50). */
 export function lordRank(level) {
-  if (level >= 80) return 'Warden';
-  if (level >= 50) return 'High Lord';
+  if (level >= 50) return 'Warden of the Realm';
+  if (level >= 40) return 'High Lord';
   if (level >= 30) return 'Lord';
   if (level >= 15) return 'Knight';
+  if (level >= 5) return 'Sworn Sword';
   return 'Squire';
 }
 
@@ -72,6 +73,50 @@ export const ID_RENAMES = {
   spirit_fragment: 'dragonglass',
   bone_shard: 'iron_ingot'
 };
+
+/** Human-readable labels for legacy JJK ids still in saves or stale DB rows. */
+export const GOT_LABELS = {
+  petty_cleanup: 'Petty Border Raid',
+  grade4_patrol: 'Border Patrol',
+  shibuya_raid: 'Sack the Village',
+  special_exorcism: 'Siege Assault',
+  tokyo: 'House Stark',
+  kyoto: 'House Lannister',
+  zenin: 'House Baratheon',
+  osaka: 'House Tully',
+  sendai: 'House Tyrell',
+  cursed_blade: 'Valyrian Steel Blade',
+  cursed_gloves: 'Smith Gloves',
+  reversal_kit: "Healer's Kit",
+  spirit_spear: 'War Spear',
+  armor_vest: 'Plate Vest',
+  domain_charm: 'Sigil Charm',
+  ce_shot: 'Morale Tonic',
+  cursed_rice: 'Grain Sack',
+  spirit_amber: 'Dragonglass Dust',
+  grade_bead: 'Noble Seal',
+  basics: 'Swordcraft Basics',
+  black_flash: 'Critical Strike Theory',
+  domain_theory: 'Siegecraft',
+  'Tokyo Jujutsu High': 'House Stark',
+  'Kyoto Sister School': 'House Lannister',
+  'Zenin Clan': 'House Baratheon',
+  'Cursed Rice': 'Grain Sack',
+  'Spirit Amber': 'Dragonglass Dust',
+  'Grade Bead': 'Noble Seal',
+  'Cursed Energy Basics': 'Swordcraft Basics',
+  'Black Flash Theory': 'Critical Strike Theory',
+  'Domain Expansion Theory': 'Siegecraft',
+  'Dorm Room': 'Squire Quarters',
+  'Faculty Quarters': 'Lordly Chambers',
+  'Domain Loft': 'Dragonstone Keep'
+};
+
+export function gotLabel(id, fallbackName) {
+  if (id && GOT_LABELS[id]) return GOT_LABELS[id];
+  if (fallbackName && GOT_LABELS[fallbackName]) return GOT_LABELS[fallbackName];
+  return fallbackName || id || '';
+}
 
 export function resolveLegacyId(id) {
   return ID_RENAMES[id] || id;

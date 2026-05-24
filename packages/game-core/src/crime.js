@@ -1,11 +1,12 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer } from './player.js';
-import { applyLevelUps, audit, isBlocked, minutesFromNow, requireLevel, roll } from './util.js';
+import { applyLevelUps, audit, isBlocked, minutesFromNow, requireLevel, roll, computeScaledXp } from './util.js';
 import {
   getMissionCoinMultiplier,
   getMissionFailReduction
 } from './stats.js';
+import { getClassModifier } from './classes.js';
 export function listCrimes(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
@@ -33,8 +34,10 @@ export function commitCrime(discordId, username, crimeId) {
     crime.bravery_cost,
     player.id
   );
-  if (roll(crime.fail_chance * (1 - getMissionFailReduction(player, db)))) {
-    if (roll(crime.jail_chance / (crime.fail_chance || 1))) {
+  const failMult = getClassModifier(player, 'crimeFailMult', 1);
+  if (roll(crime.fail_chance * failMult * (1 - getMissionFailReduction(player, db)))) {
+    const jailMult = getClassModifier(player, 'jailChanceMult', 1);
+    if (roll((crime.jail_chance * jailMult) / (crime.fail_chance || 1))) {
       const until = minutesFromNow(balance.jailMinutes);
       db.prepare('UPDATE players SET jail_until = ? WHERE id = ?').run(until, player.id);
       return { ok: false, message: `Mission failed! Caught and thrown in the Black Cells for ${balance.jailMinutes}m.` };
@@ -43,8 +46,7 @@ export function commitCrime(discordId, username, crimeId) {
     db.prepare('UPDATE players SET hospital_until = ? WHERE id = ?').run(until, player.id);
     return { ok: false, message: `Mission failed! Injured — infirmary for ${balance.hospitalMinutes}m.` };
   }
-  const xpScale = Math.max(1, 5 - Math.min(4, player.level - 1));
-  const xpGain = Math.max(1, Math.floor(crime.xp_reward / xpScale));
+  const xpGain = computeScaledXp(crime.xp_reward, player, 'crime');
   const coins = Math.floor(crime.coin_reward * getMissionCoinMultiplier(player, db));
   db.prepare('UPDATE players SET xp = xp + ?, coins = coins + ? WHERE id = ?').run(
     xpGain,

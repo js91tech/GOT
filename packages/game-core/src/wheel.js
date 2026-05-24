@@ -1,7 +1,7 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer, addItem } from './player.js';
-import { applyLevelUps, audit, minutesFromNow, roll } from './util.js';
+import { applyLevelUps, audit, minutesFromNow, roll, computeScaledXp } from './util.js';
 
 const OUTCOMES = [
   { weight: 25, type: 'coins', min: 100, max: 2000 },
@@ -41,7 +41,8 @@ export function spinWheel(discordId, username) {
       break;
     }
     case 'xp': {
-      const amt = Math.floor(outcome.min + Math.random() * (outcome.max - outcome.min));
+      const raw = Math.floor(outcome.min + Math.random() * (outcome.max - outcome.min));
+      const amt = computeScaledXp(raw, player, 'general');
       db.prepare('UPDATE players SET xp = xp + ? WHERE id = ?').run(amt, player.id);
       applyLevelUps(db, { ...player, xp: player.xp + amt });
       message = `Wheel: +${amt} XP!`;

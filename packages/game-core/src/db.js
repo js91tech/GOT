@@ -7,6 +7,10 @@ import { migrateGotTheme } from './migrate-got-theme.js';
 import { migrateCharacterBuild } from './migrate-character-build.js';
 import { migrateExplorePve } from './migrate-explore-pve.js';
 import { migratePveEncounter } from './migrate-pve-encounter.js';
+import { ensureSchemaPatches } from './migrate-repair.js';
+import { refreshGotLabels } from './migrate-got-theme.js';
+import { migrateClasses } from './migrate-classes.js';
+import { migrateEnergyCaps } from './migrate-energy.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -68,6 +72,7 @@ export function closeDb() {
 
 function migrate(db) {
   db.exec(SCHEMA_SQL);
+  ensureSchemaPatches(db);
   const version = db.pragma('user_version', { simple: true });
   if (version < 1) {
     seedWorld(db);
@@ -145,6 +150,19 @@ function migrate(db) {
     migratePveEncounter(db);
     db.pragma('user_version = 8');
   }
+  if (version < 9) {
+    refreshGotLabels(db);
+    db.pragma('user_version = 9');
+  }
+  if (version < 10) {
+    migrateClasses(db);
+    db.pragma('user_version = 10');
+  }
+  if (version < 11) {
+    migrateEnergyCaps(db);
+    db.pragma('user_version = 11');
+  }
+  ensureSchemaPatches(db);
 }
 
 function seedWesterosRealm(db) {

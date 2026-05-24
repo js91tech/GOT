@@ -2,6 +2,7 @@ import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer } from './player.js';
 import { audit } from './util.js';
+import { clampFocus, getMoraleRegenCap, clampMorale } from './energy.js';
 
 export function loungeAction(discordId, username, action) {
   const player = getOrCreatePlayer(discordId, username);
@@ -9,7 +10,8 @@ export function loungeAction(discordId, username, action) {
   switch (action) {
     case 'tea': {
       if (player.rice < 5) return { ok: false, message: 'Need 5 grain rations for a feast (+5 Focus).' };
-      db.prepare('UPDATE players SET rice = rice - 5, focus = MIN(focus + 5, 100) WHERE id = ?').run(
+      db.prepare('UPDATE players SET rice = rice - 5, focus = ? WHERE id = ?').run(
+        clampFocus(player.focus + 5, player),
         player.id
       );
       audit(db, player.id, 'lounge_tea', 5, {});
@@ -36,15 +38,16 @@ export function loungeAction(discordId, username, action) {
       if (player.gold_objects < 1 && player.coins < cost * 1000) {
         return { ok: false, message: 'Morale rally costs 1 royal relic or 12,000 coins.' };
       }
+      const refillCe = getMoraleRegenCap(player);
       if (player.gold_objects >= 1) {
         db.prepare('UPDATE players SET gold_objects = gold_objects - 1, ce = ? WHERE id = ?').run(
-          balance.ceMax,
+          refillCe,
           player.id
         );
       } else {
         db.prepare('UPDATE players SET coins = coins - ?, ce = ? WHERE id = ?').run(
           cost * 1000,
-          balance.ceMax,
+          refillCe,
           player.id
         );
       }

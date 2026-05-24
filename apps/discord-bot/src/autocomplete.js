@@ -170,5 +170,16 @@ export async function handleAutocomplete(interaction) {
     );
   }
 
+  if (cmd === 'class' && focused.name === 'choose') {
+    const progress = GameService.classProgress(uid, name);
+    const options = progress.milestone?.options || [];
+    return filterChoices(
+      options,
+      q,
+      (c) => `${c.icon} ${c.name} (Lv${c.minLevel})`,
+      (c) => c.id
+    );
+  }
+
   return [];
 }

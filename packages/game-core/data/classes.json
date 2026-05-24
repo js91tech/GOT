@@ -1,0 +1,178 @@
+{
+  "squire": {
+    "id": "squire",
+    "name": "Squire",
+    "tier": 0,
+    "minLevel": 1,
+    "parent": null,
+    "icon": "🛡️",
+    "description": "Every lord begins as a squire — jack of few trades, master of none yet.",
+    "bonuses": {},
+    "penalties": {}
+  },
+  "knight": {
+    "id": "knight",
+    "name": "Knight",
+    "tier": 1,
+    "minLevel": 5,
+    "parent": "squire",
+    "icon": "⚔️",
+    "description": "Heavy plate and honor — dominates duels, struggles in ledgers and the wild.",
+    "bonuses": { "strength": 3, "defense": 2, "duelDamageMult": 1.08, "duelXpMult": 1.1 },
+    "penalties": { "dexterity": 1, "speed": 1, "intelligence": 1, "workXpMult": 0.88, "pveXpMult": 0.92 }
+  },
+  "maester": {
+    "id": "maester",
+    "name": "Maester",
+    "tier": 1,
+    "minLevel": 5,
+    "parent": "squire",
+    "icon": "📜",
+    "description": "Citadel-trained mind — excels at study and coin, frail in open battle.",
+    "bonuses": { "intelligence": 3, "technique": 2, "trainXpMult": 1.12, "workXpMult": 1.1 },
+    "penalties": { "strength": 2, "defense": 1, "duelDamageMult": 0.82, "duelTakenMult": 1.12, "pveXpMult": 0.9 }
+  },
+  "ranger": {
+    "id": "ranger",
+    "name": "Ranger",
+    "tier": 1,
+    "minLevel": 5,
+    "parent": "squire",
+    "icon": "🏹",
+    "description": "Wilderness hunter — fast and cunning abroad, less imposing in formal combat.",
+    "bonuses": { "speed": 3, "dexterity": 2, "pveXpMult": 1.14, "crimeXpMult": 1.08 },
+    "penalties": { "strength": 1, "defense": 1, "duelDamageMult": 0.9, "duelXpMult": 0.92, "crimeFailMult": 1.06 }
+  },
+  "kingsguard": {
+    "id": "kingsguard",
+    "name": "Kingsguard",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "knight",
+    "icon": "🦁",
+    "description": "White cloak wall — nearly unbreakable in defense, slow to chase or steal.",
+    "bonuses": { "defense": 4, "endurance": 3, "max_hp": 10, "duelTakenMult": 0.85 },
+    "penalties": { "speed": 2, "dexterity": 1, "mugMult": 0.85, "crimeCoinMult": 0.9 }
+  },
+  "champion": {
+    "id": "champion",
+    "name": "Champion",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "knight",
+    "icon": "🗡️",
+    "description": "Tournament killer — explosive duel damage, glass jaw and no patience for ledgers.",
+    "bonuses": { "strength": 4, "speed": 2, "duelDamageMult": 1.15, "duelXpMult": 1.18 },
+    "penalties": { "defense": 2, "intelligence": 1, "duelTakenMult": 1.1, "workXpMult": 0.85 }
+  },
+  "archmaester": {
+    "id": "archmaester",
+    "name": "Archmaester",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "maester",
+    "icon": "🔗",
+    "description": "Master of links — unrivaled training and treasury work, avoid the battlefield.",
+    "bonuses": { "intelligence": 4, "technique": 3, "trainXpMult": 1.15, "workXpMult": 1.14 },
+    "penalties": { "strength": 1, "speed": 1, "duelDamageMult": 0.78, "pveXpMult": 0.88, "crimeFailMult": 1.05 }
+  },
+  "septon": {
+    "id": "septon",
+    "name": "Septon",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "maester",
+    "icon": "✦",
+    "description": "Voice of the Seven — mercy on missions, poor brawler and poor thief.",
+    "bonuses": { "endurance": 4, "intelligence": 2, "crimeXpMult": 1.12, "jailChanceMult": 0.75 },
+    "penalties": { "dexterity": 2, "strength": 1, "mugMult": 0.8, "duelDamageMult": 0.88 }
+  },
+  "scout": {
+    "id": "scout",
+    "name": "Scout",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "ranger",
+    "icon": "👁️",
+    "description": "Eyes of the march — PvE specialist with unmatched flee odds, weak in honor duels.",
+    "bonuses": { "speed": 4, "dexterity": 3, "pveXpMult": 1.18, "fleeMult": 1.12 },
+    "penalties": { "defense": 2, "strength": 1, "duelDamageMult": 0.85, "duelTakenMult": 1.08 }
+  },
+  "cutpurse": {
+    "id": "cutpurse",
+    "name": "Cutpurse",
+    "tier": 2,
+    "minLevel": 20,
+    "parent": "ranger",
+    "icon": "🎭",
+    "description": "Market shadow — mugs and raids for coin, hated in open trial by combat.",
+    "bonuses": { "dexterity": 4, "speed": 2, "crimeCoinMult": 1.12, "mugMult": 1.14 },
+    "penalties": { "endurance": 2, "defense": 1, "duelDamageMult": 0.8, "duelTakenMult": 1.15, "hospitalChanceMult": 1.1 }
+  },
+  "lord_commander": {
+    "id": "lord_commander",
+    "name": "Lord Commander",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "kingsguard",
+    "icon": "👑",
+    "description": "Shield of the throne — legendary tank, immovable and immobile.",
+    "bonuses": { "defense": 3, "strength": 2, "max_hp": 20, "duelTakenMult": 0.8, "duelXpMult": 1.1 },
+    "penalties": { "speed": 2, "dexterity": 1, "pveXpMult": 0.9, "workXpMult": 0.9 }
+  },
+  "knight_errant": {
+    "id": "knight_errant",
+    "name": "Knight-Errant",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "champion",
+    "icon": "🐎",
+    "description": "Wandering legend — duel XP and damage peak, everything else suffers.",
+    "bonuses": { "strength": 3, "speed": 3, "duelDamageMult": 1.12, "duelXpMult": 1.25 },
+    "penalties": { "defense": 2, "intelligence": 2, "workXpMult": 0.8, "trainXpMult": 0.92 }
+  },
+  "grand_maester": {
+    "id": "grand_maester",
+    "name": "Grand Maester",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "archmaester",
+    "icon": "🏛️",
+    "description": "Voice of the Citadel — realm's finest scholar, avoid any sword point.",
+    "bonuses": { "intelligence": 3, "technique": 3, "trainXpMult": 1.12, "workXpMult": 1.18, "xpMult": 1.06 },
+    "penalties": { "strength": 2, "defense": 1, "duelDamageMult": 0.72, "pveXpMult": 0.85 }
+  },
+  "high_septon": {
+    "id": "high_septon",
+    "name": "High Septon",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "septon",
+    "icon": "⛪",
+    "description": "Shepherd of kings — blessed on missions, cursed in melee.",
+    "bonuses": { "endurance": 3, "intelligence": 2, "crimeXpMult": 1.15, "jailChanceMult": 0.6 },
+    "penalties": { "strength": 2, "dexterity": 1, "duelDamageMult": 0.8, "duelTakenMult": 1.12 }
+  },
+  "warden": {
+    "id": "warden",
+    "name": "Warden",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "scout",
+    "icon": "🌲",
+    "description": "Warden of the wild — PvE apex, formal combat is not your arena.",
+    "bonuses": { "speed": 3, "defense": 2, "pveXpMult": 1.2, "fleeMult": 1.15 },
+    "penalties": { "strength": 1, "duelDamageMult": 0.82, "duelXpMult": 0.88, "crimeCoinMult": 0.92 }
+  },
+  "master_of_whispers": {
+    "id": "master_of_whispers",
+    "name": "Master of Whispers",
+    "tier": 3,
+    "minLevel": 40,
+    "parent": "cutpurse",
+    "icon": "🕷️",
+    "description": "Spider of the court — coins and secrets flow to you; honor duels end badly.",
+    "bonuses": { "dexterity": 3, "speed": 2, "crimeXpMult": 1.18, "mugMult": 1.12, "crimeCoinMult": 1.1 },
+    "penalties": { "defense": 2, "endurance": 1, "duelDamageMult": 0.75, "duelTakenMult": 1.2, "duelXpMult": 0.85 }
+  }
+}

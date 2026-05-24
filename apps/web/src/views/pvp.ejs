@@ -1,34 +1,58 @@
-<%- include('partials/head', { loggedIn: true, title: 'PvP', pageClass: 'page-realm' }) %>
+<%- include('partials/head', { loggedIn: true, title: 'PvP', pageClass: 'page-realm page-dashboard' }) %>
+<link rel="stylesheet" href="/public/dashboard-studio.css" />
 <%- include('partials/realm-shell-open') %>
 
+<div class="dash-page dash-studio">
 <% if (flash) { %>
 <div class="flash-wrap <%= flashOk ? '' : 'error' %>">
   <% if (flashGif) { %><img class="flash-gif" src="<%= flashGif %>" alt="PvP" loading="lazy" /><% } %>
-  <div class="flash-text"><%= flash %></div>
+  <p class="flash-text"><%= flash %></p>
 </div>
 <% } %>
 
 <h1 class="page-title">Trial by Combat</h1>
-<p class="page-lead">Duel, mug, or rob rivals — same rules as Discord <code>/attack</code> <code>/mug</code> <code>/rob</code></p>
+<p class="page-lead">
+  <% if (guildMode) { %>
+  Lords in your Discord server who have enrolled — sorted by recent activity.
+  <% } else { %>
+  Recently active lords in the realm. Set <code>DISCORD_GUILD_ID</code> to filter to your server.
+  <% } %>
+</p>
+
+<% if (!players.length) { %>
+<section class="realm-panel">
+  <p>No rivals available yet. Ask guildmates to log in via Discord once, then they will appear here.</p>
+</section>
+<% } %>
 
 <div class="pvp-grid">
 <% players.forEach(function(p) { %>
-  <article class="realm-panel vine-panel pvp-card">
-    <img class="pvp-portrait" src="<%= p.portraitUrl %>" alt="<%= p.username %>" width="96" height="96" loading="lazy" />
+  <article class="realm-panel vine-panel pvp-card <%= p.active === 'online' ? 'pvp-card--active' : '' %>">
+    <div class="pvp-card-top">
+      <img class="pvp-portrait" src="<%= p.portraitUrl %>" alt="<%= p.username %>" width="96" height="96" loading="lazy" />
+      <span class="pvp-active pvp-active--<%= p.active %>"><%= p.active === 'online' ? 'Active today' : p.active === 'recent' ? 'Recent' : p.active === 'guild' ? 'In server' : 'Idle' %></span>
+    </div>
     <div class="pvp-card-body">
       <div class="target-name"><strong><%= p.username %></strong></div>
-      <p class="stat">Lv.<%= p.level %> · <%= p.coins.toLocaleString() %> gold on hand</p>
+      <% if (p.enrolled) { %>
+      <p class="stat">Lv.<%= p.level %> · Power <%= p.power %> · <%= p.coins.toLocaleString() %> gold</p>
+      <p class="stat">HP <%= p.hp %>/<%= p.max_hp %><% if (p.inHospital) { %> · <em class="status-bad">Maester's tent</em><% } else if (p.inJail) { %> · <em class="status-bad">Black Cells</em><% } %></p>
+      <% } else { %>
+      <p class="stat stat-muted">In your Discord server — not enrolled yet</p>
+      <% } %>
       <div class="pvp-actions">
         <form method="post" action="/pvp">
           <input type="hidden" name="target" value="<%= p.discord_id %>" />
-          <button name="action" value="attack" class="btn-realm">Attack</button>
-          <button name="action" value="mug" class="btn-wood">Mug</button>
-          <button name="action" value="rob" class="danger">Rob</button>
+          <button name="action" value="attack" class="btn-realm" <%= p.canAttack ? '' : 'disabled' %>>Attack</button>
+          <button name="action" value="mug" class="btn-wood" <%= p.canAttack ? '' : 'disabled' %>>Mug</button>
+          <button name="action" value="rob" class="danger" <%= p.canAttack ? '' : 'disabled' %>>Rob</button>
         </form>
+        <% if (p.inJail) { %>
         <form method="post" action="/bust">
           <input type="hidden" name="target" value="<%= p.discord_id %>" />
           <button type="submit" class="btn-wood">Bust from Black Cells</button>
         </form>
+        <% } %>
       </div>
     </div>
   </article>
@@ -36,6 +60,7 @@
 </div>
 
 <a class="realm-back" href="/dashboard">← Dashboard</a>
+</div>
 
 <%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

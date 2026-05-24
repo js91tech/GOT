@@ -4,12 +4,13 @@ import { fileURLToPath } from 'url';
 import balance from './balance.json' with { type: 'json' };
 import { getDb } from './db.js';
 import { getOrCreatePlayer, addItem } from './player.js';
-import { audit, applyLevelUps, minutesFromNow, roll, isBlocked } from './util.js';
+import { audit, applyLevelUps, minutesFromNow, roll, isBlocked, computeScaledXp } from './util.js';
 import {
   getEffectiveStats,
   getEffectiveMaxHp,
   syncPlayerMaxHp
 } from './stats.js';
+import { getClassModifier } from './classes.js';
 import { resolveLegacyId } from './got-theme.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -162,7 +163,7 @@ function mobFreeHit(player, mob, db) {
 function applyVictory(db, player, mob, battle) {
   const coins =
     mob.coins_min + Math.floor(Math.random() * (mob.coins_max - mob.coins_min + 1));
-  const xp = mob.xp;
+  const xp = computeScaledXp(mob.xp, player, 'pve');
   db.prepare('UPDATE players SET hp = ?, coins = coins + ?, xp = xp + ? WHERE id = ?').run(
     battle.playerHp,
     coins,
@@ -303,6 +304,7 @@ export function pveFlee(discordId, username) {
     (cfg.fleeBase ?? 0.4) +
     (pStats.speed - mob.speed) * (cfg.fleeSpeedFactor ?? 0.02) +
     pStats.dexterity * (cfg.fleeDexFactor ?? 0.003);
+  fleeChance *= getClassModifier(fresh, 'fleeMult', 1);
   fleeChance = Math.min(cfg.fleeMax ?? 0.85, Math.max(cfg.fleeMin ?? 0.15, fleeChance));
 
   if (roll(fleeChance)) {

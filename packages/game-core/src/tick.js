@@ -1,6 +1,7 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { nowIso } from './util.js';
+import { applyMoraleRegen } from './energy.js';
 import { processSiegesAndYields } from './territory.js';
 
 let schedulerStarted = false;
@@ -14,8 +15,7 @@ export function processTicks(player) {
   const elapsed = now - updatedAt;
   if (elapsed >= intervalMs) {
     const ticks = Math.floor(elapsed / intervalMs);
-    const gain = Math.min(ticks * balance.ceRegenAmount, balance.ceMax - p.ce);
-    const newCe = Math.min(balance.ceMax, p.ce + ticks * balance.ceRegenAmount);
+    const newCe = applyMoraleRegen(p.ce, ticks * balance.ceRegenAmount, p);
     const newUpdated = new Date(updatedAt + ticks * intervalMs).toISOString();
     db.prepare('UPDATE players SET ce = ?, energy_updated_at = ? WHERE id = ?').run(
       newCe,

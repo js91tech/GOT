@@ -1,0 +1,69 @@
+<%- include('partials/head', { loggedIn: true, title: 'Class Path', pageClass: 'page-realm page-dashboard' }) %>
+<link rel="stylesheet" href="/public/dashboard-studio.css" />
+<%- include('partials/realm-shell-open') %>
+
+<div class="dash-page dash-studio">
+<% if (flash) { %>
+<div class="flash-wrap"><p class="flash-text"><%= flash %></p></div>
+<% } %>
+
+<h1 class="page-title">Lordly Class Path</h1>
+<p class="page-lead">
+  All begin as a <strong>Squire</strong>. At Lv.<strong>5</strong>, <strong>20</strong>, and <strong>40</strong> choose your specialization.
+  Level cap: <strong>50</strong>.
+</p>
+
+<section class="realm-panel class-current">
+  <h2>Your path</h2>
+  <p class="class-path-line">
+    <% progress.path.forEach(function(c, i) { %>
+      <span class="class-crumb"><%= c.icon %> <%= c.name %></span><% if (i < progress.path.length - 1) { %> → <% } %>
+    <% }); %>
+  </p>
+  <p class="stat"><%= progress.current.description %></p>
+  <p class="stat class-bonus-line"><%= bonusSummary %></p>
+</section>
+
+<% if (progress.milestone && progress.milestone.due) { %>
+<section class="realm-panel class-pick">
+  <h2>Choose your next oath — Lv.<%= player.level %></h2>
+  <p class="stat">You may swear one path below. This cannot be undone.</p>
+  <div class="class-grid">
+    <% progress.milestone.options.forEach(function(opt) { %>
+    <form method="post" action="/class" class="class-card">
+      <input type="hidden" name="classId" value="<%= opt.id %>" />
+      <div class="class-card-icon"><%= opt.icon %></div>
+      <h3><%= opt.name %></h3>
+      <p><%= opt.description %></p>
+      <p class="stat class-effect-line"><%= opt.effectSummary %></p>
+      <button type="submit" class="btn-realm">Swear oath</button>
+    </form>
+    <% }); %>
+  </div>
+</section>
+<% } else if (progress.atMaxClass) { %>
+<section class="realm-panel">
+  <p>You have reached the apex of your class path.</p>
+</section>
+<% } else { %>
+<section class="realm-panel">
+  <% var nextLv = progress.nextSpecializationLevel || 5; %>
+  <p>Next specialization unlocks at <strong>Lv.<%= nextLv %></strong> (you are Lv.<%= player.level %>).</p>
+</section>
+<% } %>
+
+<section class="realm-panel class-tree-overview">
+  <h2>The branching paths</h2>
+  <ul class="class-tree">
+    <li><strong>Lv.1</strong> Squire</li>
+    <li><strong>Lv.5</strong> Knight · Maester · Ranger</li>
+    <li><strong>Lv.20</strong> Six specializations (two per starter path)</li>
+    <li><strong>Lv.40</strong> Elite titles — Lord Commander, Grand Maester, Warden, and more</li>
+  </ul>
+</section>
+
+<a class="realm-back" href="/character">← Character sheet</a>
+</div>
+
+<%- include('partials/realm-shell-close') %>
+<%- include('partials/foot') %>

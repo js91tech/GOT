@@ -10,6 +10,8 @@ const BY_ID = {
   round_shield: `${BASE}/armor.svg`,
   tower_shield: `${BASE}/armor.svg`,
   cursed_blade: `${BASE}/sword.svg`,
+  cursed_gloves: `${BASE}/gauntlets.svg`,
+  reversal_kit: `${BASE}/potion.svg`,
   war_spear: `${BASE}/spear.svg`,
   spirit_spear: `${BASE}/spear.svg`,
   training_weights: `${BASE}/weights.svg`,

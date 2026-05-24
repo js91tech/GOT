@@ -1,10 +1,31 @@
 import balance from './balance.json' with { type: 'json' };
 import { lordRank } from './got-theme.js';
+import { getClassXpMultiplier } from './classes.js';
 
 export { balance };
 
+export function maxLevel() {
+  return balance.maxLevel ?? 50;
+}
+
 export function xpForLevel(level) {
-  return Math.floor(100 * Math.pow(level, 1.5));
+  return Math.floor(100 * Math.pow(level, 1.45));
+}
+
+/** Reduce XP rewards as level approaches cap (50). */
+export function scaleXp(baseXp, playerLevel) {
+  const cap = maxLevel();
+  const lv = Math.min(Math.max(1, playerLevel), cap);
+  const floor = balance.xpScaleFloor ?? 0.22;
+  const factor = Math.max(floor, 1.12 - lv / cap);
+  return Math.max(1, Math.floor(baseXp * factor));
+}
+
+/** Level-scaled XP with class path multipliers. */
+export function computeScaledXp(baseXp, player, context = 'general') {
+  let xp = scaleXp(baseXp, player.level);
+  xp = Math.floor(xp * getClassXpMultiplier(player, context));
+  return Math.max(1, xp);
 }
 
 export function gradeName(level) {
@@ -116,13 +137,18 @@ export function getTrainMultiplier(player, db) {
 }
 
 export function applyLevelUps(db, player) {
+  const cap = maxLevel();
   let level = player.level;
   let xp = player.xp;
   let leveled = 0;
-  while (xp >= xpForLevel(level)) {
+  while (level < cap && xp >= xpForLevel(level)) {
     xp -= xpForLevel(level);
     level += 1;
     leveled += 1;
+  }
+  if (level >= cap) {
+    xp = Math.min(xp, xpForLevel(cap) - 1);
+    level = cap;
   }
   if (leveled > 0) {
     const maxHp = 100 + (level - 1) * 5;

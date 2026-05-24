@@ -1,7 +1,13 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { processTicks } from './tick.js';
-import { applyLevelUps, audit, gradeName, isBlocked } from './util.js';
+import { applyLevelUps, audit, gradeName, isBlocked, computeScaledXp } from './util.js';
+import {
+  getMoraleRegenCap,
+  getFocusRegenCap,
+  getMoraleOverflowCap,
+  getFocusOverflowCap
+} from './energy.js';
 
 export function getOrCreatePlayer(discordId, username = 'Lord') {
   const db = getDb();
@@ -26,10 +32,11 @@ export function getOrCreatePlayer(discordId, username = 'Lord') {
         ? player.login_streak + 1
         : 1;
     const bonusCoins = balance.dailyLoginCoins * Math.min(streak, 7);
+    const loginXp = computeScaledXp(balance.dailyLoginXp, player, 'general');
     db.prepare(
       `UPDATE players SET last_login_date = ?, login_streak = ?, coins = coins + ?, xp = xp + ? WHERE id = ?`
-    ).run(today, streak, bonusCoins, balance.dailyLoginXp, player.id);
-    applyLevelUps(db, { ...player, xp: player.xp + balance.dailyLoginXp });
+    ).run(today, streak, bonusCoins, loginXp, player.id);
+    applyLevelUps(db, { ...player, xp: player.xp + loginXp });
     player = db.prepare('SELECT * FROM players WHERE id = ?').get(player.id);
   }
   return formatPlayer(player);
@@ -110,6 +117,10 @@ export function getStatus(player) {
     rice: player.rice,
     ce: player.ce,
     focus: player.focus,
+    morale_regen_cap: getMoraleRegenCap(player),
+    morale_overflow_cap: getMoraleOverflowCap(player),
+    focus_regen_cap: getFocusRegenCap(player),
+    focus_overflow_cap: getFocusOverflowCap(player),
     resolve: player.resolve,
     strength: player.strength,
     defense: player.defense,

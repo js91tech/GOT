@@ -598,3 +598,106 @@ body.page-dashboard .site-nav a:hover {
 .explore-actions--blocked {
   opacity: 0.55;
 }
+
+.pvp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+.pvp-card-top {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+.pvp-active {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pvp-active--online {
+  background: rgba(34, 197, 94, 0.25);
+  color: #86efac;
+  border: 1px solid rgba(34, 197, 94, 0.5);
+}
+.pvp-active--recent {
+  background: rgba(212, 175, 55, 0.2);
+  color: var(--studio-accent);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+}
+.pvp-active--inactive {
+  background: rgba(100, 116, 139, 0.25);
+  color: #94a3b8;
+}
+.pvp-active--guild {
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+.pvp-card--active {
+  border-color: rgba(34, 197, 94, 0.45);
+}
+.status-bad {
+  color: #f87171;
+  font-style: normal;
+}
+.pvp-actions form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+.pvp-actions button {
+  flex: 1;
+  min-width: 4.5rem;
+}
+
+.class-alert {
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(212, 175, 55, 0.12);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  border-radius: 6px;
+}
+.class-alert a {
+  color: var(--studio-accent);
+}
+.class-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.class-card {
+  padding: 1rem;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.class-card-icon {
+  font-size: 2rem;
+  text-align: center;
+}
+.class-path-line {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+.class-bonus-line {
+  color: var(--studio-accent);
+}
+.class-tree {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.class-tree li {
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}

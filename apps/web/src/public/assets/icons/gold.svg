@@ -2,12 +2,13 @@
   <defs>
     <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0%" stop-color="#fde68a"/>
-      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="55%" stop-color="#d4af37"/>
       <stop offset="100%" stop-color="#92680a"/>
     </linearGradient>
-    <filter id="gl"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#d4af37" flood-opacity="0.5"/></filter>
+    <filter id="gl"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#d4af37" flood-opacity="0.55"/></filter>
   </defs>
   <circle cx="32" cy="34" r="22" fill="url(#g)" stroke="#fde68a" stroke-width="2" filter="url(#gl)"/>
-  <ellipse cx="32" cy="28" rx="18" ry="6" fill="rgba(255,255,255,0.25)"/>
-  <text x="32" y="40" text-anchor="middle" fill="#3d2808" font-family="Georgia,serif" font-size="18" font-weight="bold">$</text>
+  <ellipse cx="32" cy="27" rx="16" ry="5" fill="rgba(255,255,255,0.28)"/>
+  <path d="M22 30 L26 22 L30 28 L32 18 L34 28 L38 22 L42 30 L40 34 L24 34 Z" fill="#3d2808" opacity="0.85"/>
+  <circle cx="32" cy="38" r="4" fill="#3d2808" opacity="0.5"/>
 </svg>

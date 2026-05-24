@@ -1,7 +1,6 @@
 import { getDb } from './db.js';
 import { getOrCreatePlayer, addItem, removeItem } from './player.js';
-import { audit, minutesFromNow, roll } from './util.js';
-import { applyLevelUps } from './util.js';
+import { audit, minutesFromNow, roll, applyLevelUps, computeScaledXp } from './util.js';
 
 export function delve(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
@@ -22,7 +21,7 @@ export function delve(discordId, username) {
     return { ok: false, message: `Crypt depth ${depth} — wounded! Sent to the maester's tent.` };
   }
   const coins = Math.floor(200 * depth + Math.random() * 500);
-  const xp = Math.floor(10 * depth);
+  const xp = computeScaledXp(Math.floor(10 * depth), player, 'general');
   db.prepare('UPDATE players SET coins = coins + ?, xp = xp + ? WHERE id = ?').run(
     coins,
     xp,

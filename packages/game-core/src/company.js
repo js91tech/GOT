@@ -2,7 +2,7 @@ import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer } from './player.js';
 import { getEffectiveWorkerStats } from './stats.js';
-import { applyLevelUps, audit, isBlocked, requireLevel } from './util.js';
+import { applyLevelUps, audit, isBlocked, requireLevel, computeScaledXp } from './util.js';
 
 export function listCompanies() {
   return getDb().prepare('SELECT * FROM company_definitions ORDER BY min_level').all();
@@ -41,7 +41,7 @@ export function companyWork(discordId, username) {
   const workerStat = co.worker_stat;
   const statVal = getEffectiveWorkerStats(player, db)[workerStat] ?? 10;
   const coins = Math.floor(co.base_coins * co.payout_mult * (1 + statVal / 100));
-  const xp = Math.floor(co.base_xp * co.payout_mult);
+  const xp = computeScaledXp(Math.floor(co.base_xp * co.payout_mult), player, 'work');
   db.prepare(
     `UPDATE players SET coins = coins + ?, xp = xp + ?, last_work_at = datetime('now') WHERE id = ?`
   ).run(coins, xp, player.id);

@@ -1,5 +1,11 @@
 {
+  "maxLevel": 50,
+  "xpScaleFloor": 0.22,
   "ceMax": 100,
+  "focusMax": 100,
+  "ceOverflowMax": 200,
+  "focusOverflowMax": 200,
+  "capBonusAmount": 25,
   "ceRegenMinutes": 5,
   "ceRegenAmount": 5,
   "gradeProtectionLevel": 15,

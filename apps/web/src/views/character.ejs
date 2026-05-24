@@ -4,10 +4,19 @@
 
 <div class="dash-page dash-studio">
   <h1 class="page-title">Character sheet</h1>
-  <p class="page-lead">Effective stats include equipped gear. Train at the dashboard, buy gear at the <a href="/armory">armory</a>.</p>
+  <p class="page-lead">Effective stats include gear and class path. <a href="/class">Class path</a> · <a href="/armory">Armory</a></p>
 
   <section class="character-hero">
-    <p class="power-rating">Combat power <strong><%= sheet.power %></strong> · HP <%= sheet.hp %>/<%= sheet.max_hp %></p>
+    <p class="power-rating">
+      <%= sheet.class.current.icon %> <strong><%= sheet.class.current.name %></strong>
+      · Combat power <strong><%= sheet.power %></strong> · HP <%= sheet.hp %>/<%= sheet.max_hp %>
+    </p>
+    <% if (sheet.class.milestone && sheet.class.milestone.due) { %>
+    <p class="class-alert"><a href="/class">Choose your next class specialization →</a></p>
+    <% } %>
+    <div class="modifier-row">
+      <span><%= sheet.class.bonusSummary %></span>
+    </div>
     <div class="modifier-row">
       <span>Mission fail −<%= sheet.modifiers.missionFailReduction %>%</span>
       <span>Mission coins +<%= sheet.modifiers.missionCoinBonus %>%</span>
