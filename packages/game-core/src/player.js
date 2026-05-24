@@ -13,6 +13,7 @@ import {
   getWorkCooldownStatus,
   getMoraleRegenIn,
   getDrugCooldownsLeft,
+  getInvestmentStatus,
   resolveDisplayNames
 } from './status-helpers.js';
 
@@ -118,6 +119,7 @@ export function getStatus(player) {
   const xp = getXpProgress(player);
   const work = getWorkCooldownStatus(player, db);
   const moraleRegen = getMoraleRegenIn(player);
+  const investment = getInvestmentStatus(player);
   const labels = resolveDisplayNames(player, db);
   return {
     grade: player.grade,
@@ -138,6 +140,7 @@ export function getStatus(player) {
     focus_regen_cap: getFocusRegenCap(player),
     focus_overflow_cap: getFocusOverflowCap(player),
     morale_regen_in: moraleRegen.morale_regen_in,
+    morale_regen_at: moraleRegen.morale_regen_at,
     resolve: player.resolve,
     strength: player.strength,
     defense: player.defense,
@@ -166,6 +169,10 @@ export function getStatus(player) {
     drug_cooldowns: getDrugCooldownsLeft(player),
     investment_amount: player.investment_amount,
     investment_matures_at: player.investment_matures_at,
+    investment_mature: investment.investment_mature,
+    investment_minutes_left: investment.investment_minutes_left,
+    has_bank_card: Boolean(player.has_bank_card),
+    energy_updated_at: player.energy_updated_at,
     blocked: block
   };
 }

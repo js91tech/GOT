@@ -28,33 +28,72 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 6000);
   }
 
-  const confinementPanel = document.querySelector('[data-confinement-until]');
-  const confinementMins = document.querySelector('.confinement-mins');
-  if (confinementPanel && confinementMins) {
-    const until = confinementPanel.dataset.confinementUntil;
-    if (until) {
-      const tick = () => {
-        const left = Math.max(0, Math.ceil((new Date(until).getTime() - Date.now()) / 60000));
-        confinementMins.textContent = left;
-      };
-      tick();
-      setInterval(tick, 30000);
-    }
+  /** Format ms remaining as human countdown. */
+  function formatCountdown(ms) {
+    if (ms <= 0) return '0s';
+    const totalSec = Math.ceil(ms / 1000);
+    if (totalSec < 60) return `${totalSec}s`;
+    const mins = Math.floor(totalSec / 60);
+    const secs = totalSec % 60;
+    if (mins < 60) return secs ? `${mins}m ${secs}s` : `${mins}m`;
+    const hrs = Math.floor(mins / 60);
+    const remMins = mins % 60;
+    return remMins ? `${hrs}h ${remMins}m` : `${hrs}h`;
   }
 
-  const workChip = document.querySelector('[data-work-mins]');
-  if (workChip) {
-    let mins = parseInt(workChip.dataset.workMins, 10) || 0;
-    const tickWork = () => {
-      if (mins <= 0) {
+  const workBtn = document.querySelector('.work-chip button[type="submit"]');
+  const workChip = document.querySelector('.status-chip[data-work-until]');
+
+  function tickCountdowns() {
+    const now = Date.now();
+    document.querySelectorAll('[data-countdown-until]').forEach((el) => {
+      const until = el.dataset.countdownUntil;
+      if (!until) return;
+      const left = new Date(until).getTime() - now;
+      const prefix = el.dataset.countdownPrefix || '';
+      const suffix = el.dataset.countdownSuffix || '';
+      if (left <= 0) {
+        if (el.dataset.countdownDone) {
+          el.textContent = el.dataset.countdownDone;
+        }
+        el.classList.remove('status-chip--wait');
+        el.classList.add('status-chip--ok');
+        return;
+      }
+      el.textContent = `${prefix}${formatCountdown(left)}${suffix}`;
+    });
+
+    if (workBtn && workBtn.dataset.workUntil) {
+      const left = new Date(workBtn.dataset.workUntil).getTime() - now;
+      if (left <= 0) {
+        workBtn.disabled = false;
+        workBtn.removeAttribute('title');
+        workBtn.textContent = 'Clock in';
+      } else {
+        workBtn.disabled = true;
+        workBtn.textContent = `Wait ${formatCountdown(left)}`;
+      }
+    }
+
+    if (workChip && workChip.dataset.workUntil) {
+      const left = new Date(workChip.dataset.workUntil).getTime() - now;
+      if (left <= 0) {
         workChip.textContent = 'Work ready';
         workChip.classList.remove('status-chip--wait');
         workChip.classList.add('status-chip--ok');
-        return;
+      } else {
+        workChip.textContent = `Work in ${formatCountdown(left)}`;
       }
-      workChip.textContent = `Work in ${mins}m`;
-      mins -= 1;
-    };
-    setInterval(tickWork, 60000);
+    }
   }
+
+  tickCountdowns();
+  setInterval(tickCountdowns, 1000);
+
+  document.querySelectorAll('form.tile-form, form.work-chip, form.wheel-form').forEach((form) => {
+    form.addEventListener('submit', () => {
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn && !btn.disabled) btn.disabled = true;
+    });
+  });
 });

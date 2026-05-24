@@ -872,6 +872,13 @@ body.page-dashboard .flash-wrap {
   background: rgba(15, 12, 28, 0.9);
 }
 
+body.page-realm .flash-wrap--hide,
+body.page-dashboard .flash-wrap--hide {
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
 /* ——— Subpages (shop, pvp, explore, advanced, leaderboard, home) ——— */
 
 body.page-realm .page-title {

@@ -213,6 +213,12 @@ app.get('/dashboard', requireAuth, (req, res) => {
   }));
   const { sheet } = GameService.characterSheet(id, name);
   const classProgress = GameService.classProgress(id, name);
+  const drugDefs = GameService.drugs();
+  const drugCooldownChips = Object.entries(status.drug_cooldowns || {}).map(([drugId, mins]) => {
+    const def = drugDefs.find((d) => d.id === drugId);
+    return { id: drugId, name: gotLabel(drugId, def?.name || drugId), minutes: mins };
+  });
+  const trainCosts = { ce: 10, focus: 5, workerCe: 8 };
   res.render('dashboard', {
     player,
     status,
@@ -230,6 +236,9 @@ app.get('/dashboard', requireAuth, (req, res) => {
     playerPortrait: portraitUrl(id, name, player.class_id || 'squire'),
     classInfo: classProgress.current,
     classIcon: classIconUrl(player.class_id || 'squire'),
+    classMilestone: classProgress.milestone,
+    drugCooldownChips,
+    trainCosts,
     flash: req.query.msg,
     flashAction: action,
     flashGif: gifForAction(action, flashOk),
@@ -332,7 +341,7 @@ app.post('/bank', requireAuth, (req, res) => {
   let r;
   if (req.body.action === 'collect') r = GameService.collectInvestment(req.session.discordId, req.session.username);
   else r = GameService.bank(req.session.discordId, req.session.username, req.body.action, req.body.amount);
-  res.redirect('/dashboard?msg=' + encodeURIComponent(r.message));
+  dashRedirect(res, r, 'default');
 });
 
 app.get('/shop', requireAuth, (req, res) => {

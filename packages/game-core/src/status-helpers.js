@@ -30,12 +30,30 @@ export function getWorkCooldownStatus(player, db = getDb()) {
 
 export function getMoraleRegenIn(player) {
   const cap = getMoraleRegenCap(player);
-  if (player.ce >= cap) return { morale_regen_in: 0 };
+  if (player.ce >= cap) return { morale_regen_in: 0, morale_regen_at: null };
   const intervalMs = balance.ceRegenMinutes * 60 * 1000;
   const updatedAt = new Date(player.energy_updated_at || new Date().toISOString()).getTime();
   const next = updatedAt + intervalMs;
   const left = next - Date.now();
-  return { morale_regen_in: Math.max(0, Math.ceil(left / 60000)) };
+  return {
+    morale_regen_in: Math.max(0, Math.ceil(left / 60000)),
+    morale_regen_at: new Date(next).toISOString()
+  };
+}
+
+export function getInvestmentStatus(player) {
+  if (!player.investment_amount) {
+    return { investment_mature: false, investment_minutes_left: 0 };
+  }
+  const matureAt = new Date(player.investment_matures_at).getTime();
+  const left = matureAt - Date.now();
+  if (left <= 0) {
+    return { investment_mature: true, investment_minutes_left: 0 };
+  }
+  return {
+    investment_mature: false,
+    investment_minutes_left: Math.ceil(left / 60000)
+  };
 }
 
 export function getDrugCooldownsLeft(player) {

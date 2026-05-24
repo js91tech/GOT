@@ -1,5 +1,5 @@
 /** Cache-busting version — bump when static art changes. */
-export const ASSET_VERSION = '5';
+export const ASSET_VERSION = '6';
 
 export function assetUrl(path) {
   if (!path) return path;

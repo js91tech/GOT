@@ -2,7 +2,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { AttachmentBuilder } from 'discord.js';
 import { GameService } from '@westeros/game-core';
-import { playerEmbed } from './embed.js';
+import { playerEmbed, formatStatusContent } from './embed.js';
 import { pveEncounterComponents } from './pve-buttons.js';
 
 /** Prefer GameService message; avoid bogus "Done." from `msg || ok ? 'Done.'` precedence. */
@@ -53,17 +53,7 @@ export async function handleCommand(interaction) {
 
   if (cmd === 'status') {
     const s = GameService.status(uid, name);
-    return {
-      content:
-        `**${s.grade}** Lv.${s.level} (${s.xp_current}/${s.xp_needed || 'MAX'} XP) | Morale ${s.ce} | Wheel: ${s.wheel_spins_left}\n` +
-        `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity} | HP ${s.hp}/${s.max_hp}\n` +
-        `Worker: LAB ${s.manual_labor} INT ${s.intelligence} END ${s.endurance} TEC ${s.technique}\n` +
-        `Job: ${s.job_name || 'Stable Hand'} | Yard: ${s.gym_name || s.gym_id}${s.company_name ? ` | Company: ${s.company_name}` : ''}\n` +
-        (s.work_ready ? 'Work: ready\n' : `Work: ${s.work_minutes_left}m cooldown\n`) +
-        (s.login_streak > 1 ? `Login streak: ${s.login_streak} days\n` : '') +
-        (s.hospital_until ? `Maester's tent until: ${s.hospital_until} — /escape place:hospital\n` : '') +
-        (s.jail_until ? `Black cells until: ${s.jail_until} — /escape place:jail or /bust\n` : '')
-    };
+    return { content: formatStatusContent(s) };
   }
 
   if (cmd === 'train') {

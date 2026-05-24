@@ -1036,3 +1036,41 @@ body.page-dashboard .site-nav a:hover {
   transform: translateY(-8px);
   transition: opacity 0.35s ease, transform 0.35s ease;
 }
+
+.milestone-banner {
+  margin: 0 0 12px;
+  padding: 10px 14px;
+  border-radius: var(--studio-radius, 12px);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  background: rgba(139, 26, 26, 0.25);
+  text-align: center;
+}
+
+.milestone-banner a {
+  color: var(--studio-accent, #e8c547);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.hp-meter {
+  height: 6px;
+  max-width: 320px;
+  margin: 6px 0 0;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid var(--studio-border);
+  overflow: hidden;
+}
+
+.hp-meter-fill {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #6b1a1a, #c53030);
+  border-radius: 999px;
+}
+
+.tile-hint {
+  margin: 0 0 8px;
+  font-size: 0.72rem;
+  color: var(--studio-muted);
+}

@@ -9,6 +9,12 @@
   </div>
   <% } %>
 
+  <% if (typeof classMilestone !== 'undefined' && classMilestone && classMilestone.due) { %>
+  <div class="milestone-banner">
+    <a href="/class">Choose your next class specialization →</a>
+  </div>
+  <% } %>
+
   <% if (confinement && confinement.confined) { %>
   <section class="alert-panel" data-confinement-until="<%= confinement.until %>">
     <h3><%= confinement.reason === 'jail' ? 'The Black Cells' : "Maester's Tent" %></h3>
@@ -75,15 +81,23 @@
     <% if (status.work_ready) { %>
     <span class="status-chip status-chip--ok">Work ready</span>
     <% } else { %>
-    <span class="status-chip status-chip--wait" data-work-mins="<%= status.work_minutes_left %>">Work in <%= status.work_minutes_left %>m</span>
+    <span class="status-chip status-chip--wait" data-work-until="<%= status.work_ready_at %>">Work in <%= status.work_minutes_left %>m</span>
     <% } %>
     <span class="status-chip">Wheel ×<%= status.wheel_spins_left %></span>
-    <% if (status.morale_regen_in > 0 && player.ce < status.morale_regen_cap) { %>
-    <span class="status-chip">Morale +5 in <%= status.morale_regen_in %>m</span>
+    <% if (status.morale_regen_at && player.ce < status.morale_regen_cap) { %>
+    <span class="status-chip status-chip--wait" data-countdown-until="<%= status.morale_regen_at %>" data-countdown-prefix="Morale +5 in " data-countdown-done="Morale regen ready">Morale +5 in <%= status.morale_regen_in %>m</span>
     <% } %>
     <% if (status.investment_amount) { %>
-    <span class="status-chip status-chip--invest">Investment maturing</span>
+    <span class="status-chip status-chip--invest">Invested <%= status.investment_amount.toLocaleString() %></span>
+    <% if (status.investment_mature) { %>
+    <span class="status-chip status-chip--ok">Investment ready — collect</span>
+    <% } else { %>
+    <span class="status-chip status-chip--invest" data-countdown-until="<%= status.investment_matures_at %>" data-countdown-prefix="Matures in " data-countdown-done="Collect now">Matures in <%= status.investment_minutes_left %>m</span>
     <% } %>
+    <% } %>
+    <% drugCooldownChips.forEach(function(d) { %>
+    <span class="status-chip status-chip--wait"><%= d.name %> <%= d.minutes %>m</span>
+    <% }); %>
     <% if (status.blocked && status.blocked.blocked) { %>
     <span class="status-chip status-chip--warn"><%= status.blocked.reason === 'jail' ? 'Black Cells' : "Maester's Tent" %></span>
     <% } %>
@@ -116,6 +130,11 @@
       <span class="resource-value"><%= player.focus %>/<%= focusCap %></span>
       <div class="resource-meter" aria-hidden="true"><span class="resource-meter-fill resource-meter-fill--focus" style="width:<%= focusPct %>%"></span></div>
     </div>
+    <div class="resource-stone" data-icon="grain">
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/items/grain.svg') %>" alt="Grain rations" width="40" height="40" /></div>
+      <span class="resource-label">Grain</span>
+      <span class="resource-value"><%= player.rice %></span>
+    </div>
     <div class="resource-stone" data-icon="wheel">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/wheel.svg') %>" alt="Wheel of fate" width="40" height="40" /></div>
       <span class="resource-label">Wheel</span>
@@ -137,6 +156,8 @@
       <span class="power-chip">Power <%= sheet.power %></span>
       <span class="hp-chip">HP <%= sheet.hp %>/<%= sheet.max_hp %></span>
     </div>
+    <% var hpPct = sheet.max_hp ? Math.min(100, Math.round((sheet.hp / sheet.max_hp) * 100)) : 0; %>
+    <div class="hp-meter" aria-hidden="true"><span class="hp-meter-fill" style="width:<%= hpPct %>%"></span></div>
     <p class="worker-line">Worker — LAB <strong><%= sheet.worker.effective.manual_labor %></strong> · INT <strong><%= sheet.worker.effective.intelligence %></strong> · END <strong><%= sheet.worker.effective.endurance %></strong> · TEC <strong><%= sheet.worker.effective.technique %></strong></p>
     <p class="worker-line"><a href="/character">Full character sheet</a> · <a href="/armory">Armory</a></p>
   </section>
@@ -144,6 +165,7 @@
   <section class="action-row">
     <article class="action-tile action-tile--train">
       <h3>Train combat</h3>
+      <p class="tile-hint">−<%= trainCosts.ce %> morale · −<%= trainCosts.focus %> focus per set</p>
       <div class="tile-art tile-art--train" aria-hidden="true"></div>
       <form method="post" action="/train" class="tile-form">
         <select name="stat">
@@ -172,6 +194,7 @@
 
     <article class="action-tile action-tile--worker">
       <h3>Worker training</h3>
+      <p class="tile-hint">−<%= trainCosts.workerCe %> morale per set</p>
       <div class="tile-art tile-art--worker" aria-hidden="true"></div>
       <form method="post" action="/worker" class="tile-form">
         <select name="stat">
@@ -194,7 +217,7 @@
         </button>
       </form>
       <form method="post" action="/work" class="work-chip">
-        <button type="submit" class="btn-wood" <%= status.work_ready ? '' : 'disabled title="Work on cooldown"' %>>
+        <button type="submit" class="btn-wood" <%= status.work_ready ? '' : 'disabled title="Work on cooldown"' %><% if (!status.work_ready && status.work_ready_at) { %> data-work-until="<%= status.work_ready_at %>"<% } %>>
           <%= status.work_ready ? 'Clock in' : ('Wait ' + status.work_minutes_left + 'm') %>
         </button>
       </form>
@@ -212,7 +235,7 @@
   <section class="bottom-row">
     <article class="lounge-panel">
       <h3>War Camp</h3>
-      <p class="panel-sub">Rest &amp; rally</p>
+      <p class="panel-sub">Rest &amp; rally · Feast 5 grain · Oath 10 grain</p>
       <div class="lounge-actions">
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="tea" />
@@ -240,13 +263,14 @@
 
     <article class="shelf-panel wood-shelf">
       <h3>Treasury</h3>
-      <p class="panel-sub">Vault &amp; investments<% if (status.investment_amount) { %> · <em>investment active</em><% } %></p>
+      <p class="panel-sub">Vault &amp; investments<% if (status.has_bank_card) { %> · Treasury Card active<% } else if (status.investment_amount) { %> · investment active<% } %></p>
       <form method="post" action="/bank" class="tile-form">
         <select name="action">
           <option value="deposit">Deposit</option>
           <option value="withdraw">Withdraw</option>
           <option value="invest">Invest</option>
           <option value="collect">Collect</option>
+          <% if (!status.has_bank_card) { %><option value="buycard">Buy Treasury Card</option><% } %>
         </select>
         <input type="number" name="amount" placeholder="Amount" />
         <button type="submit" class="btn-wood">Go</button>
@@ -307,5 +331,5 @@
 </div>
 
 <%- include('partials/realm-shell-close') %>
-<script src="/public/dashboard-interactions.js?v=5" defer></script>
+<script src="/public/dashboard-interactions.js?v=6" defer></script>
 <%- include('partials/foot') %>
