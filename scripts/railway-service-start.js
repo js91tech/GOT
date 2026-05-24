@@ -50,12 +50,12 @@ function runWorkspace(workspace, label) {
 }
 
 function runMany(workspaces) {
-  const children = workspaces.map(({ workspace, label }) => {
+  const children = workspaces.map(({ workspace, label, env }) => {
     console.log(`Starting ${label} (${workspace})…`);
     const child = spawn('npm', ['run', 'start', '-w', workspace], {
       stdio: 'inherit',
       shell: true,
-      env: process.env
+      env: env || process.env
     });
     child.on('exit', (code) => {
       console.error(`${label} exited (${code ?? 1})`);
@@ -82,11 +82,16 @@ if (service === 'botweb') {
 } else if (service === 'stack') {
   console.log('stack: bot + web + API in one container (one volume; web uses PORT, API uses API_PORT)');
   console.log('stack: expose ONE public URL → dashboard + Discord URL mapping /api → same host');
-  if (!process.env.API_PORT) process.env.API_PORT = '3848';
+  const apiPort = process.env.API_PORT || '3848';
+  process.env.API_PORT = apiPort;
   runMany([
     { workspace: '@westeros/discord-bot', label: 'bot' },
     { workspace: '@westeros/web', label: 'web' },
-    { workspace: '@westeros/api', label: 'api' }
+    {
+      workspace: '@westeros/api',
+      label: 'api',
+      env: { ...process.env, API_PORT: apiPort, PORT: apiPort }
+    }
   ]);
 } else {
   const workspace =

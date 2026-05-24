@@ -13,7 +13,8 @@ dotenv.config({ path: path.join(root, '.env') });
 process.env.DATABASE_PATH = process.env.DATABASE_PATH || path.join(root, 'data/westeros.db');
 
 const app = express();
-const port = Number(process.env.PORT || process.env.API_PORT) || 3848;
+// API_PORT first so stack mode (web on Railway PORT, API internal) does not collide.
+const port = Number(process.env.API_PORT || process.env.PORT) || 3848;
 
 const devOrigins = ['http://localhost:5173', 'http://127.0.0.1:5173'];
 const activityOrigins = (process.env.ACTIVITY_ORIGINS || '')
