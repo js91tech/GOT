@@ -113,7 +113,7 @@
   const ESCAPE_BUTTON = {
     'Pay medical bill': 'Pay coins to leave the maester\'s tent immediately.',
     'Rally morale (40)': 'Spend 40 morale to walk out of the maester\'s tent.',
-    'Use Reversal Kit': 'Consume a Reversal Kit from inventory.',
+    "Use Healer's Kit": "Consume a Healer's Kit from inventory.",
     'Pay bail': 'Pay coins to leave the black cells early.',
     'Dungeon Key': 'Use a dungeon key item from inventory.',
     'Ask ally to bust you': 'Open PvP so an ally can break you out.'

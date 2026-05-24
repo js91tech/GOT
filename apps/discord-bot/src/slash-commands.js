@@ -9,7 +9,7 @@ export function buildSlashCommands() {
     new SlashCommandBuilder().setName('status').setDescription('Morale, timers, blockers'),
     new SlashCommandBuilder()
       .setName('train')
-      .setDescription('Train at the grounds (SoL-style stats)')
+      .setDescription('Train combat stats at your yard')
       .addStringOption((o) =>
         o
           .setName('stat')
@@ -47,14 +47,14 @@ export function buildSlashCommands() {
           .setDescription('Job to take')
           .setRequired(true)
           .addChoices(
-            { name: 'Stable Hand', value: 'janitor' },
-            { name: 'Squire', value: 'instructor_assistant' },
-            { name: 'Relic Keeper', value: 'curator' }
+            { name: 'Stable Hand', value: 'stable_hand' },
+            { name: 'Squire', value: 'squire_duty' },
+            { name: 'Relic Keeper', value: 'relic_keeper' }
           )
       ),
     new SlashCommandBuilder()
       .setName('bank')
-      .setDescription('HQ Treasury')
+      .setDescription('Keep Treasury')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -203,7 +203,7 @@ export function buildSlashCommands() {
       ),
     new SlashCommandBuilder()
       .setName('gym')
-      .setDescription('Training gym (SoL multiplier)')
+      .setDescription('Training yard multiplier')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -266,7 +266,7 @@ export function buildSlashCommands() {
       ),
     new SlashCommandBuilder()
       .setName('company')
-      .setDescription('SoL-style company work')
+      .setDescription('Company work shift')
       .addStringOption((o) =>
         o
           .setName('action')

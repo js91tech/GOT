@@ -23,7 +23,7 @@
 | DB | SQLite (`data/westeros.db`) — set `DATABASE_URL` / `DATABASE_PATH` for custom path |
 | Clients | Discord slash commands + web UI (Discord OAuth2) |
 
-SoL-style systems implemented in `game-core`:
+Westeros-style systems implemented in `game-core`:
 
 - **MVP:** CE regen, gym, missions, PvP (attack/mug/rob), hospital/jail, shop, bank, jobs, wheel, lounge, daily login
 - **Phase 2:** education, clans, estates, item/gold markets, forge, commodities

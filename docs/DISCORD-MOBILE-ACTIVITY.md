@@ -4,7 +4,7 @@
 
 1. Join a **voice channel** in your server.
 2. Tap the **rocket** (Activities) icon.
-3. Select **JJK Sorcerer 2D** (your embedded app).
+3. Select **Westeros Realm** (your embedded app).
 4. Play with on-screen **joystick** + **Interact** + HUD buttons.
 
 Slash commands still work on mobile Discord separately; the Activity is the 2D game iframe.

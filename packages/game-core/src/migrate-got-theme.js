@@ -199,13 +199,25 @@ function updateDefinitionNames(db) {
   for (const [tier, name] of estates) {
     db.prepare('UPDATE estate_tiers SET name = ? WHERE tier = ?').run(name, tier);
   }
+
+  const jobs = [
+    ['stable_hand', 'Stable Hand'],
+    ['squire_duty', 'Squire'],
+    ['relic_keeper', 'Relic Keeper'],
+    ['janitor', 'Stable Hand'],
+    ['instructor_assistant', 'Squire'],
+    ['curator', 'Relic Keeper']
+  ];
+  for (const [id, name] of jobs) {
+    db.prepare('UPDATE job_definitions SET name = ? WHERE id = ?').run(name, id);
+  }
 }
 
 export function refreshGotLabels(db) {
   updateDefinitionNames(db);
 }
 
-/** Migrate existing saves from JJK ids to Westeros ids (v5). */
+/** Migrate existing saves from legacy ids to Westeros ids (v5). */
 export function migrateGotTheme(db) {
   db.pragma('foreign_keys = OFF');
   try {

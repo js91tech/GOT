@@ -6,7 +6,7 @@ Use **one Railway service** instead of bot + web + api + 2d scattered across fou
 
 ### Railway
 
-1. Keep only **`@westeros/discord-bot`** (delete separate `@westeros/web` and `jjk-api` if you still have them).
+1. Keep only **`@westeros/discord-bot`** (delete separate `@westeros/web` and `westeros-api` if you still have them).
 2. **Volume** on that service: mount at `/data`.
 3. **Variables:**
 
@@ -32,7 +32,7 @@ ACTIVITY_ORIGINS=https://YOUR-2D.up.railway.app
 | URL | Expected |
 |-----|----------|
 | `https://YOUR-SERVICE.up.railway.app/health` | `{"ok":true,"service":"web"}` |
-| `https://YOUR-SERVICE.up.railway.app/api/health` | `{"ok":true,"service":"jjk-api"}` |
+| `https://YOUR-SERVICE.up.railway.app/api/health` | `{"ok":true,"service":"westeros-api"}` |
 | `https://YOUR-SERVICE.up.railway.app/` | Home / login |
 
 ### Discord Developer Portal

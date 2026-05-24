@@ -35,7 +35,8 @@ import {
   shopBuyAndEquip as shopBuyAndEquipAction,
   work as workAction,
   setJob as setJobAction,
-  useItem as useItemAction
+  useItem as useItemAction,
+  listJobs as listJobsAction
 } from './economy.js';
 import { attack as attackAction, mug as mugAction, rob as robAction, bustOut } from './pvp.js';
 import { spinWheel } from './wheel.js';
@@ -172,6 +173,9 @@ export class GameService {
   }
   static setJob(discordId, username, jobId) {
     return setJobAction(discordId, username, jobId);
+  }
+  static listJobs() {
+    return listJobsAction();
   }
   static useItem(discordId, username, itemId) {
     return useItemAction(discordId, username, itemId);

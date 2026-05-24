@@ -29,7 +29,7 @@ npm start
 | `/realm` | Region list + link to web map |
 | `/war` | Declare siege, reinforce, status |
 
-Plus the full ported JJK-style core (`/train`, `/profile`, `/attack`, …).
+Plus the full realm RPG core (`/train`, `/profile`, `/attack`, …).
 
 ## Railway (one service)
 

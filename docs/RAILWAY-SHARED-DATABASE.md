@@ -12,7 +12,7 @@ Your canvas is correct:
 |--------|---------|
 | `@westeros/discord-bot-volume` | bot only |
 | `@westeros/web-volume` | web only |
-| `jjk-api-volume` | api only |
+| `westeros-api-volume` | api only |
 
 Same mount path `/data` on each, but **three separate disks** → three saves.
 
@@ -74,7 +74,7 @@ Bot and web now share `@westeros/discord-bot-volume` automatically.
 
 ## Will 2D use the same save as bot?
 
-**Not automatically.** `westeros-game-2d` only talks to **`jjk-api`**, which reads `westeros.db` from **whatever volume is on the api service** (`jjk-api-volume` today).
+**Not automatically.** `westeros-game-2d` only talks to **`westeros-api`**, which reads `westeros.db` from **whatever volume is on the api service** (`westeros-api-volume` today).
 
 | Setup | Bot + web | 2D game |
 |--------|-----------|---------|
@@ -89,7 +89,7 @@ For one save everywhere: use **Fix B** below and point `VITE_API_URL` at your st
 
 If you also want **2D and bot** on the same `westeros.db` without copying files:
 
-1. Use the **bot** service (or rename it `jjk-stack`).
+1. Use the **bot** service (or rename it `westeros-stack`).
 2. Variables:
    ```env
    SERVICE=stack
@@ -98,7 +98,7 @@ If you also want **2D and bot** on the same `westeros.db` without copying files:
    ```
    Plus all bot/web/api secrets.
 3. **Networking:** Railway’s public `PORT` goes to the **web** UI. Add a **TCP proxy** (or second public URL) on port **3848** for the API so `VITE_API_URL` can reach it.
-4. **Delete** separate `@westeros/web` and `jjk-api` services after this works.
+4. **Delete** separate `@westeros/web` and `westeros-api` services after this works.
 5. Redeploy.
 
 This is more setup; **Fix A** plus a separate API is simpler if 2D progress can stay on the API volume until you migrate DB.

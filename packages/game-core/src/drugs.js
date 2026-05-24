@@ -11,7 +11,7 @@ export function useDrug(discordId, username, drugId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const drug = db.prepare('SELECT * FROM drug_definitions WHERE id = ?').get(drugId);
-  if (!drug) return { ok: false, message: 'Drugs: ce_shot, focus_tea, resolve_pill, booster_serum' };
+  if (!drug) return { ok: false, message: 'Tonics: morale_tonic, focus_tea, resolve_pill, booster_serum' };
   const cooldowns = JSON.parse(player.drug_cooldowns_json || '{}');
   const until = cooldowns[drugId];
   if (until && new Date(until).getTime() > Date.now()) {

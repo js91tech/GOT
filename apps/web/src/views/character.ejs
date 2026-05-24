@@ -8,7 +8,8 @@
 
   <section class="character-hero">
     <p class="power-rating">
-      <%= sheet.class.current.icon %> <strong><%= sheet.class.current.name %></strong>
+      <img class="class-badge-icon" src="<%= classIcon %>" alt="" width="28" height="28" />
+      <strong><%= sheet.class.current.name %></strong>
       · Combat power <strong><%= sheet.power %></strong> · HP <%= sheet.hp %>/<%= sheet.max_hp %>
     </p>
     <% if (sheet.class.milestone && sheet.class.milestone.due) { %>

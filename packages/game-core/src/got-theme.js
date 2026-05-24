@@ -26,8 +26,11 @@ export function lordRank(level) {
   return 'Squire';
 }
 
-/** Old anime IDs → Westeros IDs (migration + alias lookup). */
+/** Legacy import IDs → Westeros IDs (migration + alias lookup). */
 export const ID_RENAMES = {
+  janitor: 'stable_hand',
+  instructor_assistant: 'squire_duty',
+  curator: 'relic_keeper',
   tokyo_jujutsu_high: 'winterfell',
   shibuya_district: 'kings_landing',
   jujutsu_high_kyoto: 'oldtown',
@@ -74,8 +77,22 @@ export const ID_RENAMES = {
   bone_shard: 'iron_ingot'
 };
 
-/** Human-readable labels for legacy JJK ids still in saves or stale DB rows. */
+/** Human-readable labels for legacy ids still in saves or stale DB rows. */
 export const GOT_LABELS = {
+  stable_hand: 'Stable Hand',
+  squire_duty: 'Squire',
+  relic_keeper: 'Relic Keeper',
+  janitor: 'Stable Hand',
+  instructor_assistant: 'Squire',
+  curator: 'Relic Keeper',
+  training_grounds: 'Training Grounds',
+  war_yard: 'War Yard',
+  royal_armory: 'Royal Armory',
+  kingsguard_yard: 'Kingsguard Yard',
+  kings_guard: "King's Guard",
+  coin_masters: 'Coin Masters Guild',
+  river_patrol: 'Riverlands Patrol',
+  vault_security: 'Vault Security Corp',
   petty_cleanup: 'Petty Border Raid',
   grade4_patrol: 'Border Patrol',
   shibuya_raid: 'Sack the Village',

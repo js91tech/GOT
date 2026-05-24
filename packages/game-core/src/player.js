@@ -8,6 +8,13 @@ import {
   getMoraleOverflowCap,
   getFocusOverflowCap
 } from './energy.js';
+import {
+  getXpProgress,
+  getWorkCooldownStatus,
+  getMoraleRegenIn,
+  getDrugCooldownsLeft,
+  resolveDisplayNames
+} from './status-helpers.js';
 
 export function getOrCreatePlayer(discordId, username = 'Lord') {
   const db = getDb();
@@ -107,10 +114,19 @@ export function removeItem(playerId, itemId, qty = 1) {
 
 export function getStatus(player) {
   const block = isBlocked(player);
+  const db = getDb();
+  const xp = getXpProgress(player);
+  const work = getWorkCooldownStatus(player, db);
+  const moraleRegen = getMoraleRegenIn(player);
+  const labels = resolveDisplayNames(player, db);
   return {
     grade: player.grade,
     level: player.level,
     xp: player.xp,
+    xp_current: xp.xp_current,
+    xp_needed: xp.xp_needed,
+    xp_pct: xp.xp_pct,
+    at_cap: xp.at_cap,
     coins: player.coins,
     bank: player.bank_balance,
     gold_objects: player.gold_objects,
@@ -121,6 +137,7 @@ export function getStatus(player) {
     morale_overflow_cap: getMoraleOverflowCap(player),
     focus_regen_cap: getFocusRegenCap(player),
     focus_overflow_cap: getFocusOverflowCap(player),
+    morale_regen_in: moraleRegen.morale_regen_in,
     resolve: player.resolve,
     strength: player.strength,
     defense: player.defense,
@@ -130,8 +147,12 @@ export function getStatus(player) {
     intelligence: player.intelligence,
     endurance: player.endurance,
     technique: player.technique,
-    gym_id: player.gym_id,
+    gym_id: labels.gym_id,
+    gym_name: labels.gym_name,
     company_id: player.company_id,
+    company_name: labels.company_name,
+    job_id: labels.job_id,
+    job_name: labels.job_name,
     hp: player.hp,
     max_hp: player.max_hp,
     bravery: player.bravery,
@@ -139,6 +160,12 @@ export function getStatus(player) {
     jail_until: player.jail_until,
     login_streak: player.login_streak,
     wheel_spins_left: balance.wheelDailySpins - player.wheel_spins_today,
+    work_ready: work.work_ready,
+    work_minutes_left: work.work_minutes_left,
+    work_ready_at: work.work_ready_at,
+    drug_cooldowns: getDrugCooldownsLeft(player),
+    investment_amount: player.investment_amount,
+    investment_matures_at: player.investment_matures_at,
     blocked: block
   };
 }

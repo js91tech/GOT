@@ -11,6 +11,7 @@ import { ensureSchemaPatches } from './migrate-repair.js';
 import { refreshGotLabels } from './migrate-got-theme.js';
 import { migrateClasses } from './migrate-classes.js';
 import { migrateEnergyCaps } from './migrate-energy.js';
+import { migrateJobs } from './migrate-jobs.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -162,6 +163,10 @@ function migrate(db) {
     migrateEnergyCaps(db);
     db.pragma('user_version = 11');
   }
+  if (version < 12) {
+    migrateJobs(db);
+    db.pragma('user_version = 12');
+  }
   ensureSchemaPatches(db);
 }
 
@@ -295,9 +300,9 @@ function seedWorld(db) {
   for (const row of crimes) insCrime.run(...row);
 
   const jobs = [
-    ['janitor', 'Stable Hand', 100, 50, 1],
-    ['instructor_assistant', 'Squire', 500, 200, 5],
-    ['curator', 'Relic Keeper', 2000, 800, 15]
+    ['stable_hand', 'Stable Hand', 100, 50, 1],
+    ['squire_duty', 'Squire', 500, 200, 5],
+    ['relic_keeper', 'Relic Keeper', 2000, 800, 15]
   ];
   const insJob = db.prepare(
     `INSERT OR IGNORE INTO job_definitions (id, name, coin_payout, xp_payout, min_level) VALUES (?, ?, ?, ?, ?)`
@@ -316,8 +321,8 @@ function seedWorld(db) {
 
   const estates = [
     [0, 'None', 0, 1.0],
-    [1, 'Dorm Room', 50000, 1.05],
-    [2, 'Faculty Quarters', 500000, 1.12],
+    [1, 'Squire Quarters', 50000, 1.05],
+    [2, 'Lordly Chambers', 500000, 1.12],
     [3, 'Safe House', 5000000, 1.25],
     [4, 'Dragonstone Keep', 50000000, 1.4]
   ];

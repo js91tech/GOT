@@ -38,7 +38,7 @@ export async function handleCommand(interaction) {
     const equipped = GameService.equipped(player.id)
       .map((e) => `${e.equip_slot}: ${e.name}`)
       .join('\n') || 'None';
-    const embed = playerEmbed(player);
+    const embed = playerEmbed(player, 'Lord\'s Profile', status);
     embed.addFields(
       {
         name: 'Worker',
@@ -55,13 +55,14 @@ export async function handleCommand(interaction) {
     const s = GameService.status(uid, name);
     return {
       content:
-        `**${s.grade}** Lv.${s.level} | Morale ${s.ce} | Wheel spins left: ${s.wheel_spins_left}\n` +
-        `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity}\n` +
+        `**${s.grade}** Lv.${s.level} (${s.xp_current}/${s.xp_needed || 'MAX'} XP) | Morale ${s.ce} | Wheel: ${s.wheel_spins_left}\n` +
+        `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity} | HP ${s.hp}/${s.max_hp}\n` +
         `Worker: LAB ${s.manual_labor} INT ${s.intelligence} END ${s.endurance} TEC ${s.technique}\n` +
-        `Gym: ${s.gym_id || 'training_grounds'}${s.company_id ? ` | Company: ${s.company_id}` : ''}\n` +
+        `Job: ${s.job_name || 'Stable Hand'} | Yard: ${s.gym_name || s.gym_id}${s.company_name ? ` | Company: ${s.company_name}` : ''}\n` +
+        (s.work_ready ? 'Work: ready\n' : `Work: ${s.work_minutes_left}m cooldown\n`) +
+        (s.login_streak > 1 ? `Login streak: ${s.login_streak} days\n` : '') +
         (s.hospital_until ? `Maester's tent until: ${s.hospital_until} — /escape place:hospital\n` : '') +
-        (s.jail_until ? `Black cells until: ${s.jail_until} — /escape place:jail or /bust\n` : '') +
-        `Login streak: ${s.login_streak}`
+        (s.jail_until ? `Black cells until: ${s.jail_until} — /escape place:jail or /bust\n` : '')
     };
   }
 

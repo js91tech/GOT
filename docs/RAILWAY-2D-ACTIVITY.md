@@ -11,7 +11,7 @@ Discord voice channel
         │
         ▼
 ┌───────────────────┐     HTTPS      ┌─────────────────┐
-│ westeros-game-2d       │ ──────────────►│ jjkbot API      │
+│ westeros-game-2d       │ ──────────────►│ westeros-bot API      │
 │ (static dist/)    │   /v1/*        │ SERVICE=api     │
 │ Railway service   │                │ same /data DB   │
 └───────────────────┘                └────────┬────────┘
@@ -23,7 +23,7 @@ Discord voice channel
 
 | Piece | Repo | Railway |
 |-------|------|---------|
-| Bot + web + API | `js91tech/jjkbot` | 3 services, shared `railway.toml`, `/data` volume on all three |
+| Bot + web + API | `js91tech/westeros-bot` | 3 services, shared `railway.toml`, `/data` volume on all three |
 | Static 2D client | `js91tech/westeros-game-2d` | Separate service (`npm run build` → `npm run start`) |
 
 ---
@@ -40,7 +40,7 @@ Same application as your bot.
 | 2 | **URL Mappings** → Root URL = **2D HTTPS URL** (step 4), e.g. `https://westeros-game-2d-production.up.railway.app` (must be **Embedded App**, not “commands only”) |
 | 3 | **Application ID** → `DISCORD_CLIENT_ID` on API + `VITE_DISCORD_CLIENT_ID` on 2D build |
 | 4 | **OAuth2** → redirects: `http://127.0.0.1/callback` (Activity desktop — **required**), `https://127.0.0.1`, `https://<web>/oauth/callback` (dashboard) |
-| 5 | **URL Mappings** → add **second** mapping: prefix **`/api`** → target `jjk-api-production.up.railway.app` (no `https://`). The 2D client calls **`/api/v1/...`** (Discord proxy forwards to your API). |
+| 5 | **URL Mappings** → add **second** mapping: prefix **`/api`** → target `westeros-api-production.up.railway.app` (no `https://`). The 2D client calls **`/api/v1/...`** (Discord proxy forwards to your API). |
 
 Tell players (any of these):
 
@@ -50,7 +50,7 @@ Tell players (any of these):
 
 ---
 
-### 2. jjkbot — API service
+### 2. westeros-bot — API service
 
 Duplicate bot or web in Railway → rename **api** → same repo.
 
@@ -65,13 +65,13 @@ Duplicate bot or web in Railway → rename **api** → same repo.
 
 **Volume:** `/data` — **same volume** as bot and web.
 
-**Start:** `npm run start:railway` (root `railway.toml`). If the service uses the repo **Dockerfile**, push latest `jjkbot` (Dockerfile must include `apps/api`). **Healthcheck:** `/health` → `{"ok":true,"service":"jjk-api"}`.
+**Start:** `npm run start:railway` (root `railway.toml`). If the service uses the repo **Dockerfile**, push latest `westeros-bot` (Dockerfile must include `apps/api`). **Healthcheck:** `/health` → `{"ok":true,"service":"westeros-api"}`.
 
 Copy public URL → `https://<api>.up.railway.app` for `VITE_API_URL` when building 2D.
 
 ---
 
-### 3. jjkbot — bot + web
+### 3. westeros-bot — bot + web
 
 Unchanged. Shared `/data/westeros.db`:
 
@@ -116,7 +116,7 @@ Copy 2D public HTTPS URL → Discord **URL Mappings** + API `ACTIVITY_ORIGINS`.
 
 | Test | Expected |
 |------|----------|
-| `https://<api>/health` | `{"ok":true,"service":"jjk-api"}` |
+| `https://<api>/health` | `{"ok":true,"service":"westeros-api"}` |
 | `https://<2d>/` | Phaser loading screen |
 | Voice → Activity | Discord user auth, HUD shows stats |
 | Bot `/profile` vs Activity | Same character (`westeros.db`) |
@@ -132,9 +132,9 @@ Copy 2D public HTTPS URL → Discord **URL Mappings** + API `ACTIVITY_ORIGINS`.
 | CORS in console | Add 2D origin to `ACTIVITY_ORIGINS` on API |
 | Wrong/empty character | API must use **same shared volume** as bot/web — [RAILWAY-SHARED-DATABASE.md](RAILWAY-SHARED-DATABASE.md) |
 | Bot and web different saves | Two volumes — merge to one volume at `/data` (link above) |
-| `Failed to fetch` in Activity | Add URL Mapping `/api` → api host; keep **jjk-api** online; rebuild 2D after code update |
-| `Unauthorized. Log in with Discord` | Redeploy **both** jjk-api + westeros-game-2d (latest); **jjk-api** `DISCORD_CLIENT_SECRET`; OAuth redirect `http://127.0.0.1/callback`; URL mapping `/api` → api host; check jjk-api logs for `[auth] 401` |
-| `[westeros-db] No /data volume` on **jjk-api** | Attach volume at `/data` on jjk-api (or use `SERVICE=stack` on bot) — separate from login, but saves won’t persist |
+| `Failed to fetch` in Activity | Add URL Mapping `/api` → api host; keep **westeros-api** online; rebuild 2D after code update |
+| `Unauthorized. Log in with Discord` | Redeploy **both** westeros-api + westeros-game-2d (latest); **westeros-api** `DISCORD_CLIENT_SECRET`; OAuth redirect `http://127.0.0.1/callback`; URL mapping `/api` → api host; check westeros-api logs for `[auth] 401` |
+| `[westeros-db] No /data volume` on **westeros-api** | Attach volume at `/data` on westeros-api (or use `SERVICE=stack` on bot) — separate from login, but saves won’t persist |
 | Build still hits localhost | Set `VITE_*` on 2D service and **redeploy** (baked into `dist/`) |
 | 2D stuck **Deploying** forever | Railway healthcheck `/health` fails on static Vite — set health path to **`/`** or disable healthcheck |
 
@@ -142,5 +142,5 @@ Copy 2D public HTTPS URL → Discord **URL Mappings** + API `ACTIVITY_ORIGINS`.
 
 ## Related
 
-- Bot/web Railway basics: [README.md](../README.md#deploy-on-railway-github-js91techjjkbot)
+- Bot/web Railway basics: [README.md](../README.md#deploy-on-railway-github-js91techwesteros-bot)
 - API env template: [apps/api/.env.example](../apps/api/.env.example)

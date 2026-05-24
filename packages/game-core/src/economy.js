@@ -7,12 +7,26 @@ import { companyWork } from './company.js';
 import { equipItem, slotForItem } from './equip.js';
 import { getEffectiveWorkerStats, getWorkCooldownReduction } from './stats.js';
 import { canBuyCapBonus, clampMorale, clampFocus } from './energy.js';
+import { resolveLegacyId } from './got-theme.js';
 
 const JOB_WORKER_STAT = {
+  stable_hand: 'manual_labor',
+  squire_duty: 'technique',
+  relic_keeper: 'intelligence',
   janitor: 'manual_labor',
   instructor_assistant: 'technique',
   curator: 'intelligence'
 };
+
+const JOB_LIST_HINT = 'Stable Hand, Squire, Relic Keeper';
+
+export function listJobs() {
+  return getDb().prepare('SELECT * FROM job_definitions ORDER BY min_level').all();
+}
+
+function resolveJobId(player) {
+  return resolveLegacyId(player.job_id || 'stable_hand');
+}
 
 export function bank(discordId, username, action, amount) {
   const player = getOrCreatePlayer(discordId, username);
@@ -27,7 +41,7 @@ export function bank(discordId, username, action, amount) {
       player.id
     );
     audit(db, player.id, 'bank_deposit', amount, {});
-    return { ok: true, message: `Deposited ${amount} to HQ Treasury.`, player: getOrCreatePlayer(discordId, username) };
+    return { ok: true, message: `Deposited ${amount} to the Keep Treasury.`, player: getOrCreatePlayer(discordId, username) };
   }
   if (action === 'withdraw') {
     if (player.bank_balance < amount) return { ok: false, message: 'Insufficient bank balance.' };
@@ -193,7 +207,7 @@ export function work(discordId, username) {
   const block = isBlocked(player);
   if (block.blocked) return { ok: false, message: 'Cannot work while hospitalized or jailed.' };
   const db = getDb();
-  const jobId = player.job_id || 'janitor';
+  const jobId = resolveJobId(player);
   const job = db.prepare('SELECT * FROM job_definitions WHERE id = ?').get(jobId);
   if (!job) return { ok: false, message: 'No job. Use /job set <id>.' };
   const lvl = requireLevel(player, job.min_level, job.name);
@@ -230,8 +244,9 @@ export function work(discordId, username) {
 export function setJob(discordId, username, jobId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
+  jobId = resolveLegacyId(jobId);
   const job = db.prepare('SELECT * FROM job_definitions WHERE id = ?').get(jobId);
-  if (!job) return { ok: false, message: 'Jobs: janitor, instructor_assistant, curator' };
+  if (!job) return { ok: false, message: `Jobs: ${JOB_LIST_HINT}.` };
   const lvl = requireLevel(player, job.min_level, job.name);
   if (!lvl.ok) return { ok: false, message: lvl.message };
   db.prepare('UPDATE players SET job_id = ? WHERE id = ?').run(jobId, player.id);
@@ -241,7 +256,8 @@ export function setJob(discordId, username, jobId) {
 export function useItem(discordId, username, itemId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
-  const inv = getInventory(player.id).find((i) => i.item_id === itemId);
+  const inv = getInventory(player.id).find((i) => i.item_id === resolveLegacyId(itemId) || i.item_id === itemId);
+  itemId = inv?.item_id || resolveLegacyId(itemId);
   if (!inv || inv.quantity < 1) return { ok: false, message: 'Item not in inventory.' };
   const effects = JSON.parse(inv.effects_json || '{}');
   if (effects.hospitalClear && player.hospital_until) {

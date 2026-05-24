@@ -179,15 +179,38 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const flashOk = req.query.ok !== '0';
   const factions = GameService.factions();
   const house = player.faction_id ? factions.find((f) => f.id === player.faction_id) : null;
-  const inventoryWithIcons = inventory.map((i) => ({
-    ...i,
-    name: gotLabel(i.item_id, i.name),
-    iconUrl: itemIconUrl(i.item_id, i.item_type),
-    rarity: itemRarityTier(i.item_id, i.item_type, i.shop_price)
-  }));
+  const inventoryWithIcons = inventory.map((i) => {
+    let effects = {};
+    try {
+      effects = JSON.parse(i.effects_json || '{}');
+    } catch {
+      effects = {};
+    }
+    const usable =
+      i.item_type === 'consumable' &&
+      !!(effects.hospitalClear || effects.jailClear || effects.grabBag || effects.ce || effects.focus);
+    return {
+      ...i,
+      name: gotLabel(i.item_id, i.name),
+      iconUrl: itemIconUrl(i.item_id, i.item_type),
+      rarity: itemRarityTier(i.item_id, i.item_type, i.shop_price),
+      usable
+    };
+  });
   const equippable = inventoryWithIcons.filter(
     (i) => i.equip_slot || ['weapon', 'armor', 'gear'].includes(i.item_type)
   );
+  const unlockedCrimes = crimes.filter((c) => !c.locked);
+  const defaultMission = unlockedCrimes.length ? unlockedCrimes[unlockedCrimes.length - 1].id : '';
+  const jobs = GameService.listJobs().map((j) => ({
+    ...j,
+    locked: player.level < j.min_level
+  }));
+  const gyms = GameService.gyms().map((g) => ({
+    ...g,
+    name: gotLabel(g.id, g.name),
+    locked: player.level < g.min_level
+  }));
   const { sheet } = GameService.characterSheet(id, name);
   const classProgress = GameService.classProgress(id, name);
   res.render('dashboard', {
@@ -198,6 +221,9 @@ app.get('/dashboard', requireAuth, (req, res) => {
     equippable,
     confinement,
     crimes,
+    defaultMission,
+    jobs,
+    gyms,
     factions,
     house,
     houseCrest: house ? crestUrl(house.crest_key) : null,
@@ -272,6 +298,16 @@ app.post('/work', requireAuth, (req, res) => {
   dashRedirect(res, r, 'work');
 });
 
+app.post('/job', requireAuth, (req, res) => {
+  const r = GameService.setJob(req.session.discordId, req.session.username, req.body.jobId);
+  dashRedirect(res, r, 'work');
+});
+
+app.post('/use', requireAuth, (req, res) => {
+  const r = GameService.useItem(req.session.discordId, req.session.username, req.body.item);
+  dashRedirect(res, r, 'default');
+});
+
 app.post('/wheel', requireAuth, (req, res) => {
   const r = GameService.wheel(req.session.discordId, req.session.username);
   dashRedirect(res, r, 'wheel');
@@ -337,7 +373,12 @@ app.post('/armory/equip', requireAuth, (req, res) => {
 
 app.get('/character', requireAuth, (req, res) => {
   const { player, sheet } = GameService.characterSheet(req.session.discordId, req.session.username);
-  res.render('character', { player, sheet, flash: req.query.msg });
+  res.render('character', {
+    player,
+    sheet,
+    classIcon: classIconUrl(player.class_id || 'squire'),
+    flash: req.query.msg
+  });
 });
 
 app.get('/class', requireAuth, (req, res) => {
