@@ -1,47 +1,48 @@
-/* JJK Sorcerer MUD — skeuomorphic theme (dashboard + all pages) */
+/* Westeros Realm — medieval skeuomorphic theme (dashboard + all pages) */
 
+body.page-realm,
 body.page-jjk,
 body.page-dashboard {
-  --dash-purple: #4c1d95;
-  --dash-purple-glow: rgba(168, 85, 247, 0.55);
-  --dash-ce-glow: rgba(34, 211, 238, 0.65);
-  --dash-red-title: #f87171;
-  --dash-stone: #2a2638;
-  --dash-stone-light: #3d3854;
+  --dash-purple: #5c1010;
+  --dash-purple-glow: rgba(212, 175, 55, 0.45);
+  --dash-ce-glow: rgba(217, 119, 6, 0.55);
+  --dash-red-title: #fbbf24;
+  --dash-stone: #2a2420;
+  --dash-stone-light: #3d342c;
   --dash-wood: #3d2e22;
   --dash-wood-dark: #1f1610;
-  --dash-metal: #5c5a6e;
-  background: #08060f;
+  --dash-metal: #5c5048;
+  background: #0c0a08;
 }
 
-body.page-jjk::before {
+body.page-realm, body.page-jjk::before {
   display: none;
 }
 
-body.page-jjk header,
+body.page-realm, body.page-jjk header,
 body.page-dashboard header {
   position: relative;
   z-index: 100;
   max-width: 1280px;
-  border-bottom: 2px solid rgba(124, 58, 237, 0.4);
-  background: linear-gradient(180deg, rgba(12, 8, 24, 0.98), rgba(8, 6, 16, 0.92));
+  border-bottom: 2px solid rgba(139, 26, 26, 0.5);
+  background: linear-gradient(180deg, rgba(20, 12, 8, 0.98), rgba(10, 8, 6, 0.92));
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
 }
 
-body.page-jjk header strong,
+body.page-realm, body.page-jjk header strong,
 body.page-dashboard header strong {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
   letter-spacing: 0.12em;
-  background: linear-gradient(180deg, #fca5a5 0%, #c084fc 45%, #7c3aed 100%);
+  background: linear-gradient(180deg, #fde68a 0%, #d4af37 45%, #8b1a1a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 12px rgba(248, 113, 113, 0.35));
+  filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.35));
   text-transform: uppercase;
 }
 
-body.page-jjk nav a,
+body.page-realm, body.page-jjk nav a,
 body.page-dashboard nav a {
   color: #cbd5e1;
   font-size: 0.82rem;
@@ -51,26 +52,26 @@ body.page-dashboard nav a {
   text-decoration: none;
 }
 
-body.page-jjk nav a:hover,
+body.page-realm, body.page-jjk nav a:hover,
 body.page-dashboard nav a:hover {
-  color: #22d3ee;
+  color: #d4af37;
 }
 
-body.page-jjk .site-nav {
+body.page-realm, body.page-jjk .site-nav {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 0.65rem;
   align-items: center;
 }
 
-body.page-jjk .site-nav a {
+body.page-realm, body.page-jjk .site-nav a {
   padding: 0.35rem 0.5rem;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(124, 58, 237, 0.35);
 }
 
-body.page-jjk main,
+body.page-realm, body.page-jjk main,
 body.page-dashboard main {
   position: relative;
   z-index: 2;
@@ -142,12 +143,13 @@ body.page-dashboard main {
 .dash-ornament--tl::after {
   top: 8px;
   left: 10px;
+  content: '🐺';
 }
 
 .dash-ornament--tr::after {
   top: 8px;
   right: 10px;
-  content: '👹';
+  content: '🦁';
 }
 
 /* Frames */
@@ -243,7 +245,7 @@ body.page-dashboard main {
 .profile-sync {
   margin: 0.5rem 0 0;
   font-size: 0.8rem;
-  color: #22d3ee;
+  color: #d4af37;
   opacity: 0.85;
 }
 
@@ -540,13 +542,13 @@ a.btn-wood {
   box-shadow: 0 3px 0 #1f2937;
 }
 
-body.page-jjk .action-tile input,
-body.page-jjk .action-tile select,
-body.page-jjk .shelf-panel input,
-body.page-jjk .shelf-panel select,
-body.page-jjk .lounge-panel input,
-body.page-jjk .jjk-panel input,
-body.page-jjk .jjk-panel select,
+body.page-realm, body.page-jjk .action-tile input,
+body.page-realm, body.page-jjk .action-tile select,
+body.page-realm, body.page-jjk .shelf-panel input,
+body.page-realm, body.page-jjk .shelf-panel select,
+body.page-realm, body.page-jjk .lounge-panel input,
+body.page-realm, body.page-jjk .jjk-panel input,
+body.page-realm, body.page-jjk .jjk-panel select,
 body.page-dashboard .action-tile input,
 body.page-dashboard .action-tile select,
 body.page-dashboard .shelf-panel input,
@@ -786,7 +788,7 @@ body.page-dashboard .lounge-panel input {
 
 .inv-icon::before {
   content: '◆';
-  color: #22d3ee;
+  color: #d4af37;
   font-size: 0.65rem;
 }
 
@@ -805,7 +807,7 @@ body.page-dashboard .lounge-panel input {
   font-family: 'Bebas Neue', sans-serif;
 }
 
-body.page-jjk .flash-wrap,
+body.page-realm, body.page-jjk .flash-wrap,
 body.page-dashboard .flash-wrap {
   border: 2px solid rgba(34, 211, 238, 0.4);
   background: rgba(15, 12, 28, 0.9);
@@ -813,7 +815,7 @@ body.page-dashboard .flash-wrap {
 
 /* ——— Subpages (shop, pvp, explore, advanced, leaderboard, home) ——— */
 
-body.page-jjk .page-title {
+body.page-realm, body.page-jjk .page-title {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2.25rem;
   letter-spacing: 0.08em;
@@ -822,18 +824,18 @@ body.page-jjk .page-title {
   text-shadow: 0 2px 12px rgba(124, 58, 237, 0.5);
 }
 
-body.page-jjk .page-lead {
+body.page-realm, body.page-jjk .page-lead {
   color: #94a3b8;
   font-size: 0.9rem;
   margin: 0 0 1.25rem;
 }
 
-body.page-jjk .page-lead code {
-  color: #22d3ee;
+body.page-realm, body.page-jjk .page-lead code {
+  color: #d4af37;
   font-size: 0.82rem;
 }
 
-body.page-jjk .jjk-back {
+body.page-realm, body.page-jjk .jjk-back {
   display: inline-block;
   margin-top: 1.5rem;
   color: #c084fc;
@@ -842,12 +844,12 @@ body.page-jjk .jjk-back {
   font-size: 0.9rem;
 }
 
-body.page-jjk .jjk-back:hover {
-  color: #22d3ee;
+body.page-realm, body.page-jjk .jjk-back:hover {
+  color: #d4af37;
 }
 
-body.page-jjk .jjk-panel,
-body.page-jjk .panel {
+body.page-realm, body.page-jjk .jjk-panel,
+body.page-realm, body.page-jjk .panel {
   background: linear-gradient(165deg, rgba(58, 54, 72, 0.95) 0%, rgba(30, 28, 40, 0.98) 100%);
   border: 3px solid #4a4560;
   border-radius: 3px;
@@ -859,8 +861,8 @@ body.page-jjk .panel {
     0 8px 24px rgba(0, 0, 0, 0.35);
 }
 
-body.page-jjk .jjk-panel h3,
-body.page-jjk .panel h3 {
+body.page-realm, body.page-jjk .jjk-panel h3,
+body.page-realm, body.page-jjk .panel h3 {
   margin: 0 0 0.65rem;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.25rem;
@@ -868,32 +870,32 @@ body.page-jjk .panel h3 {
   color: #e9d5ff;
 }
 
-body.page-jjk .jjk-panel.wood-panel {
+body.page-realm, body.page-jjk .jjk-panel.wood-panel {
   background: linear-gradient(180deg, #4a3828 0%, #2d2218 100%);
   border: 4px solid #5c4033;
 }
 
-body.page-jjk .jjk-panel.vine-panel {
+body.page-realm, body.page-jjk .jjk-panel.vine-panel {
   border: 3px solid transparent;
   background:
     linear-gradient(145deg, rgba(30, 22, 48, 0.92), rgba(18, 14, 32, 0.95)) padding-box,
     linear-gradient(135deg, #7c3aed, #22d3ee, #5b21b6, #a855f7) border-box;
 }
 
-body.page-jjk .jjk-panel.stone-frame {
+body.page-realm, body.page-jjk .jjk-panel.stone-frame {
   background: linear-gradient(165deg, rgba(58, 54, 72, 0.95) 0%, rgba(30, 28, 40, 0.98) 100%);
   border: 3px solid #4a4560;
 }
 
-body.page-jjk .jjk-grid,
-body.page-jjk .grid {
+body.page-realm, body.page-jjk .jjk-grid,
+body.page-realm, body.page-jjk .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
   margin-bottom: 1rem;
 }
 
-body.page-jjk .flash {
+body.page-realm, body.page-jjk .flash {
   border: 2px solid rgba(34, 211, 238, 0.35);
   background: rgba(15, 12, 28, 0.92);
   color: #f1f5f9;
@@ -902,7 +904,7 @@ body.page-jjk .flash {
   margin-bottom: 1rem;
 }
 
-body.page-jjk .explore-box {
+body.page-realm, body.page-jjk .explore-box {
   background: rgba(0, 0, 0, 0.55);
   border: 2px solid #4a4560;
   border-radius: 3px;
@@ -914,14 +916,14 @@ body.page-jjk .explore-box {
   box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.5);
 }
 
-body.page-jjk .tab-bar {
+body.page-realm, body.page-jjk .tab-bar {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
   margin-bottom: 1.25rem;
 }
 
-body.page-jjk .tab-bar a {
+body.page-realm, body.page-jjk .tab-bar a {
   padding: 0.4rem 0.75rem;
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid rgba(124, 58, 237, 0.45);
@@ -934,18 +936,18 @@ body.page-jjk .tab-bar a {
   letter-spacing: 0.04em;
 }
 
-body.page-jjk .tab-bar a:hover {
+body.page-realm, body.page-jjk .tab-bar a:hover {
   border-color: #22d3ee;
   color: #67e8f9;
 }
 
-body.page-jjk .rank-list {
+body.page-realm, body.page-jjk .rank-list {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-body.page-jjk .rank-list li {
+body.page-realm, body.page-jjk .rank-list li {
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -956,61 +958,61 @@ body.page-jjk .rank-list li {
   border-radius: 2px;
 }
 
-body.page-jjk .rank-list .rank-num {
+body.page-realm, body.page-jjk .rank-list .rank-num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 1.1rem;
   color: #a855f7;
   min-width: 1.5rem;
 }
 
-body.page-jjk .shop-card strong {
+body.page-realm, body.page-jjk .shop-card strong {
   color: #f8fafc;
   font-size: 1.05rem;
 }
 
-body.page-jjk .shop-card .price {
+body.page-realm, body.page-jjk .shop-card .price {
   color: #fbbf24;
   font-weight: 700;
 }
 
-body.page-jjk .pvp-card .target-name {
+body.page-realm, body.page-jjk .pvp-card .target-name {
   font-size: 1.1rem;
   color: #f8fafc;
 }
 
-body.page-jjk .pvp-actions {
+body.page-realm, body.page-jjk .pvp-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.45rem;
   margin-top: 0.75rem;
 }
 
-body.page-jjk .list-plain {
+body.page-realm, body.page-jjk .list-plain {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-body.page-jjk .list-plain li {
+body.page-realm, body.page-jjk .list-plain li {
   padding: 0.4rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   font-size: 0.88rem;
   color: #cbd5e1;
 }
 
-body.page-jjk .home-hero {
+body.page-realm, body.page-jjk .home-hero {
   text-align: center;
   padding: 2rem 1rem 3rem;
   max-width: 720px;
   margin: 0 auto;
 }
 
-body.page-jjk .home-hero .vine-panel {
+body.page-realm, body.page-jjk .home-hero .vine-panel {
   margin-bottom: 1.5rem;
   padding: 2rem 1.5rem;
 }
 
-body.page-jjk .home-hero h1 {
+body.page-realm, body.page-jjk .home-hero h1 {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 3rem;
   margin: 0;
@@ -1020,8 +1022,8 @@ body.page-jjk .home-hero h1 {
   -webkit-text-fill-color: transparent;
 }
 
-body.page-jjk button:not(.btn-wood):not(.btn-stone):not(.secondary):not(.danger):not(.wheel-btn):not(.lounge-btn),
-body.page-jjk .btn:not(.btn-wood):not(.secondary) {
+body.page-realm, body.page-jjk button:not(.btn-wood):not(.btn-stone):not(.secondary):not(.danger):not(.wheel-btn):not(.lounge-btn),
+body.page-realm, body.page-jjk .btn:not(.btn-wood):not(.secondary) {
   background: linear-gradient(180deg, #a855f7 0%, #6d28d9 50%, #5b21b6 100%);
   border: 2px solid #c084fc;
   border-radius: 3px;
@@ -1033,22 +1035,22 @@ body.page-jjk .btn:not(.btn-wood):not(.secondary) {
   font-family: inherit;
 }
 
-body.page-jjk button.secondary,
-body.page-jjk .btn.secondary {
+body.page-realm, body.page-jjk button.secondary,
+body.page-realm, body.page-jjk .btn.secondary {
   background: linear-gradient(180deg, #78716c, #44403c);
   border: 2px solid #a8a29e;
   box-shadow: 0 4px 0 #292524;
   color: #fafaf9;
 }
 
-body.page-jjk button.danger {
+body.page-realm, body.page-jjk button.danger {
   background: linear-gradient(180deg, #ef4444, #991b1b);
   border: 2px solid #fca5a5;
   box-shadow: 0 4px 0 #7f1d1d;
 }
 
-body.page-jjk input,
-body.page-jjk select {
+body.page-realm, body.page-jjk input,
+body.page-realm, body.page-jjk select {
   background: rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 2px;
@@ -1058,8 +1060,8 @@ body.page-jjk select {
   font-size: 0.88rem;
 }
 
-body.page-jjk .action-card form,
-body.page-jjk .jjk-panel form {
+body.page-realm, body.page-jjk .action-card form,
+body.page-realm, body.page-jjk .jjk-panel form {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;

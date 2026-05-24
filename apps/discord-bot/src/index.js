@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import discord from 'discord.js';
@@ -8,11 +8,18 @@ import { handleCommand } from './commands.js';
 import { registerSlashCommands } from './register-slash.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const root = path.resolve(__dirname, '../../..');
+dotenv.config({ path: path.join(root, '.env') });
 process.env.DATABASE_PATH =
-  process.env.DATABASE_PATH || path.resolve(__dirname, '../../../data/westeros.db');
+  process.env.DATABASE_PATH || path.resolve(root, 'data/westeros.db');
 
 if (!process.env.DISCORD_TOKEN) {
-  console.error('FATAL: DISCORD_TOKEN is missing on this Railway service. Add it under Variables.');
+  const stack = (process.env.SERVICE || '').toLowerCase() === 'stack';
+  if (stack) {
+    console.warn('DISCORD_TOKEN missing — bot skipped; web + API still run (fill .env for slash commands).');
+    process.exit(0);
+  }
+  console.error('FATAL: DISCORD_TOKEN is missing. Add it to .env or Railway variables.');
   process.exit(1);
 }
 
@@ -102,8 +109,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 client.login(process.env.DISCORD_TOKEN).catch((err) => {
-  console.error('FATAL: Discord login failed — check DISCORD_TOKEN is valid and not truncated.');
+  console.error('Discord login failed — check DISCORD_TOKEN is valid and not truncated.');
   console.error(err.message || err);
+  const stack = (process.env.SERVICE || '').toLowerCase() === 'stack';
+  if (stack) {
+    console.warn('Stack continues without bot (web + API still available).');
+    process.exit(0);
+  }
   process.exit(1);
 });
 

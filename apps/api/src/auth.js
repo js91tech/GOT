@@ -3,7 +3,7 @@ import { verifyActivitySession } from './activitySession.js';
 function bearerToken(req) {
   const auth = req.headers.authorization || '';
   if (auth.startsWith('Bearer ')) return auth.slice(7);
-  const alt = req.headers['x-jjk-session'];
+  const alt = req.headers['x-westeros-session'] || req.headers['x-jjk-session'];
   if (alt) return String(alt);
   if (req.body?.session_token) return String(req.body.session_token);
   return null;
@@ -11,12 +11,12 @@ function bearerToken(req) {
 
 /**
  * Discord Bearer token auth for 2D Activity + dev headers.
- * Activity sessions use signed `jjk.*` tokens from POST /v1/auth/code.
+ * Activity sessions use signed `westeros.*` tokens from POST /v1/auth/code.
  */
 export async function resolveDiscordUser(req) {
   if (process.env.ALLOW_DEV_AUTH === 'true') {
     const devId = req.headers['x-discord-id'];
-    const devName = req.headers['x-discord-username'] || 'DevSorcerer';
+    const devName = req.headers['x-discord-username'] || 'DevLord';
     if (devId) return { id: String(devId), username: String(devName) };
   }
 
@@ -32,7 +32,7 @@ export async function resolveDiscordUser(req) {
   if (!res.ok) return null;
   const user = await res.json();
   if (!user?.id) return null;
-  return { id: user.id, username: user.username || 'Sorcerer' };
+  return { id: user.id, username: user.username || 'Lord' };
 }
 export function requireAuth(handler) {
   return async (req, res, next) => {

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title><%= typeof title !== 'undefined' ? title : 'Westeros Bot' %></title>
   <link rel="stylesheet" href="/public/style.css" />
-  <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-jjk') || pageClass === 'page-dashboard')) { %>
+  <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-realm') || String(pageClass).includes('page-jjk') || pageClass === 'page-dashboard')) { %>
   <link rel="stylesheet" href="/public/theme.css" />
   <% } %>
   <script src="/public/tooltips.js" defer></script>
@@ -22,7 +22,7 @@
       <a href="/explore">Explore</a>
       <a href="/advanced">Advanced</a>
       <a href="/leaderboard">Leaderboard</a>
-      <a href="/play/2d">2D</a>
+      <a href="/play">Play</a>
       <a href="/logout">Logout</a>
     <% } else { %>
       <a href="/leaderboard">Leaderboard</a> |

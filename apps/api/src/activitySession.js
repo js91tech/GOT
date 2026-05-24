@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
-const PREFIX = 'jjk.';
+const PREFIX = 'westeros.';
+const LEGACY_PREFIX = 'jjk.';
 
 function sessionSecret() {
   return (
@@ -21,9 +22,17 @@ export function signActivitySession(discordId, username) {
   return `${PREFIX}${payload}.${sig}`;
 }
 
+function sessionPrefix(token) {
+  if (!token) return null;
+  if (token.startsWith(PREFIX)) return PREFIX;
+  if (token.startsWith(LEGACY_PREFIX)) return LEGACY_PREFIX;
+  return null;
+}
+
 export function verifyActivitySession(token) {
-  if (!token || !token.startsWith(PREFIX)) return null;
-  const rest = token.slice(PREFIX.length);
+  const prefix = sessionPrefix(token);
+  if (!prefix) return null;
+  const rest = token.slice(prefix.length);
   const dot = rest.lastIndexOf('.');
   if (dot < 1) return null;
   const payload = rest.slice(0, dot);
@@ -38,7 +47,7 @@ export function verifyActivitySession(token) {
   try {
     const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
     if (!data?.id || !data.exp || Date.now() > data.exp) return null;
-    return { id: data.id, username: data.u || 'Sorcerer' };
+    return { id: data.id, username: data.u || 'Lord' };
   } catch {
     return null;
   }

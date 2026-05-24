@@ -60,7 +60,7 @@ function buildLaunch2dUrl(session) {
   if (!base) return null;
   const params = new URLSearchParams({
     discord_id: session.discordId,
-    username: session.username || 'Sorcerer'
+    username: session.username || 'Lord'
   });
   const joiner = base.includes('?') ? '&' : '?';
   return `${base}${joiner}${params.toString()}`;
@@ -179,6 +179,19 @@ app.get('/dashboard', requireAuth, (req, res) => {
     heroImage: HERO_IMAGE,
     game2dUrl: getGame2dUrl(),
     launch2dUrl: buildLaunch2dUrl(req.session),
+    launch2dHint: getLaunch2dHint()
+  });
+});
+
+/** Play hub — redirects to 2D launcher (Discord Activity or optional browser client). */
+app.get('/play', requireAuth, (req, res) => {
+  if (req.query.go === '1' && getGame2dUrl()) {
+    const launch2dUrl = buildLaunch2dUrl(req.session);
+    if (launch2dUrl) return res.redirect(launch2dUrl);
+  }
+  res.render('play-2d', {
+    launch2dUrl: buildLaunch2dUrl(req.session),
+    game2dUrl: getGame2dUrl(),
     launch2dHint: getLaunch2dHint()
   });
 });

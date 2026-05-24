@@ -1,4 +1,4 @@
-<%- include('partials/head', { loggedIn: true, title: 'Dashboard', pageClass: 'page-jjk page-dashboard' }) %>
+<%- include('partials/head', { loggedIn: true, title: 'Dashboard', pageClass: 'page-realm page-dashboard' }) %>
 <%- include('partials/jjk-shell-open') %>
 
 <div class="dash-page">
@@ -14,12 +14,12 @@
 
   <% if (confinement && confinement.confined) { %>
   <section class="alert-panel vine-frame">
-    <h3><%= confinement.reason === 'jail' ? '⛓ Prison Realm' : '🏥 Shoko\'s Infirmary' %></h3>
+    <h3><%= confinement.reason === 'jail' ? '⛓ The Black Cells' : '🏥 Maester\'s Tent' %></h3>
     <p><strong><%= confinement.minutesLeft %> minutes</strong> remaining · until <%= confinement.until %></p>
     <div class="escape-actions">
       <% if (confinement.reason === 'hospital') { %>
         <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="pay" /><button type="submit" class="btn-stone">Pay medical bill</button></form>
-        <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="ce" /><button type="submit" class="btn-wood">CE escape (40 CE)</button></form>
+        <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="ce" /><button type="submit" class="btn-wood">Rally morale (40)</button></form>
         <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="item" /><button type="submit" class="btn-wood">Use Reversal Kit</button></form>
       <% } else { %>
         <form method="post" action="/escape"><input type="hidden" name="place" value="jail" /><input type="hidden" name="method" value="pay" /><button type="submit" class="btn-stone">Pay bail</button></form>
@@ -35,7 +35,7 @@
       <h1 class="profile-name"><%= player.username %> <span class="grade-tag"><%= player.grade %></span></h1>
       <p class="profile-meta">Level <%= player.level %> · <%= player.world_id %> · Gym: <%= player.gym_id %></p>
       <div class="profile-actions profile-actions--2d">
-        <p class="play-2d-primary"><strong>Play in Discord:</strong> join a voice channel → <strong>Activities</strong> (rocket) → JJK Sorcerer</p>
+        <p class="play-2d-primary"><strong>Play in Discord:</strong> join a voice channel → <strong>Activities</strong> (rocket) → Westeros Realm</p>
         <% if (launch2dUrl) { %>
         <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer" data-tip="Optional browser link to the hosted 2D client. Main path is Discord Activity in a voice channel.">Open 2D in browser</a>
         <% } %>
@@ -57,7 +57,7 @@
     </div>
     <div class="resource-stone resource-stone--ce" data-icon="ce">
       <span class="resource-icon" aria-hidden="true"></span>
-      <span class="resource-label">CE</span>
+      <span class="resource-label">Morale</span>
       <span class="resource-value"><%= player.ce %>/100</span>
     </div>
     <div class="resource-stone" data-icon="focus">
@@ -147,27 +147,27 @@
 
   <section class="bottom-row">
     <article class="lounge-panel glow-purple vine-frame">
-      <h3>CE Lounge</h3>
-      <p class="panel-sub">Cursed techniques</p>
+      <h3>War Camp</h3>
+      <p class="panel-sub">Rest &amp; rally</p>
       <div class="lounge-actions">
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="tea" />
-          <button type="submit" class="lounge-btn" data-icon="tea"><span>Simple Domain</span><em>Tea</em></button>
+          <button type="submit" class="lounge-btn" data-icon="tea"><span>Feast</span><em>Tea</em></button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="vow" />
-          <button type="submit" class="lounge-btn" data-icon="vow"><span>Divergent Fist</span><em>Vow</em></button>
+          <button type="submit" class="lounge-btn" data-icon="vow"><span>Oath</span><em>Vow</em></button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="refill" />
-          <button type="submit" class="lounge-btn" data-icon="refill"><span>CE pool</span><em>Refill</em></button>
+          <button type="submit" class="lounge-btn" data-icon="refill"><span>Morale</span><em>Refill</em></button>
         </form>
       </div>
     </article>
 
     <article class="shelf-panel wood-shelf">
       <h3>Treasury</h3>
-      <p class="panel-sub">Cursed artifacts · bank</p>
+      <p class="panel-sub">Vault &amp; investments</p>
       <div class="shelf-deco" aria-hidden="true"></div>
       <form method="post" action="/bank" class="tile-form">
         <select name="action">
@@ -182,12 +182,12 @@
     </article>
 
     <article class="shelf-panel wood-shelf gear-shelf">
-      <h3>Cursed gear</h3>
-      <p class="panel-sub">Equip &amp; gym</p>
+      <h3>Armory</h3>
+      <p class="panel-sub">Equip &amp; training yard</p>
       <div class="shelf-deco gear-deco" aria-hidden="true"></div>
       <form method="post" action="/gym" class="tile-form tile-form--inline">
         <input type="hidden" name="gymId" value="cursed_pit" />
-        <button type="submit" class="btn-wood">Cursed Pit gym</button>
+        <button type="submit" class="btn-wood">War yard</button>
       </form>
       <form method="post" action="/equip" class="tile-form">
         <input name="item" placeholder="item id" />

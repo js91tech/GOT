@@ -23,7 +23,7 @@ function ownerLabel(control) {
   const db = getDb();
   if (control.owner_type === 'faction') {
     const f = db.prepare('SELECT name FROM factions WHERE id = ?').get(control.owner_id);
-    return f ? `House ${f.name}` : control.owner_id;
+    return f ? (f.name.startsWith('House ') ? f.name : `House ${f.name}`) : control.owner_id;
   }
   if (control.owner_type === 'guild') {
     const g = db.prepare('SELECT tag, name FROM guilds WHERE id = ?').get(control.owner_id);

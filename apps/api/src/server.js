@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
@@ -9,6 +9,7 @@ import { signActivitySession } from './activitySession.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '../../..');
+dotenv.config({ path: path.join(root, '.env') });
 process.env.DATABASE_PATH = process.env.DATABASE_PATH || path.join(root, 'data/westeros.db');
 
 const app = express();
@@ -159,7 +160,7 @@ app.post('/v1/auth/code', async (req, res) => {
   if (!token.access_token) {
     const hint =
       token.error === 'invalid_grant'
-        ? 'Add http://127.0.0.1/callback to Discord OAuth2 redirects; verify DISCORD_CLIENT_SECRET on jjk-api'
+        ? 'Add http://127.0.0.1/callback to Discord OAuth2 redirects; verify DISCORD_CLIENT_SECRET on API service'
         : token.error || 'unknown';
     console.error('Activity OAuth exchange failed:', hint, token);
     return res.status(401).json({
@@ -194,6 +195,63 @@ app.get('/v1/territories', requireAuth(async (req, res) => {
 }));
 app.post('/v1/territories', requireAuth(async (req, res) => {
   res.json({ ok: true, territories: GameService.territories() });
+}));
+
+app.get('/v1/territories/:id', requireAuth(async (req, res) => {
+  const detail = GameService.territory(req.params.id, req.discordId, req.discordUsername);
+  if (!detail.ok) return res.status(404).json({ ok: false, message: detail.message });
+  res.json({ ok: true, ...detail });
+}));
+app.post('/v1/territories/:id', requireAuth(async (req, res) => {
+  const detail = GameService.territory(req.params.id, req.discordId, req.discordUsername);
+  if (!detail.ok) return res.status(404).json({ ok: false, message: detail.message });
+  res.json({ ok: true, ...detail });
+}));
+
+app.get('/v1/guilds', requireAuth(async (req, res) => {
+  const limit = Math.min(50, Number(req.query.limit) || 20);
+  res.json({ ok: true, guilds: GameService.guilds(limit) });
+}));
+
+app.post('/v1/guilds', requireAuth(async (req, res) => {
+  const { name, tag } = req.body || {};
+  if (!name || !tag) return res.status(400).json({ ok: false, message: 'name and tag required' });
+  res.json(wrap(GameService.createGuild(req.discordId, req.discordUsername, name, tag)));
+}));
+
+app.get('/v1/guilds/:id', requireAuth(async (req, res) => {
+  const guildId = Number(req.params.id);
+  const guilds = GameService.guilds(100);
+  const guild = guilds.find((g) => g.id === guildId);
+  if (!guild) return res.status(404).json({ ok: false, message: 'Guild not found.' });
+  const members = GameService.guildMembers(guildId);
+  const player = GameService.profile(req.discordId, req.discordUsername).player;
+  res.json({
+    ok: true,
+    guild,
+    members,
+    my_guild_id: player.guild_id || null
+  });
+}));
+
+app.post('/v1/guilds/:id/join', requireAuth(async (req, res) => {
+  const guildId = Number(req.params.id);
+  if (!guildId) return res.status(400).json({ ok: false, message: 'Invalid guild id' });
+  res.json(wrap(GameService.joinGuild(req.discordId, req.discordUsername, guildId)));
+}));
+
+app.post('/v1/guilds/:id/deposit', requireAuth(async (req, res) => {
+  const amount = Number(req.body?.amount);
+  if (!amount || amount < 1) return res.status(400).json({ ok: false, message: 'amount required' });
+  const player = GameService.profile(req.discordId, req.discordUsername).player;
+  if (player.guild_id !== Number(req.params.id)) {
+    return res.status(403).json({ ok: false, message: 'You are not in this guild.' });
+  }
+  res.json(wrap(GameService.guildDeposit(req.discordId, req.discordUsername, amount)));
+}));
+
+app.post('/v1/guilds/leave', requireAuth(async (req, res) => {
+  res.json(wrap(GameService.leaveGuild(req.discordId, req.discordUsername)));
 }));
 
 app.get('/v1/map/bootstrap', requireAuth(async (req, res) => {

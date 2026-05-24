@@ -1,9 +1,9 @@
-<%- include('partials/head', { loggedIn: true, title: 'Shop', pageClass: 'page-jjk' }) %>
+<%- include('partials/head', { loggedIn: true, title: 'Shop', pageClass: 'page-realm' }) %>
 <%- include('partials/jjk-shell-open') %>
 
 <% if (flash) { %><div class="flash"><%= flash %></div><% } %>
 <h1 class="page-title">Relic Shop</h1>
-<p class="page-lead">Spend coins on cursed tools and consumables.</p>
+<p class="page-lead">Spend gold on arms, gear, and supplies.</p>
 
 <div class="jjk-grid">
 <% items.forEach(function(item) { %>
