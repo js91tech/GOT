@@ -4,7 +4,9 @@ import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
 import { GameService } from '@westeros/game-core';
-import { gifForAction, HERO_IMAGE } from './action-media.js';
+import { gifForAction, HERO_IMAGE, MISSION_IMAGE, crestUrl } from './action-media.js';
+import { itemIconUrl } from './item-icons.js';
+import { portraitUrl } from './portraits.js';
 import { createApiProxy, resolveApiProxyTarget } from './api-proxy.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -166,17 +168,23 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const crimes = GameService.crimes(id, name);
   const action = req.query.action || '';
   const flashOk = req.query.ok !== '0';
+  const factions = GameService.factions();
+  const house = player.faction_id ? factions.find((f) => f.id === player.faction_id) : null;
   res.render('dashboard', {
     player,
     status,
     inventory,
     confinement,
     crimes,
+    factions,
+    house,
+    houseCrest: house ? crestUrl(house.crest_key) : null,
     flash: req.query.msg,
     flashAction: action,
     flashGif: gifForAction(action, flashOk),
     flashOk,
     heroImage: HERO_IMAGE,
+    missionImage: MISSION_IMAGE,
     game2dUrl: getGame2dUrl(),
     launch2dUrl: buildLaunch2dUrl(req.session),
     launch2dHint: getLaunch2dHint()
@@ -267,7 +275,11 @@ app.post('/bank', requireAuth, (req, res) => {
 });
 
 app.get('/shop', requireAuth, (req, res) => {
-  res.render('shop', { items: GameService.shop(), flash: req.query.msg });
+  const items = GameService.shop().map((item) => ({
+    ...item,
+    iconUrl: itemIconUrl(item.id, item.item_type)
+  }));
+  res.render('shop', { items, flash: req.query.msg });
 });
 
 app.post('/shop/buy', requireAuth, (req, res) => {
@@ -276,7 +288,12 @@ app.post('/shop/buy', requireAuth, (req, res) => {
 });
 
 app.get('/pvp', requireAuth, (req, res) => {
-  const players = GameService.listPlayers(30).filter((p) => p.discord_id !== req.session.discordId);
+  const players = GameService.listPlayers(30)
+    .filter((p) => p.discord_id !== req.session.discordId)
+    .map((p) => ({
+      ...p,
+      portraitUrl: portraitUrl(p.discord_id, p.username)
+    }));
   const flashOk = req.query.ok !== '0';
   res.render('pvp', {
     players,

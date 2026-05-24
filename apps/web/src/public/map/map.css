@@ -1,8 +1,8 @@
 .map-layout {
   display: grid;
-  grid-template-columns: 1fr 280px;
+  grid-template-columns: 1fr 300px;
   gap: 1rem;
-  max-width: 1100px;
+  max-width: 680px;
   margin: 0 auto;
 }
 @media (max-width: 800px) {
@@ -11,42 +11,71 @@
   }
 }
 .map-canvas-wrap {
-  background: #121018;
-  border: 1px solid #5a4a38;
+  background: linear-gradient(165deg, #0a1628, #0e1824);
+  border: 2px solid #8a7048;
   border-radius: 8px;
-  padding: 0.5rem;
+  padding: 0.35rem;
+  box-shadow: inset 0 0 48px rgba(0, 0, 0, 0.5);
 }
 #realm-map svg {
   width: 100%;
   height: auto;
+  display: block;
+}
+#realm-map #landmass {
+  pointer-events: none;
+}
+#realm-map g[id] {
   cursor: pointer;
 }
-#realm-map circle {
-  transition: fill 0.2s, stroke 0.2s;
+#realm-map .region-fill {
+  fill: #4a4550;
+  stroke: #8a7a60;
+  stroke-width: 1.5;
+  transition: fill 0.25s, stroke 0.2s, filter 0.2s;
 }
-#realm-map circle:hover {
+#realm-map .region-label {
+  pointer-events: none;
+  font-size: 9px;
+  fill: #e8dcc8;
+  opacity: 0.85;
+}
+#realm-map g[id]:hover .region-fill {
   stroke: #e8c878;
   stroke-width: 2.5;
+  filter: brightness(1.12);
 }
-#realm-map circle.selected {
+#realm-map g.selected .region-fill {
   stroke: #fff;
   stroke-width: 3;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.65));
+}
+#realm-map g.selected .region-label {
+  fill: #fff;
+  font-weight: bold;
 }
 .map-panel {
-  background: #1e1a24;
-  border: 1px solid #5a4a38;
+  background: linear-gradient(165deg, #2a2218, #1a1410);
+  border: 2px solid #8a7048;
   border-radius: 8px;
   padding: 1rem;
   color: #e8e0d0;
 }
 .map-panel h2 {
   margin: 0 0 0.5rem;
-  font-size: 1.1rem;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  color: #d4af37;
 }
 .map-panel .meta {
   font-size: 0.9rem;
   color: #b0a898;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
+}
+.map-crest {
+  display: block;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
 }
 .map-actions form {
   margin-top: 0.5rem;
@@ -55,21 +84,35 @@
   width: 100%;
   margin-top: 0.35rem;
 }
-.owner-faction-stark { fill: #4a6a8a; }
-.owner-faction-lannister { fill: #9a7a1a; }
-.owner-faction-baratheon { fill: #2d5a8a; }
-.owner-faction-tyrell { fill: #3d7a3d; }
-.owner-faction-greyjoy { fill: #5a5a5a; }
-.owner-faction-targaryen { fill: #8b2a2a; }
-.owner-guild { fill: #6b4a9a; }
-.owner-neutral { fill: #4a4550; }
+#realm-map g.owner-faction-stark .region-fill { fill: #4a6a8a; stroke: #8ab0d0; }
+#realm-map g.owner-faction-lannister .region-fill { fill: #9a7a1a; stroke: #d4af37; }
+#realm-map g.owner-faction-baratheon .region-fill { fill: #2d5a8a; stroke: #6a9ad0; }
+#realm-map g.owner-faction-tyrell .region-fill { fill: #3d7a3d; stroke: #7cb868; }
+#realm-map g.owner-faction-greyjoy .region-fill { fill: #5a5a5a; stroke: #9aa0a8; }
+#realm-map g.owner-faction-targaryen .region-fill { fill: #8b2a2a; stroke: #e85050; }
+#realm-map g.owner-guild .region-fill { fill: #6b4a9a; stroke: #a878d8; }
+#realm-map g.owner-neutral .region-fill { fill: #4a4550; }
 .map-flash {
   padding: 0.5rem 1rem;
   margin-bottom: 1rem;
   background: #2a2430;
   border-radius: 6px;
+  border: 1px solid #8a7048;
 }
 .house-pick select {
   width: 100%;
   margin: 0.5rem 0;
+}
+.house-crest-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  margin: 0.75rem 0;
+}
+.house-crest-grid img {
+  width: 100%;
+  max-width: 48px;
+  margin: 0 auto;
+  display: block;
+  opacity: 0.85;
 }

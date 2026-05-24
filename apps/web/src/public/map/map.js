@@ -20,6 +20,10 @@
 
   const byId = Object.fromEntries(data.territories.map((t) => [t.id, t]));
 
+  function regionEl(id) {
+    return svg.querySelector(`#${CSS.escape(id)}`);
+  }
+
   function ownerClass(t) {
     const c = t.control;
     if (!c) return 'owner-neutral';
@@ -30,11 +34,9 @@
 
   function paint() {
     for (const t of data.territories) {
-      const el = svg.querySelector(`#${t.svg_path_id || t.id}`);
+      const el = regionEl(t.svg_path_id || t.id);
       if (!el) continue;
-      el.classList.remove(
-        ...Array.from(el.classList).filter((c) => c.startsWith('owner-'))
-      );
+      el.classList.remove(...Array.from(el.classList).filter((c) => c.startsWith('owner-')));
       el.classList.add(ownerClass(t));
     }
   }
@@ -42,14 +44,19 @@
   function showDetail(id) {
     const t = byId[id];
     if (!t) return;
-    svg.querySelectorAll('circle.selected').forEach((c) => c.classList.remove('selected'));
-    const el = svg.querySelector(`#${t.svg_path_id || t.id}`);
+    svg.querySelectorAll('.selected').forEach((c) => c.classList.remove('selected'));
+    const el = regionEl(t.svg_path_id || t.id);
     if (el) el.classList.add('selected');
 
     const siege = t.active_siege
       ? `<p class="meta">Siege in progress (${t.active_siege.progress}/100)</p>`
       : '';
+    const crest =
+      t.control?.owner_type === 'faction'
+        ? `<img class="map-crest" src="/public/assets/crests/${t.control.owner_id}.svg" alt="" width="40" height="40" />`
+        : '';
     panel.innerHTML = `
+      ${crest}
       <h2>${t.display_name}</h2>
       <p class="meta">Resource: <strong>${t.resource_type}</strong> · ${t.base_yield_per_hour}/hr</p>
       <p class="meta">Holder: ${t.owner_label}</p>
@@ -65,7 +72,7 @@
   }
 
   paint();
-  svg.querySelectorAll('#regions circle').forEach((el) => {
+  svg.querySelectorAll('#regions > g[id]').forEach((el) => {
     el.addEventListener('click', () => showDetail(el.id));
   });
 

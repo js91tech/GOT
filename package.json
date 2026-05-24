@@ -16,12 +16,14 @@
     "start:stack": "cross-env SERVICE=stack node scripts/railway-service-start.js",
     "start:railway": "node scripts/railway-service-start.js",
     "start": "cross-env SERVICE=stack node scripts/railway-service-start.js",
-    "test": "npm test -w @westeros/game-core"
+    "test": "npm test -w @westeros/game-core",
+    "compress:portraits": "node scripts/compress-portraits.js"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "sharp": "^0.33.5"
   }
 }

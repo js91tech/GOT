@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="House Baratheon">
+  <path d="M32 4 L58 18 V46 L32 60 L6 46 V18 Z" fill="#1a2848" stroke="#d4af37" stroke-width="2"/>
+  <path d="M32 14 C38 22 42 30 42 38 C42 44 37 48 32 48 C27 48 22 44 22 38 C22 30 26 22 32 14 Z" fill="#f0c040"/>
+  <path d="M32 20 L34 30 L44 30 L36 36 L39 46 L32 40 L25 46 L28 36 L20 30 L30 30 Z" fill="#1a2848" opacity="0.5"/>
+  <path d="M32 12 L32 8 M26 14 L24 10 M38 14 L40 10" stroke="#f0c040" stroke-width="2" stroke-linecap="round"/>
+</svg>

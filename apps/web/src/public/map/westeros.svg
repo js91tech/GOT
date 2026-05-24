@@ -1,17 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 300" role="img" aria-label="Realm map">
-  <rect width="360" height="300" fill="#1a1520"/>
-  <g id="regions" fill="#3a3540" stroke="#8a7a60" stroke-width="1.5">
-    <circle id="winterfell" cx="120" cy="40" r="22"/>
-    <circle id="dreadfort" cx="200" cy="55" r="18"/>
-    <circle id="white_harbor" cx="150" cy="90" r="18"/>
-    <circle id="twins" cx="180" cy="130" r="20"/>
-    <circle id="riverrun" cx="160" cy="170" r="18"/>
-    <circle id="kings_landing" cx="220" cy="200" r="24"/>
-    <circle id="storms_end" cx="260" cy="240" r="18"/>
-    <circle id="highgarden" cx="140" cy="240" r="20"/>
-    <circle id="casterly_rock" cx="80" cy="200" r="20"/>
-    <circle id="oldtown" cx="60" cy="260" r="16"/>
-    <circle id="pyke" cx="40" cy="120" r="18"/>
-    <circle id="dragonstone" cx="300" cy="180" r="18"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 720" role="img" aria-label="Map of the Realm">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#142838"/>
+    </linearGradient>
+    <linearGradient id="land" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a3428"/>
+      <stop offset="100%" stop-color="#2a2418"/>
+    </linearGradient>
+    <filter id="coast-glow">
+      <feGaussianBlur stdDeviation="1.5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="560" height="720" fill="url(#sea)"/>
+  <!-- Stylized landmass (original silhouette, not official art) -->
+  <path id="landmass" d="
+    M 120 48
+    C 180 32, 260 38, 320 55
+    C 380 72, 420 95, 440 130
+    L 455 180
+    C 470 220, 480 280, 475 340
+    C 470 400, 450 460, 420 510
+    C 390 560, 340 600, 280 620
+    C 220 640, 160 635, 110 610
+    C 70 590, 45 550, 38 500
+    C 30 450, 35 400, 50 350
+    C 65 300, 55 250, 48 200
+    C 42 150, 55 100, 80 70
+    C 95 55, 108 50, 120 48
+    Z
+  " fill="url(#land)" stroke="#8a7a58" stroke-width="2.5" filter="url(#coast-glow)"/>
+  <!-- Narrow sea (The Bite / coast indent) -->
+  <path d="M 395 155 Q 410 200 400 250 Q 385 280 370 260 Q 360 220 375 170 Z" fill="url(#sea)" opacity="0.85"/>
+  <!-- Dorne spur -->
+  <path d="M 300 610 Q 340 650 380 680 Q 400 700 420 710 L 400 720 L 280 720 Q 260 680 280 640 Z" fill="url(#land)" stroke="#8a7a58" stroke-width="1.5"/>
+  <!-- Iron Islands -->
+  <g id="iron-isles" opacity="0.9">
+    <ellipse cx="72" cy="320" rx="28" ry="14" fill="#4a5048" stroke="#7a8880" stroke-width="1.5"/>
+    <ellipse cx="58" cy="338" rx="12" ry="7" fill="#3a4038" stroke="#6a7870"/>
+    <ellipse cx="88" cy="332" rx="10" ry="6" fill="#3a4038" stroke="#6a7870"/>
+  </g>
+  <text x="280" y="36" text-anchor="middle" fill="#d4af37" font-family="Georgia, serif" font-size="16" letter-spacing="4">THE REALM</text>
+  <g id="regions" font-family="Georgia, serif" font-size="10" fill="#e8dcc8" text-anchor="middle">
+    <g id="winterfell">
+      <path class="region-fill" d="M 200 95 L 250 85 L 270 115 L 255 145 L 210 140 L 185 120 Z"/>
+      <text class="region-label" x="228" y="122">Winterfell</text>
+    </g>
+    <g id="dreadfort">
+      <path class="region-fill" d="M 290 100 L 330 95 L 345 125 L 325 150 L 285 145 L 275 120 Z"/>
+      <text class="region-label" x="308" y="128">Dreadfort</text>
+    </g>
+    <g id="white_harbor">
+      <path class="region-fill" d="M 230 155 L 280 150 L 295 180 L 275 205 L 225 200 L 215 175 Z"/>
+      <text class="region-label" x="252" y="182">White Harbor</text>
+    </g>
+    <g id="pyke">
+      <path class="region-fill" d="M 55 305 L 95 298 L 105 325 L 85 345 L 50 338 L 45 318 Z"/>
+      <text class="region-label" x="72" y="328">Pyke</text>
+    </g>
+    <g id="twins">
+      <path class="region-fill" d="M 240 220 L 290 215 L 305 245 L 285 270 L 235 265 L 225 240 Z"/>
+      <text class="region-label" x="262" y="248">The Twins</text>
+    </g>
+    <g id="riverrun">
+      <path class="region-fill" d="M 210 275 L 260 270 L 275 300 L 255 325 L 205 320 L 195 295 Z"/>
+      <text class="region-label" x="232" y="302">Riverrun</text>
+    </g>
+    <g id="casterly_rock">
+      <path class="region-fill" d="M 95 380 L 145 372 L 160 402 L 140 430 L 90 425 L 80 400 Z"/>
+      <text class="region-label" x="118" y="405">Casterly Rock</text>
+    </g>
+    <g id="highgarden">
+      <path class="region-fill" d="M 180 420 L 240 412 L 258 445 L 235 475 L 175 468 L 165 442 Z"/>
+      <text class="region-label" x="208" y="448">Highgarden</text>
+    </g>
+    <g id="oldtown">
+      <path class="region-fill" d="M 115 480 L 165 475 L 178 505 L 158 530 L 108 525 L 100 500 Z"/>
+      <text class="region-label" x="136" y="508">Oldtown</text>
+    </g>
+    <g id="kings_landing">
+      <path class="region-fill" d="M 320 340 L 375 332 L 395 365 L 370 395 L 315 388 L 305 360 Z"/>
+      <text class="region-label" x="345" y="368">King's Landing</text>
+    </g>
+    <g id="dragonstone">
+      <path class="region-fill" d="M 400 300 L 440 292 L 452 320 L 435 345 L 395 340 L 388 315 Z"/>
+      <text class="region-label" x="418" y="325">Dragonstone</text>
+    </g>
+    <g id="storms_end">
+      <path class="region-fill" d="M 350 430 L 400 422 L 418 455 L 395 485 L 345 478 L 335 450 Z"/>
+      <text class="region-label" x="373" y="458">Storm's End</text>
+    </g>
+  </g>
+  <g opacity="0.55" transform="translate(480,580)">
+    <circle r="18" fill="none" stroke="#6a8090" stroke-width="1"/>
+    <polygon points="0,-14 4,0 0,14 -4,0" fill="#8aa0b0"/>
+    <text y="5" text-anchor="middle" fill="#a0b8c8" font-size="9">N</text>
   </g>
 </svg>

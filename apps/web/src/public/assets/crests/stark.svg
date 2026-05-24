@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="House Stark">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#6b7f8f"/>
+      <stop offset="100%" stop-color="#3d4f5c"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 4 L58 18 V46 L32 60 L6 46 V18 Z" fill="url(#g)" stroke="#c8d4dc" stroke-width="2"/>
+  <path d="M22 38 C24 28 28 22 32 18 C36 22 40 28 42 38 C38 36 35 34 32 34 C29 34 26 36 22 38 Z" fill="#e8eef2"/>
+  <circle cx="28" cy="26" r="2" fill="#1a2228"/>
+  <circle cx="36" cy="26" r="2" fill="#1a2228"/>
+  <path d="M30 30 Q32 32 34 30" stroke="#1a2228" stroke-width="1.2" fill="none"/>
+</svg>

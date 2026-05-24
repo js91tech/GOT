@@ -31,15 +31,20 @@
   <% } %>
 
   <section class="profile-panel vine-frame">
-    <div class="profile-inner">
+    <div class="profile-inner profile-inner--crest">
+      <% if (typeof houseCrest !== 'undefined' && houseCrest) { %>
+      <img class="profile-crest" src="<%= houseCrest %>" alt="<%= house.name %>" width="72" height="72" />
+      <% } %>
+      <div class="profile-text">
       <h1 class="profile-name"><%= player.username %> <span class="grade-tag"><%= player.grade %></span></h1>
-      <p class="profile-meta">Level <%= player.level %> · <%= player.world_id %> · Gym: <%= player.gym_id %></p>
+      <p class="profile-meta">Level <%= player.level %><% if (typeof house !== 'undefined' && house) { %> · <%= house.name %><% } %> · Yard: <%= player.gym_id %></p>
       <div class="profile-actions profile-actions--2d">
         <p class="play-2d-primary"><strong>Play in Discord:</strong> join a voice channel → <strong>Activities</strong> (rocket) → Westeros Realm</p>
         <% if (launch2dUrl) { %>
         <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer" data-tip="Optional browser link to the hosted 2D client. Main path is Discord Activity in a voice channel.">Open 2D in browser</a>
         <% } %>
         <span class="profile-sync"><%= launch2dHint %></span>
+      </div>
       </div>
     </div>
   </section>
@@ -104,8 +109,8 @@
     </article>
 
     <article class="action-tile wood-frame action-tile--mission">
-      <h3>Curse mission</h3>
-      <div class="tile-art tile-art--mission" style="background-image:url('<%= heroImage %>')" aria-hidden="true"></div>
+      <h3>Realm mission</h3>
+      <div class="tile-art tile-art--mission" style="background-image:url('<%= typeof missionImage !== "undefined" ? missionImage : heroImage %>')" aria-hidden="true"></div>
       <form method="post" action="/crime" class="tile-form">
         <select name="mission">
           <% crimes.forEach(function(c) { %>

@@ -1,8 +1,9 @@
 node_modules/
 zip-import/
 .env
-data/*.db
-data/*.db-journal
+data/
+apps/api/data/
+apps/web/data/
 *.log
 .DS_Store
 dist/

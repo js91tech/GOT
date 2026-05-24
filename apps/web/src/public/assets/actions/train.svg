@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Training yard">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1420"/>
+      <stop offset="100%" stop-color="#2a2030"/>
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a3828"/>
+      <stop offset="100%" stop-color="#2a2018"/>
+    </linearGradient>
+  </defs>
+  <rect width="320" height="180" fill="url(#sky)"/>
+  <rect y="120" width="320" height="60" fill="url(#ground)"/>
+  <rect x="40" y="80" width="8" height="60" fill="#5c4033"/>
+  <rect x="272" y="80" width="8" height="60" fill="#5c4033"/>
+  <line x1="44" y1="85" x2="276" y2="85" stroke="#8a6040" stroke-width="3"/>
+  <path d="M120 130 L140 90 L160 130 Z" fill="#8b1a1a" stroke="#d4af37" stroke-width="2"/>
+  <rect x="148" y="70" width="24" height="8" rx="2" fill="#c8a860"/>
+  <circle cx="160" cy="62" r="10" fill="#d4a574"/>
+</svg>

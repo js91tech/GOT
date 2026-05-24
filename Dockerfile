@@ -11,18 +11,18 @@ COPY apps/discord-bot/package.json ./apps/discord-bot/
 COPY apps/web/package.json ./apps/web/
 COPY apps/api/package.json ./apps/api/
 
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
 COPY packages ./packages
 COPY apps ./apps
 COPY scripts ./scripts
-
-RUN chmod +x scripts/railway-start.sh
+COPY railway.toml ./
 
 ENV NODE_ENV=production
-ENV DATABASE_PATH=/data/jjk.db
-ENV SERVICE=web
+ENV SERVICE=stack
+ENV DATABASE_PATH=/data/westeros.db
+ENV API_PORT=3848
 
 EXPOSE 3847
 
-CMD ["./scripts/railway-start.sh"]
+CMD ["sh", "-c", "npm run db:init -w @westeros/game-core || true && npm run start:railway"]

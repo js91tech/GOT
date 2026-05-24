@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Battle">
+  <rect width="320" height="180" fill="#120c10"/>
+  <rect y="130" width="320" height="50" fill="#2a2018"/>
+  <path d="M80 130 L100 70 L120 130 Z" fill="#4a5568" stroke="#8a9098"/>
+  <path d="M200 130 L220 70 L240 130 Z" fill="#7a1010" stroke="#d4af37"/>
+  <path d="M155 95 L165 55 L175 95 L195 95 L180 115 L185 140 L165 125 L145 140 L150 115 L135 95 Z" fill="#d4af37" opacity="0.8"/>
+  <line x1="120" y1="100" x2="200" y2="100" stroke="#e8c878" stroke-width="2" stroke-dasharray="6 4"/>
+</svg>

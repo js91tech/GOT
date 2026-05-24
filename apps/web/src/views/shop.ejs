@@ -2,14 +2,20 @@
 <%- include('partials/jjk-shell-open') %>
 
 <% if (flash) { %><div class="flash"><%= flash %></div><% } %>
-<h1 class="page-title">Relic Shop</h1>
-<p class="page-lead">Spend gold on arms, gear, and supplies.</p>
+<h1 class="page-title">Armory &amp; Supplies</h1>
+<p class="page-lead">Spend gold on blades, armor, and provisions for the realm.</p>
 
-<div class="jjk-grid">
+<div class="jjk-grid shop-grid">
 <% items.forEach(function(item) { %>
   <article class="jjk-panel wood-panel shop-card">
-    <strong><%= item.name %></strong>
-    <span class="price"> — <%= item.shop_price %> coins</span>
+    <div class="shop-card-head">
+      <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="56" height="56" loading="lazy" />
+      <div class="shop-item-meta">
+        <strong><%= item.name %></strong>
+        <span class="price"><%= item.shop_price.toLocaleString() %> gold</span>
+        <span class="shop-type-tag"><%= item.item_type %></span>
+      </div>
+    </div>
     <p class="stat"><%= item.description %></p>
     <form method="post" action="/shop/buy">
       <input type="hidden" name="item" value="<%= item.id %>" />
