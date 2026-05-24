@@ -1,4 +1,4 @@
-/** Shared UI polish — flash auto-dismiss on any page. */
+/** Shared UI polish — flash auto-dismiss and double-submit guards. */
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.flash-wrap, .flash').forEach((flash) => {
     if (flash.classList.contains('flash-wrap')) {
@@ -13,5 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => flash.remove(), 400);
       }, 6000);
     }
+  });
+
+  document.querySelectorAll('form[action="/bank"], form[action="/crime"], form[action="/pvp"]').forEach((form) => {
+    form.addEventListener('submit', () => {
+      const btn = form.querySelector('button[type="submit"]');
+      if (btn && !btn.disabled) btn.disabled = true;
+    });
   });
 });

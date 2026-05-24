@@ -33,6 +33,12 @@ export function applyMoraleRegen(current, gain, player) {
   return Math.min(cap, current + gain);
 }
 
+/** Focus regen tick — never exceeds regen cap. */
+export function applyFocusRegen(current, gain, player) {
+  const cap = getFocusRegenCap(player);
+  return Math.min(cap, current + gain);
+}
+
 export function moraleCapCost(player, percent) {
   return Math.ceil((getMoraleRegenCap(player) * percent) / 100);
 }

@@ -1,7 +1,7 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { nowIso } from './util.js';
-import { applyMoraleRegen } from './energy.js';
+import { applyMoraleRegen, applyFocusRegen } from './energy.js';
 import { processSiegesAndYields } from './territory.js';
 
 let schedulerStarted = false;
@@ -24,6 +24,21 @@ export function processTicks(player) {
     );
     p.ce = newCe;
     p.energy_updated_at = newUpdated;
+  }
+  const focusUpdatedAt = new Date(p.focus_updated_at || p.energy_updated_at || nowIso()).getTime();
+  const focusIntervalMs = (balance.focusRegenMinutes ?? 10) * 60 * 1000;
+  const focusElapsed = now - focusUpdatedAt;
+  if (focusElapsed >= focusIntervalMs) {
+    const focusTicks = Math.floor(focusElapsed / focusIntervalMs);
+    const newFocus = applyFocusRegen(p.focus, focusTicks * (balance.focusRegenAmount ?? 2), p);
+    const newFocusUpdated = new Date(focusUpdatedAt + focusTicks * focusIntervalMs).toISOString();
+    db.prepare('UPDATE players SET focus = ?, focus_updated_at = ? WHERE id = ?').run(
+      newFocus,
+      newFocusUpdated,
+      p.id
+    );
+    p.focus = newFocus;
+    p.focus_updated_at = newFocusUpdated;
   }
   if (p.hospital_until && new Date(p.hospital_until).getTime() <= now) {
     db.prepare('UPDATE players SET hospital_until = NULL WHERE id = ?').run(p.id);

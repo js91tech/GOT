@@ -9,12 +9,12 @@
   <link rel="stylesheet" href="/public/theme.css" />
   <% } %>
   <% if (typeof pageClass !== 'undefined' && String(pageClass).includes('page-dashboard')) { %>
-  <link rel="stylesheet" href="/public/dashboard-studio.css?v=6" />
+  <link rel="stylesheet" href="<%= assetUrl('/public/dashboard-studio.css') %>" />
   <% } %>
   <link rel="icon" href="/public/assets/crests/stark.svg" type="image/svg+xml" />
   <script src="/public/tooltips.js" defer></script>
   <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
-  <script src="/public/realm-ui.js?v=1" defer></script>
+  <script src="<%= assetUrl('/public/realm-ui.js') %>" defer></script>
   <% } %>
 </head>
 <body<% if (typeof pageClass !== 'undefined') { %> class="<%= pageClass %>"<% } %>>

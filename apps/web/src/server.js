@@ -3,7 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import express from 'express';
 import session from 'express-session';
-import { GameService, gotLabel } from '@westeros/game-core';
+import { GameService, gotLabel, balance } from '@westeros/game-core';
 import { gifForAction, HERO_IMAGE, MISSION_IMAGE, missionImageUrl, crestUrl } from './action-media.js';
 import { assetUrl } from './assets.js';
 import { classIconUrl } from './class-icons.js';
@@ -218,7 +218,19 @@ app.get('/dashboard', requireAuth, (req, res) => {
     const def = drugDefs.find((d) => d.id === drugId);
     return { id: drugId, name: gotLabel(drugId, def?.name || drugId), minutes: mins };
   });
-  const trainCosts = { ce: 10, focus: 5, workerCe: 8 };
+  const companies = GameService.companies().map((c) => ({
+    ...c,
+    name: gotLabel(c.id, c.name),
+    locked: player.level < c.min_level
+  }));
+  const guilds = GameService.guilds(20);
+  const playerGuild = GameService.playerGuild(player);
+  const miniLeaderboard = GameService.leaderboard('level').slice(0, 5);
+  const trainCosts = {
+    ce: balance.trainCeCost,
+    focus: balance.trainFocusCost,
+    workerCe: balance.workerTrainCeCost
+  };
   res.render('dashboard', {
     player,
     status,
@@ -238,6 +250,11 @@ app.get('/dashboard', requireAuth, (req, res) => {
     classIcon: classIconUrl(player.class_id || 'squire'),
     classMilestone: classProgress.milestone,
     drugCooldownChips,
+    drugDefs: drugDefs.map((d) => ({ ...d, name: gotLabel(d.id, d.name) })),
+    companies,
+    guilds,
+    playerGuild,
+    miniLeaderboard,
     trainCosts,
     flash: req.query.msg,
     flashAction: action,
@@ -275,6 +292,34 @@ app.get('/play/2d', requireAuth, (req, res) => {
     game2dUrl: getGame2dUrl(),
     launch2dHint: getLaunch2dHint()
   });
+});
+
+app.post('/daily-quest', requireAuth, (req, res) => {
+  const r = GameService.claimDailyQuest(req.session.discordId, req.session.username, req.body.questId);
+  dashRedirect(res, r, 'default');
+});
+
+app.post('/company', requireAuth, (req, res) => {
+  const r = GameService.joinCompany(req.session.discordId, req.session.username, req.body.companyId);
+  dashRedirect(res, r, 'work');
+});
+
+app.post('/guild', requireAuth, (req, res) => {
+  const id = req.session.discordId;
+  const name = req.session.username;
+  let r;
+  if (req.body.action === 'create') {
+    r = GameService.createGuild(id, name, req.body.name, req.body.tag);
+  } else if (req.body.action === 'join') {
+    r = GameService.joinGuild(id, name, Number(req.body.guildId));
+  } else if (req.body.action === 'leave') {
+    r = GameService.leaveGuild(id, name);
+  } else if (req.body.action === 'deposit') {
+    r = GameService.guildDeposit(id, name, Number(req.body.amount));
+  } else {
+    r = { ok: false, message: 'Unknown guild action.' };
+  }
+  dashRedirect(res, r, 'default');
 });
 
 app.post('/train', requireAuth, (req, res) => {
@@ -418,7 +463,9 @@ app.post('/class', requireAuth, (req, res) => {
 
 app.post('/unequip', requireAuth, (req, res) => {
   const r = GameService.unequip(req.session.discordId, req.session.username, req.body.slot);
-  res.redirect('/character?msg=' + encodeURIComponent(r.message));
+  const dest = req.body.next === 'dashboard' ? '/dashboard' : '/character';
+  const params = new URLSearchParams({ msg: r.message, ok: r.ok !== false ? '1' : '0' });
+  res.redirect(`${dest}?${params.toString()}`);
 });
 
 app.post('/shop/buy', requireAuth, (req, res) => {
@@ -428,7 +475,11 @@ app.post('/shop/buy', requireAuth, (req, res) => {
 
 app.get('/pvp', requireAuth, async (req, res) => {
   const guildMembers = await fetchGuildMemberUsers();
-  const targets = GameService.listPvpTargets(req.session.discordId, guildMembers);
+  const pvpOpts = {
+    sort: req.query.sort || 'activity',
+    search: req.query.search || ''
+  };
+  const targets = GameService.listPvpTargets(req.session.discordId, guildMembers, pvpOpts);
   const players = targets.map((p) => ({
     ...p,
     portraitUrl: portraitUrl(p.discord_id, p.username, p.class_id)
@@ -437,6 +488,8 @@ app.get('/pvp', requireAuth, async (req, res) => {
   res.render('pvp', {
     players,
     guildMode: Boolean(guildMembers?.length),
+    sort: pvpOpts.sort,
+    search: pvpOpts.search,
     flash: req.query.msg,
     flashGif: gifForAction(req.query.action || 'attack', flashOk),
     flashOk
@@ -463,15 +516,72 @@ app.post('/bust', requireAuth, (req, res) => {
 });
 
 app.get('/advanced', requireAuth, (req, res) => {
+  const id = req.session.discordId;
+  const name = req.session.username;
+  const { inventory } = GameService.profile(id, name);
   res.render('advanced', {
     clans: GameService.clans().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
     estates: GameService.estates().map((e) => ({ ...e, name: gotLabel(e.name, e.name) })),
     education: GameService.educationList().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
+    companies: GameService.companies().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
+    recipes: GameService.recipes().map((r) => ({ ...r, name: gotLabel(r.id, r.name) })),
+    drugs: GameService.drugs().map((d) => ({ ...d, name: gotLabel(d.id, d.name) })),
+    guilds: GameService.guilds(30),
     commodities: GameService.commodities().map((c) => ({ ...c, name: gotLabel(c.id, c.name) })),
     market: GameService.marketBrowse(),
     gold: GameService.goldBrowse(),
+    inventory,
     flash: req.query.msg
   });
+});
+
+app.post('/market/sell', requireAuth, (req, res) => {
+  const r = GameService.marketList(
+    req.session.discordId,
+    req.session.username,
+    req.body.itemId,
+    Number(req.body.quantity),
+    Number(req.body.price)
+  );
+  res.redirect('/advanced?msg=' + encodeURIComponent(r.message));
+});
+
+app.post('/market/buy', requireAuth, (req, res) => {
+  const r = GameService.marketBuy(req.session.discordId, req.session.username, Number(req.body.listingId));
+  res.redirect('/advanced?msg=' + encodeURIComponent(r.message));
+});
+
+app.post('/gold/list', requireAuth, (req, res) => {
+  const r = GameService.goldList(
+    req.session.discordId,
+    req.session.username,
+    Number(req.body.amount),
+    Number(req.body.price)
+  );
+  res.redirect('/advanced?msg=' + encodeURIComponent(r.message));
+});
+
+app.post('/gold/buy', requireAuth, (req, res) => {
+  const r = GameService.goldBuy(req.session.discordId, req.session.username, Number(req.body.listingId));
+  res.redirect('/advanced?msg=' + encodeURIComponent(r.message));
+});
+
+app.post('/guild-advanced', requireAuth, (req, res) => {
+  const id = req.session.discordId;
+  const name = req.session.username;
+  let r;
+  if (req.body.action === 'create') {
+    r = GameService.createGuild(id, name, req.body.name, req.body.tag);
+  } else if (req.body.action === 'join') {
+    r = GameService.joinGuild(id, name, Number(req.body.guildId));
+  } else if (req.body.action === 'leave') {
+    r = GameService.leaveGuild(id, name);
+  } else if (req.body.action === 'deposit') {
+    r = GameService.guildDeposit(id, name, Number(req.body.amount));
+  } else {
+    r = { ok: false, message: 'Unknown guild action.' };
+  }
+  res.redirect('/advanced?msg=' + encodeURIComponent(r.message));
 });
 
 app.post('/advanced', requireAuth, (req, res) => {

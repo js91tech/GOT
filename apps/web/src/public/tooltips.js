@@ -27,8 +27,18 @@
       submit: 'Start the selected mission.'
     },
     '/work': {
-      panel: 'Clock in at your company for coins. Join a company under Advanced first.',
+      panel: 'Clock in at your job for coins and XP. Set your job with the job picker or /job.',
       submit: 'Complete a work shift.'
+    },
+    '/job': {
+      panel: 'Choose which job you work when you clock in (separate from company membership).',
+      jobId: 'Job — each has level requirements and different payouts.',
+      submit: 'Set your active job.'
+    },
+    '/use': {
+      panel: 'Use a consumable from inventory — healers kits, morale/focus items, relic chests.',
+      item: 'Item id from your inventory.',
+      submit: 'Use the selected item.'
     },
     '/wheel': {
       panel: 'Daily prize wheel — limited spins shown on your stat cards.',
@@ -105,9 +115,11 @@
     Coins: 'Cash on hand — lost partially when mugged or robbed.',
     Bank: 'Stored coins — safer from PvP theft.',
     CE: 'Morale — spent on war actions and rallying out of the maester\'s tent.',
-    Focus: 'Spent when training combat or worker stats.',
+    Focus: 'Spent when training combat stats. Regenerates slowly up to your focus cap.',
+    Resolve: 'Used for some missions and oath actions.',
+    Bravery: 'Spent on realm missions — restore via War Camp oath.',
     'Wheel spins': 'Daily wheel attempts remaining.',
-    Company: 'Your employer id — required to clock in at work.'
+    Company: 'Your employer — join a company for boosted work shifts.'
   };
 
   const ESCAPE_BUTTON = {
@@ -271,6 +283,9 @@
     document.querySelectorAll('.stat-card, .resource-stone').forEach((card) => {
       const label = (card.querySelector('.label') || card.querySelector('.resource-label'))?.textContent?.trim();
       if (STAT[label]) bind(card, STAT[label]);
+    });
+    document.querySelectorAll('.status-chip[data-countdown-prefix*="Focus"]').forEach((chip) => {
+      bind(chip, 'Focus regenerates +2 every 10 minutes up to your resting cap.');
     });
   }
 

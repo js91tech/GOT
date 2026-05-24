@@ -3,7 +3,8 @@ import { getDb } from './db.js';
 import { xpForLevel, maxLevel } from './util.js';
 import { gotLabel, resolveLegacyId } from './got-theme.js';
 import { getWorkCooldownReduction } from './stats.js';
-import { getMoraleRegenCap } from './energy.js';
+import { getMoraleRegenCap, getFocusRegenCap } from './energy.js';
+import { pickInvestmentTier } from './investment-tiers.js';
 
 export function getXpProgress(player) {
   const cap = maxLevel();
@@ -41,18 +42,50 @@ export function getMoraleRegenIn(player) {
   };
 }
 
+export function getFocusRegenIn(player) {
+  const cap = getFocusRegenCap(player);
+  if (player.focus >= cap) return { focus_regen_in: 0, focus_regen_at: null };
+  const intervalMs = (balance.focusRegenMinutes ?? 10) * 60 * 1000;
+  const updatedAt = new Date(player.focus_updated_at || player.energy_updated_at || new Date().toISOString()).getTime();
+  const next = updatedAt + intervalMs;
+  const left = next - Date.now();
+  return {
+    focus_regen_in: Math.max(0, Math.ceil(left / 60000)),
+    focus_regen_at: new Date(next).toISOString()
+  };
+}
+
+export function getDelveStatus(player, db = getDb()) {
+  const active = db
+    .prepare(`SELECT depth FROM delve_runs WHERE player_id = ? AND status = 'active'`)
+    .get(player.id);
+  if (!active) return { delve_active: false, delve_depth: 0 };
+  return { delve_active: true, delve_depth: active.depth };
+}
+
 export function getInvestmentStatus(player) {
   if (!player.investment_amount) {
     return { investment_mature: false, investment_minutes_left: 0 };
   }
+  const tier = pickInvestmentTier(player.investment_amount);
+  const returnMult = player.investment_return_mult || tier?.returnMult || 2.2;
   const matureAt = new Date(player.investment_matures_at).getTime();
   const left = matureAt - Date.now();
   if (left <= 0) {
-    return { investment_mature: true, investment_minutes_left: 0 };
+    return {
+      investment_mature: true,
+      investment_minutes_left: 0,
+      investment_tier_id: tier?.id,
+      investment_return_mult: returnMult,
+      investment_tier_days: tier?.days
+    };
   }
   return {
     investment_mature: false,
-    investment_minutes_left: Math.ceil(left / 60000)
+    investment_minutes_left: Math.ceil(left / 60000),
+    investment_tier_id: tier?.id,
+    investment_return_mult: returnMult,
+    investment_tier_days: tier?.days
   };
 }
 

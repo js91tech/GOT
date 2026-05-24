@@ -87,6 +87,12 @@
     <% if (status.morale_regen_at && player.ce < status.morale_regen_cap) { %>
     <span class="status-chip status-chip--wait" data-countdown-until="<%= status.morale_regen_at %>" data-countdown-prefix="Morale +5 in " data-countdown-done="Morale regen ready">Morale +5 in <%= status.morale_regen_in %>m</span>
     <% } %>
+    <% if (status.focus_regen_at && player.focus < status.focus_regen_cap) { %>
+    <span class="status-chip status-chip--wait" data-countdown-until="<%= status.focus_regen_at %>" data-countdown-prefix="Focus +2 in " data-countdown-done="Focus regen ready">Focus +2 in <%= status.focus_regen_in %>m</span>
+    <% } %>
+    <% if (status.delve_active) { %>
+    <span class="status-chip status-chip--invest">Crypt delve · depth <%= status.delve_depth %></span>
+    <% } %>
     <% if (status.investment_amount) { %>
     <span class="status-chip status-chip--invest">Invested <%= status.investment_amount.toLocaleString() %></span>
     <% if (status.investment_mature) { %>
@@ -102,6 +108,30 @@
     <span class="status-chip status-chip--warn"><%= status.blocked.reason === 'jail' ? 'Black Cells' : "Maester's Tent" %></span>
     <% } %>
   </section>
+
+  <% if (status.daily_quests && status.daily_quests.length) { %>
+  <section class="daily-quests-strip" aria-label="Daily quests">
+    <h3 class="daily-quests-title">Daily quests</h3>
+    <div class="daily-quests-row">
+      <% status.daily_quests.forEach(function(q) { %>
+      <article class="daily-quest-card <%= q.claimed ? 'daily-quest-card--claimed' : (q.done ? 'daily-quest-card--done' : '') %>">
+        <span class="daily-quest-label"><%= q.label %></span>
+        <span class="daily-quest-progress"><%= q.progress %>/<%= q.target %></span>
+        <% if (q.claimed) { %>
+        <span class="daily-quest-status">Claimed</span>
+        <% } else if (q.done) { %>
+        <form method="post" action="/daily-quest" class="daily-quest-claim">
+          <input type="hidden" name="questId" value="<%= q.id %>" />
+          <button type="submit" class="btn-wood btn-sm">Claim +<%= q.coins %>c</button>
+        </form>
+        <% } else { %>
+        <span class="daily-quest-status">In progress</span>
+        <% } %>
+      </article>
+      <% }); %>
+    </div>
+  </section>
+  <% } %>
 
   <section class="resource-row" aria-label="Resources">
     <% var moraleCap = player.ce > status.morale_regen_cap ? status.morale_overflow_cap : status.morale_regen_cap; %>
@@ -139,6 +169,16 @@
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/wheel.svg') %>" alt="Wheel of fate" width="40" height="40" /></div>
       <span class="resource-label">Wheel</span>
       <span class="resource-value"><%= status.wheel_spins_left %></span>
+    </div>
+    <div class="resource-stone" data-icon="resolve">
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/oath.svg') %>" alt="Resolve" width="40" height="40" /></div>
+      <span class="resource-label">Resolve</span>
+      <span class="resource-value"><%= status.resolve %></span>
+    </div>
+    <div class="resource-stone" data-icon="bravery">
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/rally.svg') %>" alt="Bravery" width="40" height="40" /></div>
+      <span class="resource-label">Bravery</span>
+      <span class="resource-value"><%= status.bravery %></span>
     </div>
     <div class="resource-stone" data-icon="company">
       <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/company.svg') %>" alt="Company" width="40" height="40" /></div>
@@ -259,11 +299,68 @@
           </button>
         </form>
       </div>
+      <% if (typeof drugDefs !== 'undefined' && drugDefs.length) { %>
+      <div class="drug-quick-row">
+        <% drugDefs.forEach(function(d) { %>
+        <% var onCd = status.drug_cooldowns && status.drug_cooldowns[d.id]; %>
+        <form method="post" action="/drug" class="drug-quick-form">
+          <input type="hidden" name="drugId" value="<%= d.id %>" />
+          <button type="submit" class="btn-stone btn-sm" <%= onCd ? 'disabled title="Cooldown"' : '' %>><%= d.name %><% if (onCd) { %> <%= onCd %>m<% } %></button>
+        </form>
+        <% }); %>
+      </div>
+      <% } %>
+    </article>
+
+    <article class="shelf-panel wood-shelf">
+      <h3>Company</h3>
+      <p class="panel-sub"><%= status.company_name ? status.company_name : 'No company — join to boost work shifts' %></p>
+      <form method="post" action="/company" class="tile-form">
+        <select name="companyId" aria-label="Company">
+          <% companies.forEach(function(c) { %>
+          <option value="<%= c.id %>" <%= c.id === status.company_id ? 'selected' : '' %> <%= c.locked ? 'disabled' : '' %>><%= c.name %> (Lv<%= c.min_level %>)</option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn-wood">Join</button>
+      </form>
+    </article>
+
+    <article class="shelf-panel stone-frame">
+      <h3>Guild</h3>
+      <% if (playerGuild) { %>
+      <p class="panel-sub">[<span><%= playerGuild.tag %></span>] <%= playerGuild.name %></p>
+      <form method="post" action="/guild" class="tile-form">
+        <input type="hidden" name="action" value="deposit" />
+        <input type="number" name="amount" placeholder="Deposit gold" min="1" />
+        <button type="submit" class="btn-realm">Deposit</button>
+      </form>
+      <form method="post" action="/guild" style="margin-top:6px">
+        <input type="hidden" name="action" value="leave" />
+        <button type="submit" class="btn-stone btn-sm">Leave guild</button>
+      </form>
+      <% } else { %>
+      <p class="panel-sub">Found or join a player guild</p>
+      <form method="post" action="/guild" class="tile-form">
+        <input type="hidden" name="action" value="create" />
+        <input name="name" placeholder="Guild name" required minlength="3" />
+        <input name="tag" placeholder="TAG" required minlength="2" maxlength="5" />
+        <button type="submit" class="btn-realm">Found</button>
+      </form>
+      <form method="post" action="/guild" class="tile-form" style="margin-top:6px">
+        <input type="hidden" name="action" value="join" />
+        <select name="guildId" aria-label="Guild">
+          <% guilds.forEach(function(g) { %>
+          <option value="<%= g.id %>">[<%= g.tag %>] <%= g.name %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn-wood">Join</button>
+      </form>
+      <% } %>
     </article>
 
     <article class="shelf-panel wood-shelf">
       <h3>Treasury</h3>
-      <p class="panel-sub">Vault &amp; investments<% if (status.has_bank_card) { %> · Treasury Card active<% } else if (status.investment_amount) { %> · investment active<% } %></p>
+      <p class="panel-sub">Vault &amp; investments<% if (status.has_bank_card) { %> · Treasury Card active<% } else if (status.investment_amount) { %> · <%= status.investment_tier_id || 'investment' %> (×<%= status.investment_return_mult %>)<% } %></p>
       <form method="post" action="/bank" class="tile-form">
         <select name="action">
           <option value="deposit">Deposit</option>
@@ -297,7 +394,31 @@
         </select>
         <button type="submit" class="btn-realm" <%= equippable.length ? '' : 'disabled' %>>Equip</button>
       </form>
+      <% if (sheet.equipped && sheet.equipped.length) { %>
+      <ul class="equipped-list">
+        <% sheet.equipped.forEach(function(eq) { %>
+        <li class="equipped-slot">
+          <span><%= eq.slot %>: <%= eq.name %></span>
+          <form method="post" action="/unequip" class="inv-equip-form">
+            <input type="hidden" name="slot" value="<%= eq.slot %>" />
+            <input type="hidden" name="next" value="dashboard" />
+            <button type="submit" class="btn-stone btn-sm">Unequip</button>
+          </form>
+        </li>
+        <% }); %>
+      </ul>
+      <% } %>
     </article>
+
+    <aside class="inventory-panel mini-leaderboard-panel">
+      <h3>Top lords</h3>
+      <ol class="mini-leaderboard">
+        <% if (typeof miniLeaderboard !== 'undefined') { miniLeaderboard.forEach(function(row, i) { %>
+        <li><span class="lb-rank"><%= i + 1 %></span> <%= row.username %> · Lv.<%= row.level %></li>
+        <% }); } %>
+      </ol>
+      <a href="/leaderboard">Full rankings →</a>
+    </aside>
 
     <aside class="inventory-panel">
       <h3>Inventory</h3>
@@ -331,5 +452,5 @@
 </div>
 
 <%- include('partials/realm-shell-close') %>
-<script src="/public/dashboard-interactions.js?v=6" defer></script>
+<script src="<%= assetUrl('/public/dashboard-interactions.js') %>" defer></script>
 <%- include('partials/foot') %>

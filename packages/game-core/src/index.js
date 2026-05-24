@@ -5,6 +5,7 @@ export {
   getInventory,
   getStatus
 } from './GameService.js';
+export { balance } from './util.js';
 export { listFactions, joinFaction } from './faction.js';
 export { listTerritoriesWithControl, mapBootstrap } from './territory.js';
 export { getDb, getDbPath, closeDb } from './db.js';

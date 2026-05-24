@@ -8,13 +8,15 @@
   "capBonusAmount": 25,
   "ceRegenMinutes": 5,
   "ceRegenAmount": 5,
+  "focusRegenMinutes": 10,
+  "focusRegenAmount": 2,
   "gradeProtectionLevel": 15,
   "gradeProtectionGap": 10,
   "attackCeCostPercent": 33,
   "mugCeCostPercent": 15,
   "robCeCostPercent": 25,
   "trainCeCost": 10,
-  "trainFocusCost": 5,
+  "trainFocusCost": 3,
   "trainStrengthGain": 2,
   "trainDefenseGain": 2,
   "trainSpeedGain": 2,
@@ -22,8 +24,8 @@
   "trainXpGain": 3,
   "workerTrainCeCost": 8,
   "workerTrainGain": 2,
-  "wheelDailySpins": 50,
-  "workCooldownMinutes": 60,
+  "wheelDailySpins": 10,
+  "workCooldownMinutes": 45,
   "hospitalMinutes": 15,
   "jailMinutes": 20,
   "hospitalBailBase": 500,
@@ -35,8 +37,23 @@
   "bankDailyInterestRate": 0.02,
   "bankCardInterestRate": 0.04,
   "bankCardCost": 5000000,
-  "investmentMin": 30000000,
+  "investmentMin": 100000,
   "investmentDays": 20,
+  "investmentTiers": [
+    { "id": "small", "min": 100000, "days": 5, "returnMult": 1.15 },
+    { "id": "medium", "min": 5000000, "days": 12, "returnMult": 1.35 },
+    { "id": "large", "min": 30000000, "days": 20, "returnMult": 2.2 }
+  ],
+  "dailyQuests": {
+    "count": 3,
+    "pool": [
+      { "id": "work2", "kind": "work", "target": 2, "label": "Clock in twice", "coins": 250, "xp": 40 },
+      { "id": "train3", "kind": "train", "target": 3, "label": "Train 3 times", "coins": 200, "xp": 60 },
+      { "id": "crime1", "kind": "crime", "target": 1, "label": "Run a realm mission", "coins": 300, "xp": 50 },
+      { "id": "wheel2", "kind": "wheel", "target": 2, "label": "Spin the wheel twice", "coins": 150, "xp": 30 },
+      { "id": "duel1", "kind": "duel", "target": 1, "label": "Win a duel or PvE fight", "coins": 400, "xp": 80 }
+    ]
+  },
   "mugMaxPercent": 0.15,
   "robMaxCoins": 50000,
   "combat": {

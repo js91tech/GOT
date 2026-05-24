@@ -181,5 +181,43 @@ export async function handleAutocomplete(interaction) {
     );
   }
 
+  if (cmd === 'crime' && focused.name === 'mission') {
+    return filterChoices(
+      GameService.crimes(uid, name),
+      q,
+      (c) => `${c.name} (Lv${c.min_level})${c.locked ? ' 🔒' : ''}`,
+      (c) => c.id
+    );
+  }
+
+  if (cmd === 'job' && focused.name === 'id') {
+    return filterChoices(
+      GameService.listJobs(),
+      q,
+      (j) => `${j.name} (Lv${j.min_level})`,
+      (j) => j.id
+    );
+  }
+
+  if (cmd === 'gym' && focused.name === 'id') {
+    const action = interaction.options.getString('action');
+    if (action && action !== 'set') return [];
+    return filterChoices(
+      GameService.gyms(),
+      q,
+      (g) => `${g.name} ×${g.train_multiplier} (Lv${g.min_level})`,
+      (g) => g.id
+    );
+  }
+
+  if (cmd === 'forge' && focused.name === 'recipe') {
+    return filterChoices(
+      GameService.recipes(),
+      q,
+      (r) => `${r.name} (${r.coin_cost}c)`,
+      (r) => r.id
+    );
+  }
+
   return [];
 }

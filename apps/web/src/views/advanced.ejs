@@ -9,26 +9,61 @@
   <article class="realm-panel stone-frame">
     <h3>Great Houses</h3>
     <% clans.forEach(c => { %><p class="stat"><%= c.name %> (<%= c.id %>)</p><% }) %>
-    <form method="post" action="/advanced"><input type="hidden" name="type" value="joinClan" /><input name="clanId" placeholder="stark" /><button type="submit" class="btn-realm">Swear Fealty</button></form>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="joinClan" />
+      <select name="clanId" aria-label="Great House">
+        <% clans.forEach(c => { %><option value="<%= c.id %>"><%= c.name %></option><% }) %>
+      </select>
+      <button type="submit" class="btn-realm">Swear Fealty</button>
+    </form>
   </article>
   <article class="realm-panel wood-panel">
     <h3>Estates</h3>
     <% estates.forEach(e => { %><p class="stat">T<%= e.tier %> <%= e.name %> — <%= e.cost %>c</p><% }) %>
-    <form method="post" action="/advanced"><input type="hidden" name="type" value="buyEstate" /><input name="tier" type="number" /><button type="submit" class="btn-wood">Purchase</button></form>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="buyEstate" />
+      <select name="tier" aria-label="Estate tier">
+        <% estates.forEach(e => { %><option value="<%= e.tier %>">T<%= e.tier %> — <%= e.name %></option><% }) %>
+      </select>
+      <button type="submit" class="btn-wood">Purchase</button>
+    </form>
   </article>
   <article class="realm-panel stone-frame">
     <h3>Maester's Study</h3>
     <% education.forEach(c => { %><p class="stat"><%= c.id %>: <%= c.name %> (<%= c.cost %>c)</p><% }) %>
-    <form method="post" action="/advanced"><input type="hidden" name="type" value="enroll" /><input name="courseId" placeholder="swordcraft" /><button type="submit" class="btn-realm">Enroll</button></form>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="enroll" />
+      <select name="courseId" aria-label="Course">
+        <% education.forEach(c => { %><option value="<%= c.id %>"><%= c.name %> (Lv<%= c.min_level %>)</option><% }) %>
+      </select>
+      <button type="submit" class="btn-realm">Enroll</button>
+    </form>
   </article>
   <article class="realm-panel vine-panel">
     <h3>Company / Tonic</h3>
-    <form method="post" action="/advanced"><input type="hidden" name="type" value="joinCompany" /><input name="companyId" placeholder="kings_guard" /><button type="submit" class="btn-realm">Join Company</button></form>
-    <form method="post" action="/drug" style="margin-top:6px"><input name="drugId" value="morale_tonic" /><button type="submit" class="btn-wood">Morale tonic</button></form>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="joinCompany" />
+      <select name="companyId" aria-label="Company">
+        <% companies.forEach(c => { %><option value="<%= c.id %>"><%= c.name %> (Lv<%= c.min_level %>)</option><% }) %>
+      </select>
+      <button type="submit" class="btn-realm">Join Company</button>
+    </form>
+    <form method="post" action="/drug" style="margin-top:6px">
+      <select name="drugId" aria-label="Tonic">
+        <% drugs.forEach(d => { %><option value="<%= d.id %>"><%= d.name %></option><% }) %>
+      </select>
+      <button type="submit" class="btn-wood">Use tonic</button>
+    </form>
   </article>
   <article class="realm-panel wood-panel">
     <h3>Forge / Delve / Relic chest</h3>
-    <form method="post" action="/advanced"><input type="hidden" name="type" value="forge" /><input name="recipeId" placeholder="valyrian_steel" /><button type="submit" class="btn-realm">Forge</button></form>
+    <form method="post" action="/advanced">
+      <input type="hidden" name="type" value="forge" />
+      <select name="recipeId" aria-label="Recipe">
+        <% recipes.forEach(r => { %><option value="<%= r.id %>"><%= r.name %> (<%= r.coin_cost %>c)</option><% }) %>
+      </select>
+      <button type="submit" class="btn-realm">Forge</button>
+    </form>
     <form method="post" action="/advanced"><input type="hidden" name="type" value="delve" /><button type="submit" class="btn-wood">Delve crypts</button></form>
     <form method="post" action="/advanced"><input type="hidden" name="type" value="endDelve" /><button type="submit" class="btn-wood">Leave crypts</button></form>
     <form method="post" action="/advanced"><input type="hidden" name="type" value="grabbag" /><button type="submit" class="btn-realm">Open relic chest</button></form>
@@ -38,21 +73,76 @@
     <% commodities.forEach(c => { %><p class="stat"><%= c.name %> @ <%= c.current_price %>c</p><% }) %>
     <form method="post" action="/advanced">
       <input type="hidden" name="type" value="commodity" />
-      <input name="commId" placeholder="grain_sack" />
-      <input name="qty" type="number" value="1" />
+      <select name="commId" aria-label="Commodity">
+        <% commodities.forEach(c => { %><option value="<%= c.id %>"><%= c.name %></option><% }) %>
+      </select>
+      <input name="qty" type="number" value="1" min="1" />
       <button name="action" value="buy" class="btn-realm">Buy</button>
       <button name="action" value="sell" class="btn-wood">Sell</button>
+    </form>
+  </article>
+  <article class="realm-panel vine-panel">
+    <h3>Player Guilds</h3>
+    <form method="post" action="/guild-advanced">
+      <input type="hidden" name="action" value="create" />
+      <input name="name" placeholder="Guild name" required minlength="3" />
+      <input name="tag" placeholder="TAG" required minlength="2" maxlength="5" />
+      <button type="submit" class="btn-realm">Found guild</button>
+    </form>
+    <form method="post" action="/guild-advanced" style="margin-top:6px">
+      <input type="hidden" name="action" value="join" />
+      <select name="guildId" aria-label="Guild">
+        <% guilds.forEach(g => { %><option value="<%= g.id %>">[<%= g.tag %>] <%= g.name %></option><% }) %>
+      </select>
+      <button type="submit" class="btn-wood">Join</button>
+    </form>
+    <form method="post" action="/guild-advanced" style="margin-top:6px">
+      <input type="hidden" name="action" value="deposit" />
+      <input type="number" name="amount" placeholder="Deposit" min="1" />
+      <button type="submit" class="btn-wood">Deposit</button>
+    </form>
+    <form method="post" action="/guild-advanced" style="margin-top:6px">
+      <input type="hidden" name="action" value="leave" />
+      <button type="submit" class="btn-stone">Leave guild</button>
     </form>
   </article>
 </div>
 
 <article class="realm-panel wood-panel">
-  <h3>Item Market</h3>
+  <h3>Item Market — browse</h3>
   <ul class="list-plain"><% market.forEach(m => { %><li>#<%= m.id %> <%= m.name %> x<%= m.quantity %> — <%= m.price %>c</li><% }) %></ul>
+  <h4>List item</h4>
+  <form method="post" action="/market/sell" class="tile-form">
+    <select name="itemId" aria-label="Item to sell">
+      <% inventory.forEach(i => { %><option value="<%= i.item_id %>"><%= i.name %> x<%= i.quantity %></option><% }) %>
+    </select>
+    <input type="number" name="quantity" value="1" min="1" />
+    <input type="number" name="price" placeholder="Price each" min="1" required />
+    <button type="submit" class="btn-realm">List</button>
+  </form>
+  <h4>Buy listing</h4>
+  <form method="post" action="/market/buy" class="tile-form">
+    <select name="listingId" aria-label="Listing">
+      <% market.forEach(m => { %><option value="<%= m.id %>">#<%= m.id %> <%= m.name %> x<%= m.quantity %> — <%= m.price %>c</option><% }) %>
+    </select>
+    <button type="submit" class="btn-wood">Buy</button>
+  </form>
 </article>
+
 <article class="realm-panel wood-panel">
   <h3>Gold Market</h3>
-  <ul class="list-plain"><% gold.forEach(g => { %><li>#<%= g.id %> <%= g.gold_amount %> objects — <%= g.price %>c</li><% }) %></ul>
+  <ul class="list-plain"><% gold.forEach(g => { %><li>#<%= g.id %> <%= g.gold_amount %> relics — <%= g.price %>c</li><% }) %></ul>
+  <form method="post" action="/gold/list" class="tile-form">
+    <input type="number" name="amount" placeholder="Gold objects" min="1" required />
+    <input type="number" name="price" placeholder="Total price" min="1" required />
+    <button type="submit" class="btn-realm">List gold</button>
+  </form>
+  <form method="post" action="/gold/buy" class="tile-form" style="margin-top:6px">
+    <select name="listingId" aria-label="Gold listing">
+      <% gold.forEach(g => { %><option value="<%= g.id %>">#<%= g.id %> <%= g.gold_amount %> — <%= g.price %>c</option><% }) %>
+    </select>
+    <button type="submit" class="btn-wood">Buy</button>
+  </form>
 </article>
 
 <a class="realm-back" href="/dashboard">← Dashboard</a>

@@ -11,6 +11,16 @@
 <% } %>
 
 <h1 class="page-title">Trial by Combat</h1>
+<form method="get" action="/pvp" class="pvp-filters tile-form">
+  <input type="search" name="search" value="<%= search || '' %>" placeholder="Search lords…" aria-label="Search username" />
+  <select name="sort" aria-label="Sort by">
+    <option value="activity" <%= sort === 'activity' ? 'selected' : '' %>>Recent activity</option>
+    <option value="level" <%= sort === 'level' ? 'selected' : '' %>>Level</option>
+    <option value="power" <%= sort === 'power' ? 'selected' : '' %>>Power</option>
+    <option value="coins" <%= sort === 'coins' ? 'selected' : '' %>>Coins</option>
+  </select>
+  <button type="submit" class="btn-wood">Filter</button>
+</form>
 <p class="page-lead">
   <% if (guildMode) { %>
   Lords in your Discord server who have enrolled — sorted by recent activity.

@@ -12,10 +12,13 @@ import {
   getXpProgress,
   getWorkCooldownStatus,
   getMoraleRegenIn,
+  getFocusRegenIn,
   getDrugCooldownsLeft,
   getInvestmentStatus,
+  getDelveStatus,
   resolveDisplayNames
 } from './status-helpers.js';
+import { getDailyQuestsForPlayer } from './daily-quests.js';
 
 export function getOrCreatePlayer(discordId, username = 'Lord') {
   const db = getDb();
@@ -119,7 +122,9 @@ export function getStatus(player) {
   const xp = getXpProgress(player);
   const work = getWorkCooldownStatus(player, db);
   const moraleRegen = getMoraleRegenIn(player);
+  const focusRegen = getFocusRegenIn(player);
   const investment = getInvestmentStatus(player);
+  const delve = getDelveStatus(player, db);
   const labels = resolveDisplayNames(player, db);
   return {
     grade: player.grade,
@@ -141,6 +146,8 @@ export function getStatus(player) {
     focus_overflow_cap: getFocusOverflowCap(player),
     morale_regen_in: moraleRegen.morale_regen_in,
     morale_regen_at: moraleRegen.morale_regen_at,
+    focus_regen_in: focusRegen.focus_regen_in,
+    focus_regen_at: focusRegen.focus_regen_at,
     resolve: player.resolve,
     strength: player.strength,
     defense: player.defense,
@@ -171,6 +178,12 @@ export function getStatus(player) {
     investment_matures_at: player.investment_matures_at,
     investment_mature: investment.investment_mature,
     investment_minutes_left: investment.investment_minutes_left,
+    investment_tier_id: investment.investment_tier_id,
+    investment_return_mult: investment.investment_return_mult,
+    investment_tier_days: investment.investment_tier_days,
+    daily_quests: getDailyQuestsForPlayer(player),
+    delve_active: delve.delve_active,
+    delve_depth: delve.delve_depth,
     has_bank_card: Boolean(player.has_bank_card),
     energy_updated_at: player.energy_updated_at,
     blocked: block

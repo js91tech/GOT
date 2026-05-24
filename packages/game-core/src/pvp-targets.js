@@ -56,6 +56,31 @@ function formatGuildOnly(member) {
   };
 }
 
+function sortByField(a, b, field) {
+  const av = a[field] ?? 0;
+  const bv = b[field] ?? 0;
+  return bv - av;
+}
+
+function applySortAndFilter(targets, opts) {
+  let out = targets;
+  const search = String(opts.search || '').trim().toLowerCase();
+  if (search) {
+    out = out.filter((t) => String(t.username || '').toLowerCase().includes(search));
+  }
+  const sort = opts.sort || 'activity';
+  if (sort === 'level') {
+    out = [...out].sort((a, b) => sortByField(a, b, 'level') || String(a.username).localeCompare(String(b.username)));
+  } else if (sort === 'power') {
+    out = [...out].sort((a, b) => sortByField(a, b, 'power') || String(a.username).localeCompare(String(b.username)));
+  } else if (sort === 'coins') {
+    out = [...out].sort((a, b) => sortByField(a, b, 'coins') || String(a.username).localeCompare(String(b.username)));
+  } else {
+    out = [...out].sort(sortTargets);
+  }
+  return out;
+}
+
 function sortTargets(a, b) {
   const ar = ACTIVE_RANK[a.active] ?? 9;
   const br = ACTIVE_RANK[b.active] ?? 9;
@@ -65,7 +90,7 @@ function sortTargets(a, b) {
 }
 
 /** Lords to show on PvP — prefer guild member IDs when provided. */
-export function listPvpTargets(excludeDiscordId, guildMembers = null) {
+export function listPvpTargets(excludeDiscordId, guildMembers = null, opts = {}) {
   const db = getDb();
   const baseSql = `
     SELECT id, discord_id, username, level, coins, hp, max_hp,
@@ -92,11 +117,12 @@ export function listPvpTargets(excludeDiscordId, guildMembers = null) {
       const member = guildMembers.find((m) => m.id === id);
       return member ? formatGuildOnly(member) : null;
     }).filter(Boolean);
-    return targets.sort(sortTargets);
+    return applySortAndFilter(targets, opts);
   }
 
   const rows = db
     .prepare(`${baseSql} ORDER BY (last_login_date IS NULL), last_login_date DESC LIMIT 40`)
     .all(excludeDiscordId);
-  return rows.map((row) => formatTarget(row, db, nameById[row.discord_id])).sort(sortTargets);
+  const targets = rows.map((row) => formatTarget(row, db, nameById[row.discord_id]));
+  return applySortAndFilter(targets, opts);
 }

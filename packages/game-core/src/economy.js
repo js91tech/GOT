@@ -20,6 +20,8 @@ const JOB_WORKER_STAT = {
 
 const JOB_LIST_HINT = 'Stable Hand, Squire, Relic Keeper';
 
+import { pickInvestmentTier } from './investment-tiers.js';
+
 export function listJobs() {
   return getDb().prepare('SELECT * FROM job_definitions ORDER BY min_level').all();
 }
@@ -65,17 +67,22 @@ export function bank(discordId, username, action, amount) {
     return { ok: true, message: 'Treasury Card purchased! Higher daily interest.', player: getOrCreatePlayer(discordId, username) };
   }
   if (action === 'invest') {
-    if (amount < balance.investmentMin) {
-      return { ok: false, message: `Minimum investment is ${balance.investmentMin.toLocaleString()}.` };
+    const tier = pickInvestmentTier(amount);
+    const min = tier.min ?? balance.investmentMin;
+    if (amount < min) {
+      return { ok: false, message: `Minimum ${tier.id || 'investment'} tier is ${min.toLocaleString()}.` };
     }
     if (player.bank_balance < amount) return { ok: false, message: 'Not enough in bank.' };
-    const matures = new Date(Date.now() + balance.investmentDays * 86400000).toISOString();
+    const days = tier.days ?? balance.investmentDays;
+    const mult = tier.returnMult ?? 2.2;
+    const matures = new Date(Date.now() + days * 86400000).toISOString();
     db.prepare(
-      `UPDATE players SET bank_balance = bank_balance - ?, investment_amount = ?, investment_matures_at = ? WHERE id = ?`
-    ).run(amount, amount, matures, player.id);
+      `UPDATE players SET bank_balance = bank_balance - ?, investment_amount = ?, investment_matures_at = ?, investment_return_mult = ? WHERE id = ?`
+    ).run(amount, amount, matures, mult, player.id);
+    const pct = Math.round((mult - 1) * 100);
     return {
       ok: true,
-      message: `Invested ${amount.toLocaleString()} for ${balance.investmentDays} days (~200% return).`,
+      message: `Invested ${amount.toLocaleString()} (${tier.id || 'tier'}) for ${days} days (~${pct}% return).`,
       player: getOrCreatePlayer(discordId, username)
     };
   }
@@ -88,10 +95,11 @@ export function collectInvestment(discordId, username) {
   if (new Date(player.investment_matures_at).getTime() > Date.now()) {
     return { ok: false, message: 'Investment not mature yet.' };
   }
-  const payout = Math.floor(player.investment_amount * 2.2);
+  const mult = player.investment_return_mult || pickInvestmentTier(player.investment_amount).returnMult || 2.2;
+  const payout = Math.floor(player.investment_amount * mult);
   const db = getDb();
   db.prepare(
-    `UPDATE players SET bank_balance = bank_balance + ?, investment_amount = 0, investment_matures_at = NULL WHERE id = ?`
+    `UPDATE players SET bank_balance = bank_balance + ?, investment_amount = 0, investment_matures_at = NULL, investment_return_mult = NULL WHERE id = ?`
   ).run(payout, player.id);
   return { ok: true, message: `Investment matured! +${payout.toLocaleString()} to bank.`, player: getOrCreatePlayer(discordId, username) };
 }

@@ -67,7 +67,8 @@ import {
   setWorld as setWorldAction,
   adminAction
 } from './phase3.js';
-import { startTickScheduler } from './tick.js';
+import { listRecipes, forgeRecipe as forgeRecipeAction } from './recipes.js';
+import { getDailyQuests, claimDailyQuest as claimDailyQuestAction } from './daily-quests.js';
 import { listFactions, joinFaction } from './faction.js';
 import {
   createGuild,
@@ -89,10 +90,19 @@ import {
   realmMapLegend,
   realmMapPngPath
 } from './territory.js';
+import { startTickScheduler } from './tick.js';
 
 export class GameService {
   static startScheduler() {
     return startTickScheduler(60000);
+  }
+
+  static dailyQuests(discordId, username) {
+    return getDailyQuests(discordId, username);
+  }
+
+  static claimDailyQuest(discordId, username, questId) {
+    return claimDailyQuestAction(discordId, username, questId);
   }
 
   static profile(discordId, username) {
@@ -335,8 +345,8 @@ export class GameService {
       .all(limit);
   }
 
-  static listPvpTargets(excludeDiscordId, guildMembers = null) {
-    return listPvpTargets(excludeDiscordId, guildMembers);
+  static listPvpTargets(excludeDiscordId, guildMembers = null, opts = {}) {
+    return listPvpTargets(excludeDiscordId, guildMembers, opts);
   }
 
   static getPlayerByDiscord(discordId) {

@@ -91,6 +91,9 @@ export function audit(db, playerId, kind, amount, meta = {}) {
   db.prepare(
     `INSERT INTO transactions (player_id, kind, amount, meta_json) VALUES (?, ?, ?, ?)`
   ).run(playerId, kind, amount, JSON.stringify(meta));
+  import('./daily-quests.js')
+    .then(({ bumpDailyQuestFromAudit }) => bumpDailyQuestFromAudit(db, playerId, kind))
+    .catch(() => {});
 }
 
 export function getCritChance(player, db) {

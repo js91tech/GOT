@@ -30,27 +30,14 @@ export function buildSlashCommands() {
         o
           .setName('mission')
           .setDescription('Mission type (omit to list all)')
-          .addChoices(
-            { name: 'Petty Border Raid', value: 'petty_raid' },
-            { name: 'Border Patrol', value: 'border_patrol' },
-            { name: 'Sack the Village', value: 'sack_village' },
-            { name: 'Siege Assault', value: 'siege_assault' }
-          )
+          .setAutocomplete(true)
       ),
     new SlashCommandBuilder().setName('work').setDescription('Do your job for coins and XP'),
     new SlashCommandBuilder()
       .setName('job')
       .setDescription('Set your job')
       .addStringOption((o) =>
-        o
-          .setName('id')
-          .setDescription('Job to take')
-          .setRequired(true)
-          .addChoices(
-            { name: 'Stable Hand', value: 'stable_hand' },
-            { name: 'Squire', value: 'squire_duty' },
-            { name: 'Relic Keeper', value: 'relic_keeper' }
-          )
+        o.setName('id').setDescription('Job to take').setRequired(true).setAutocomplete(true)
       ),
     new SlashCommandBuilder()
       .setName('bank')
@@ -191,15 +178,7 @@ export function buildSlashCommands() {
       .setName('forge')
       .setDescription('Forge gear from recipes')
       .addStringOption((o) =>
-        o
-          .setName('recipe')
-          .setDescription('Recipe id (list with /forge no recipe)')
-          .addChoices(
-            { name: 'Valyrian Steel', value: 'valyrian_steel' },
-            { name: 'War Spear', value: 'war_spear' },
-            { name: 'Plate Vest', value: 'plate_vest' },
-            { name: 'Sigil Charm', value: 'sigil_charm' }
-          )
+        o.setName('recipe').setDescription('Recipe id (list with /forge no recipe)').setAutocomplete(true)
       ),
     new SlashCommandBuilder()
       .setName('gym')
@@ -211,15 +190,7 @@ export function buildSlashCommands() {
           .addChoices({ name: 'list', value: 'list' }, { name: 'set', value: 'set' })
       )
       .addStringOption((o) =>
-        o
-          .setName('id')
-          .setDescription('Gym id when setting')
-          .addChoices(
-            { name: 'Training Grounds', value: 'training_grounds' },
-            { name: 'War Yard', value: 'war_yard' },
-            { name: 'Royal Armory', value: 'royal_armory' },
-            { name: 'Kingsguard Yard', value: 'kingsguard_yard' }
-          )
+        o.setName('id').setDescription('Gym id when setting').setAutocomplete(true)
       ),
     new SlashCommandBuilder()
       .setName('worker')

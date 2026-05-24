@@ -12,6 +12,7 @@ import { refreshGotLabels } from './migrate-got-theme.js';
 import { migrateClasses } from './migrate-classes.js';
 import { migrateEnergyCaps } from './migrate-energy.js';
 import { migrateJobs } from './migrate-jobs.js';
+import { migrateDailyQuests } from './migrate-daily-quests.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -166,6 +167,10 @@ function migrate(db) {
   if (version < 12) {
     migrateJobs(db);
     db.pragma('user_version = 12');
+  }
+  if (version < 13) {
+    migrateDailyQuests(db);
+    db.pragma('user_version = 13');
   }
   ensureSchemaPatches(db);
 }
