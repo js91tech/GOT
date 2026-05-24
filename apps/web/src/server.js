@@ -29,7 +29,20 @@ function dashRedirect(res, r, action) {
 process.env.DATABASE_PATH = process.env.DATABASE_PATH || path.join(root, 'data/westeros.db');
 
 const app = express();
+app.set('trust proxy', 1);
 const port = Number(process.env.PORT || process.env.WEB_PORT) || 3847;
+
+function sessionCookieOptions() {
+  const opts = { maxAge: 7 * 24 * 60 * 60 * 1000 };
+  const prod =
+    process.env.NODE_ENV === 'production' ||
+    Boolean(process.env.RAILWAY_ENVIRONMENT || process.env.RAILWAY_PUBLIC_DOMAIN);
+  if (prod) {
+    opts.sameSite = 'none';
+    opts.secure = true;
+  }
+  return opts;
+}
 
 /** Public URL for OAuth — must match Discord Developer Portal redirect exactly. */
 function normalizeHttpsUrl(raw) {
@@ -120,7 +133,7 @@ app.use(
     secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 7 * 24 * 60 * 60 * 1000 }
+    cookie: sessionCookieOptions()
   })
 );
 app.use('/public', express.static(path.join(__dirname, 'public')));
@@ -226,7 +239,7 @@ app.post('/activity/auth', async (req, res) => {
     req.session.discordId = user.id;
     req.session.username = user.username;
     GameService.profile(user.id, user.username);
-    res.json({ ok: true, redirect: '/dashboard' });
+    res.json({ ok: true, redirect: `${baseUrl}/dashboard` });
   } catch (e) {
     console.error('[activity/auth]', e);
     res.status(500).json({ ok: false, message: 'Activity login failed.' });

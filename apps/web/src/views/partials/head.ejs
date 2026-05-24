@@ -20,6 +20,7 @@
 <body<% if (typeof pageClass !== 'undefined') { %> class="<%= pageClass %>"<% } %>>
 <header>
   <strong>Westeros Realm</strong>
+  <% if (!(typeof hideSiteNav !== 'undefined' && hideSiteNav)) { %>
   <nav class="site-nav">
     <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
       <a href="/dashboard">Dashboard</a>
@@ -38,5 +39,6 @@
       <a href="/login">Login</a>
     <% } %>
   </nav>
+  <% } %>
 </header>
 <main>

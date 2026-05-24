@@ -1,16 +1,19 @@
-<%- include('partials/head', { loggedIn: false, title: 'Westeros Realm', pageClass: 'page-realm page-activity' }) %>
+<%- include('partials/head', { loggedIn: false, title: 'Westeros Realm', pageClass: 'page-realm page-activity', hideSiteNav: true }) %>
 <%- include('partials/realm-shell-open') %>
 <script>
   document.body.dataset.discordClientId = '<%= discordClientId %>';
   document.body.dataset.activityAuthUrl = '/activity/auth';
+  document.body.dataset.activityRedirect = '<%= baseUrl %>/dashboard';
 </script>
 
 <article class="realm-panel vine-panel activity-panel" style="max-width:520px;margin:2rem auto;text-align:center">
   <h1 class="page-title">Westeros Realm</h1>
   <p class="page-lead" id="activity-status">Connecting to Discord…</p>
-  <p class="stat activity-fallback" id="activity-fallback" hidden>
-    Open this page from a Discord Activity (voice channel → Activities), or
-    <a href="/login">log in on the web</a>.
+  <button type="button" class="btn btn-realm" id="activity-login-btn" hidden style="margin-top:1rem">
+    Sign in with Discord
+  </button>
+  <p class="stat activity-fallback" id="activity-fallback" hidden style="margin-top:1rem">
+    Playing inside Discord? Use the button above — browser OAuth does not work in Activities.
   </p>
 </article>
 
