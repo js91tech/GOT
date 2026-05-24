@@ -30,13 +30,69 @@ export function findMob(areaId, mobId) {
   return pool.mobs.find((m) => m.id === mobId) || null;
 }
 
+/** Scale a mob template to a rolled level (stats, rewards). */
+export function instantiateMob(template, rolledLevel) {
+  const baseLevel = Math.max(1, template.level || 1);
+  const level = Math.max(1, Math.floor(rolledLevel));
+  const scale = level / baseLevel;
+  const statScale = 0.85 + scale * 0.15;
+  return {
+    ...template,
+    level,
+    strength: Math.max(1, Math.floor(template.strength * statScale)),
+    defense: Math.max(1, Math.floor(template.defense * statScale)),
+    speed: Math.max(1, Math.floor(template.speed * Math.sqrt(statScale))),
+    hp: Math.max(12, Math.floor(template.hp * scale)),
+    xp: Math.max(5, Math.floor(template.xp * scale)),
+    coins_min: Math.max(5, Math.floor(template.coins_min * scale)),
+    coins_max: Math.max(template.coins_min || 5, Math.floor(template.coins_max * scale))
+  };
+}
+
+function rollZoneLevel(pool, playerLevel) {
+  const levels = pool.mobs.map((m) => m.level);
+  const levelMin = pool.level_min ?? Math.min(...levels);
+  const levelMax = pool.level_max ?? Math.max(...levels);
+  const spread = pool.level_spread ?? 5;
+  let low = Math.max(levelMin, playerLevel - 1);
+  let high = Math.min(levelMax, playerLevel + spread);
+  if (high < low) {
+    low = levelMin;
+    high = levelMax;
+  }
+  return low + Math.floor(Math.random() * (high - low + 1));
+}
+
+function pickMobTemplate(pool, rolledLevel) {
+  const mobs = pool.mobs;
+  if (!mobs.length) return null;
+  const weighted = mobs.flatMap((m) => {
+    const w = m.weight ?? 1;
+    const dist = Math.abs(m.level - rolledLevel);
+    const bias = Math.max(1, 4 - dist);
+    return Array(Math.max(1, Math.round(w * bias))).fill(m);
+  });
+  return weighted[Math.floor(Math.random() * weighted.length)];
+}
+
+export function pickMob(areaId, playerLevel) {
+  const pool = loadMobs()[resolveLegacyId(areaId)];
+  if (!pool?.mobs?.length) return null;
+  const rolledLevel = rollZoneLevel(pool, playerLevel);
+  const template = pickMobTemplate(pool, rolledLevel);
+  if (!template) return null;
+  return instantiateMob(template, rolledLevel);
+}
+
 export function getPendingEncounter(player) {
   const raw = player.pve_encounter_json;
   if (!raw || raw === '' || raw === '{}') return null;
   try {
     const data = JSON.parse(raw);
-    if (!data?.mobId || !data?.areaId) return null;
-    const mob = findMob(data.areaId, data.mobId);
+    if (!data?.areaId) return null;
+    const mob =
+      data.mobSnapshot ||
+      (data.mobId ? findMob(data.areaId, data.mobId) : null);
     if (!mob) return null;
     return { ...data, mob };
   } catch {
@@ -47,7 +103,11 @@ export function getPendingEncounter(player) {
 function setPendingEncounter(playerId, areaId, mob) {
   const db = getDb();
   db.prepare('UPDATE players SET pve_encounter_json = ? WHERE id = ?').run(
-    JSON.stringify({ mobId: mob.id, areaId: resolveLegacyId(areaId) }),
+    JSON.stringify({
+      mobId: mob.id,
+      areaId: resolveLegacyId(areaId),
+      mobSnapshot: mob
+    }),
     playerId
   );
 }
@@ -81,14 +141,6 @@ export function getExploreRisk(areaId, room) {
     label: labels[Math.min(pool.tier, labels.length - 1)] || 'Moderate',
     chancePercent: Math.round(chance * 100)
   };
-}
-
-function pickMob(areaId, playerLevel) {
-  const pool = loadMobs()[resolveLegacyId(areaId)];
-  if (!pool?.mobs?.length) return null;
-  const eligible = pool.mobs.filter((m) => m.level <= playerLevel + 3);
-  const list = eligible.length ? eligible : pool.mobs;
-  return list[Math.floor(Math.random() * list.length)];
 }
 
 function rollDrops(mob, db) {

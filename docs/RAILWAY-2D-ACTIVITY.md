@@ -1,6 +1,8 @@
-# Railway: 2D Discord Activity (Activity-only)
+# Railway: Discord Activity (realm dashboard)
 
-Production path for **every player**: voice channel → **Activities** (rocket) → play. No localhost, no dev auth, no copying Discord IDs.
+Production path for **every player**: voice channel → **Activities** (rocket) → play the **web realm dashboard** at `/activity`. No localhost, no dev auth, no copying Discord IDs.
+
+Optional: host the legacy Phaser client (`westeros-game-2d`) separately via `GAME_2D_URL` — not required for the Activity.
 
 **Env checklist (copy-paste):** [env/railway-2d-activity.env.example](env/railway-2d-activity.env.example)
 
@@ -37,16 +39,16 @@ Same application as your bot.
 | Step | Action |
 |------|--------|
 | 1 | **Activities** → enable **Embedded App** |
-| 2 | **URL Mappings** → Root URL = **2D HTTPS URL** (step 4), e.g. `https://westeros-game-2d-production.up.railway.app` (must be **Embedded App**, not “commands only”) |
+| 2 | **URL Mappings** → Root URL = **web `/activity`** (step 3), e.g. `https://westeros-web-production.up.railway.app/activity` (must be **Embedded App**, not “commands only”) |
 | 3 | **Application ID** → `DISCORD_CLIENT_ID` on API + `VITE_DISCORD_CLIENT_ID` on 2D build |
-| 4 | **OAuth2** → redirects: `http://127.0.0.1/callback` (Activity desktop — **required**), `https://127.0.0.1`, `https://<web>/oauth/callback` (dashboard) |
-| 5 | **URL Mappings** → add **second** mapping: prefix **`/api`** → target `westeros-api-production.up.railway.app` (no `https://`). The 2D client calls **`/api/v1/...`** (Discord proxy forwards to your API). |
+| 4 | **OAuth2** → redirects: `http://127.0.0.1/callback` (Activity desktop — **required**), `https://127.0.0.1`, `https://<web>/oauth/callback` (browser login) |
+| 5 | **(Optional Phaser client only)** URL Mappings → prefix **`/api`** → API host. The embedded dashboard uses **`POST /activity/auth`** on web, not `/api`. |
 
 Tell players (any of these):
 
 - **Voice channel → Activities** (rocket icon) → your game  
 - **App launcher** (grid icon) → **Launch** (not the long command list)  
-- Type **`/play2d`** in chat (opens the Activity if Embedded App + URL mapping are set)
+- Type **`/play2d`** in chat (opens the Activity if Embedded App + URL mapping → `/activity` are set)
 
 ---
 
@@ -60,7 +62,7 @@ Duplicate bot or web in Railway → rename **api** → same repo.
 | `DATABASE_PATH` | `/data/westeros.db` |
 | `DISCORD_CLIENT_ID` | app id |
 | `DISCORD_CLIENT_SECRET` | OAuth secret |
-| `ACTIVITY_ORIGINS` | `https://<2d-url>` (exact origin, no trailing slash) |
+| `ACTIVITY_ORIGINS` | `https://<web-url>` if using Phaser client; dashboard Activity auth is same-origin on web |
 | `ALLOW_DEV_AUTH` | `false` |
 
 **Volume:** `/data` — **same volume** as bot and web.
@@ -80,12 +82,15 @@ Unchanged. Shared `/data/westeros.db`:
 | Bot | `bot` |
 | Web | `web` |
 
-Optional on **web** (optional browser link on dashboard):
+On **web** (Activity + optional Phaser link):
 
 | Variable | Value |
 |----------|--------|
-| `GAME_2D_URL` | `https://<2d-url>` |
-| `API_PUBLIC_URL` | `https://<api-url>` |
+| `DISCORD_CLIENT_ID` | Application ID (same as bot) |
+| `DISCORD_CLIENT_SECRET` | OAuth secret (`POST /activity/auth`) |
+| `WEB_BASE_URL` | Public HTTPS URL (for OAuth redirect + Activity mapping) |
+| `GAME_2D_URL` | *(optional)* `https://<2d-url>` — legacy Phaser client link on dashboard |
+| `API_PUBLIC_URL` | *(optional)* `https://<api-url>` |
 
 ---
 

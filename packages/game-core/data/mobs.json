@@ -2,12 +2,31 @@
   "winterfell": {
     "tier": 1,
     "encounter_base": 0.2,
+    "level_min": 1,
+    "level_max": 10,
+    "level_spread": 4,
     "mobs": [
+      {
+        "id": "snow_hare",
+        "name": "Snow Hare",
+        "emoji": "🐇",
+        "level": 1,
+        "weight": 2,
+        "strength": 4,
+        "defense": 2,
+        "speed": 14,
+        "hp": 22,
+        "xp": 6,
+        "coins_min": 8,
+        "coins_max": 35,
+        "drops": [{ "item": "wolf_pelt", "chance": 0.15 }]
+      },
       {
         "id": "direwolf",
         "name": "Direwolf",
         "emoji": "🐺",
-        "level": 1,
+        "level": 2,
+        "weight": 3,
         "strength": 7,
         "defense": 3,
         "speed": 11,
@@ -21,10 +40,29 @@
         ]
       },
       {
+        "id": "pack_wolf",
+        "name": "Pack Wolf",
+        "emoji": "🐺",
+        "level": 4,
+        "weight": 2,
+        "strength": 9,
+        "defense": 4,
+        "speed": 12,
+        "hp": 38,
+        "xp": 14,
+        "coins_min": 22,
+        "coins_max": 70,
+        "drops": [
+          { "item": "wolf_pelt", "chance": 0.35 },
+          { "item": "hunting_knife", "chance": 0.03 }
+        ]
+      },
+      {
         "id": "forest_bandit",
         "name": "Forest Bandit",
         "emoji": "🗡️",
-        "level": 3,
+        "level": 5,
+        "weight": 2,
         "strength": 10,
         "defense": 5,
         "speed": 9,
@@ -38,10 +76,26 @@
         ]
       },
       {
+        "id": "haunted_stag",
+        "name": "Haunted Stag",
+        "emoji": "🦌",
+        "level": 7,
+        "weight": 1,
+        "strength": 11,
+        "defense": 6,
+        "speed": 13,
+        "hp": 48,
+        "xp": 20,
+        "coins_min": 40,
+        "coins_max": 100,
+        "drops": [{ "item": "grave_dust", "chance": 0.2 }]
+      },
+      {
         "id": "deserter",
         "name": "Northern Deserter",
         "emoji": "⚔️",
-        "level": 5,
+        "level": 9,
+        "weight": 1,
         "strength": 12,
         "defense": 7,
         "speed": 8,
@@ -59,12 +113,31 @@
   "kings_landing": {
     "tier": 2,
     "encounter_base": 0.28,
+    "level_min": 5,
+    "level_max": 14,
+    "level_spread": 4,
     "mobs": [
+      {
+        "id": "street_urchin",
+        "name": "Street Urchin",
+        "emoji": "🧒",
+        "level": 5,
+        "weight": 2,
+        "strength": 10,
+        "defense": 4,
+        "speed": 14,
+        "hp": 40,
+        "xp": 18,
+        "coins_min": 25,
+        "coins_max": 80,
+        "drops": [{ "item": "gold_dust", "chance": 0.2 }]
+      },
       {
         "id": "alley_thug",
         "name": "Alley Thug",
         "emoji": "🗡️",
-        "level": 6,
+        "level": 7,
+        "weight": 3,
         "strength": 14,
         "defense": 6,
         "speed": 12,
@@ -78,10 +151,26 @@
         ]
       },
       {
+        "id": "flea_bottom_rat",
+        "name": "Giant Sewer Rat",
+        "emoji": "🐀",
+        "level": 8,
+        "weight": 2,
+        "strength": 12,
+        "defense": 5,
+        "speed": 16,
+        "hp": 50,
+        "xp": 20,
+        "coins_min": 35,
+        "coins_max": 110,
+        "drops": [{ "item": "grain_sack", "chance": 0.15 }]
+      },
+      {
         "id": "goldcloak_turncoat",
         "name": "Goldcloak Turncoat",
         "emoji": "🛡️",
-        "level": 8,
+        "level": 10,
+        "weight": 2,
         "strength": 16,
         "defense": 10,
         "speed": 10,
@@ -98,7 +187,8 @@
         "id": "dock_raider",
         "name": "Dock Raider",
         "emoji": "⚓",
-        "level": 10,
+        "level": 12,
+        "weight": 1,
         "strength": 18,
         "defense": 8,
         "speed": 14,
@@ -110,18 +200,40 @@
           { "item": "smuggler_knife", "chance": 0.15 },
           { "item": "grain_sack", "chance": 0.3 }
         ]
+      },
+      {
+        "id": "red_keep_mutineer",
+        "name": "Red Keep Mutineer",
+        "emoji": "👑",
+        "level": 14,
+        "weight": 1,
+        "strength": 20,
+        "defense": 12,
+        "speed": 11,
+        "hp": 85,
+        "xp": 45,
+        "coins_min": 120,
+        "coins_max": 320,
+        "drops": [
+          { "item": "round_shield", "chance": 0.08 },
+          { "item": "gold_dust", "chance": 0.35 }
+        ]
       }
     ]
   },
   "oldtown": {
     "tier": 3,
     "encounter_base": 0.34,
+    "level_min": 10,
+    "level_max": 20,
+    "level_spread": 4,
     "mobs": [
       {
         "id": "hedge_brigand",
         "name": "Hedge Brigand",
         "emoji": "🏹",
         "level": 12,
+        "weight": 3,
         "strength": 20,
         "defense": 11,
         "speed": 13,
@@ -135,10 +247,26 @@
         ]
       },
       {
+        "id": "citadel_rat",
+        "name": "Citadel Rat",
+        "emoji": "🐀",
+        "level": 13,
+        "weight": 2,
+        "strength": 14,
+        "defense": 9,
+        "speed": 17,
+        "hp": 62,
+        "xp": 35,
+        "coins_min": 90,
+        "coins_max": 240,
+        "drops": [{ "item": "scholar_tome", "chance": 0.05 }]
+      },
+      {
         "id": "maester_acolyte_gone_rogue",
         "name": "Rogue Acolyte",
         "emoji": "📜",
-        "level": 14,
+        "level": 15,
+        "weight": 2,
         "strength": 15,
         "defense": 14,
         "speed": 11,
@@ -155,7 +283,8 @@
         "id": "cultist",
         "name": "Shadow Cultist",
         "emoji": "🕯️",
-        "level": 16,
+        "level": 17,
+        "weight": 2,
         "strength": 22,
         "defense": 12,
         "speed": 15,
@@ -167,18 +296,40 @@
           { "item": "cultist_relic", "chance": 0.2 },
           { "item": "chain_hauberk", "chance": 0.04 }
         ]
+      },
+      {
+        "id": "hightower_enforcer",
+        "name": "Hightower Enforcer",
+        "emoji": "🏰",
+        "level": 19,
+        "weight": 1,
+        "strength": 24,
+        "defense": 16,
+        "speed": 12,
+        "hp": 110,
+        "xp": 62,
+        "coins_min": 200,
+        "coins_max": 480,
+        "drops": [
+          { "item": "chain_hauberk", "chance": 0.1 },
+          { "item": "cultist_relic", "chance": 0.12 }
+        ]
       }
     ]
   },
   "the_wall": {
     "tier": 4,
     "encounter_base": 0.42,
+    "level_min": 16,
+    "level_max": 28,
+    "level_spread": 5,
     "mobs": [
       {
         "id": "wildling_scout",
         "name": "Wildling Scout",
         "emoji": "❄️",
         "level": 18,
+        "weight": 3,
         "strength": 24,
         "defense": 14,
         "speed": 18,
@@ -192,10 +343,26 @@
         ]
       },
       {
+        "id": "frost_spider",
+        "name": "Frost Spider",
+        "emoji": "🕷️",
+        "level": 20,
+        "weight": 2,
+        "strength": 18,
+        "defense": 10,
+        "speed": 20,
+        "hp": 75,
+        "xp": 50,
+        "coins_min": 160,
+        "coins_max": 400,
+        "drops": [{ "item": "wight_shard", "chance": 0.2 }]
+      },
+      {
         "id": "wight",
         "name": "Wight",
         "emoji": "💀",
-        "level": 20,
+        "level": 22,
+        "weight": 2,
         "strength": 26,
         "defense": 18,
         "speed": 10,
@@ -212,7 +379,8 @@
         "id": "ice_troll",
         "name": "Ice Troll",
         "emoji": "🧊",
-        "level": 24,
+        "level": 25,
+        "weight": 1,
         "strength": 32,
         "defense": 22,
         "speed": 6,
@@ -224,6 +392,24 @@
           { "item": "frostbite_blade", "chance": 0.12 },
           { "item": "dragonglass", "chance": 0.15 },
           { "item": "plate_vest", "chance": 0.02 }
+        ]
+      },
+      {
+        "id": "white_walker_thrall",
+        "name": "Walker Thrall",
+        "emoji": "👁️",
+        "level": 28,
+        "weight": 1,
+        "strength": 30,
+        "defense": 20,
+        "speed": 14,
+        "hp": 140,
+        "xp": 110,
+        "coins_min": 400,
+        "coins_max": 1000,
+        "drops": [
+          { "item": "dragonglass", "chance": 0.25 },
+          { "item": "frostbite_blade", "chance": 0.08 }
         ]
       }
     ]

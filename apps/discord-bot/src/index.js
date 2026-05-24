@@ -108,11 +108,11 @@ client.on(Events.InteractionCreate, async (interaction) => {
         console.error('play2d failed:', launchErr?.raw ?? launchErr);
         const hint =
           launchErr?.code === 50035 || /activity|embedded|mapping/i.test(launchErr?.message || '')
-            ? 'Check Discord portal: Activities ON, URL Mapping → westeros-game-2d-production.up.railway.app (no https in mapping). Join a voice channel and try again.'
+            ? 'Check Discord portal: Activities ON, URL Mapping root → your web URL `/activity` (e.g. https://your-web.up.railway.app/activity). Join a voice channel and try again.'
             : launchErr?.message || 'Unknown error';
         if (!interaction.replied && !interaction.deferred) {
           await interaction.reply({
-            content: `Could not launch 2D: ${hint}`,
+            content: `Could not launch Activity: ${hint}`,
             flags: MessageFlags.Ephemeral
           });
         }

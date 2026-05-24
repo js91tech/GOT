@@ -66,9 +66,10 @@
           <span class="xp-bar-label"><%= status.xp_pct %>% to Lv.<%= player.level + 1 %></span>
         </div>
         <% } %>
-        <p class="play-2d-primary"><strong>Play in Discord:</strong> voice channel → Activities → Westeros Realm</p>
+        <p class="play-2d-primary"><strong>Play in Discord:</strong> voice channel → Activities → Westeros Realm (realm dashboard)</p>
+        <a href="/play" class="btn-launch-2d">How to launch</a>
         <% if (launch2dUrl) { %>
-        <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer">Open 2D in browser</a>
+        <a href="<%= launch2dUrl %>" class="btn-wood" target="_blank" rel="noopener noreferrer" style="margin-left:0.5rem">Phaser client (optional)</a>
         <% } %>
       </div>
     </div>

@@ -4,7 +4,7 @@ export function buildSlashCommands() {
   return [
     new SlashCommandBuilder()
       .setName('play2d')
-      .setDescription('Launch the 2D game (Discord Activity)'),
+      .setDescription('Launch Westeros Realm (Discord Activity — realm dashboard)'),
     new SlashCommandBuilder().setName('profile').setDescription('Your lord profile'),
     new SlashCommandBuilder().setName('status').setDescription('Morale, timers, blockers'),
     new SlashCommandBuilder()

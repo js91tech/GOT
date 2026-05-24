@@ -74,15 +74,47 @@ function buildLaunch2dUrl(session) {
 
 function getLaunch2dHint() {
   if (!getGame2dUrl()) {
-    return 'Play in Discord: join a voice channel → Activities (rocket). Optional browser link: set GAME_2D_URL on the web service.';
+    return 'Play in Discord: join a voice channel → Activities (rocket) → Westeros Realm dashboard.';
   }
-  return 'Primary: voice channel → Activities (rocket). Browser link below is optional.';
+  return 'Primary: voice channel → Activities (rocket). Optional Phaser client below if GAME_2D_URL is set.';
+}
+
+/** Discord Activity OAuth — same redirect URIs as apps/api. */
+async function exchangeActivityOAuthCode(code) {
+  const clientId = process.env.DISCORD_CLIENT_ID;
+  const clientSecret = process.env.DISCORD_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return { error: 'missing_credentials' };
+  const redirectUris = [
+    'http://127.0.0.1/callback',
+    'https://127.0.0.1/callback',
+    'http://127.0.0.1',
+    'https://127.0.0.1'
+  ];
+  let last = null;
+  for (const redirect_uri of redirectUris) {
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        client_id: clientId,
+        client_secret: clientSecret,
+        grant_type: 'authorization_code',
+        code,
+        redirect_uri
+      })
+    });
+    const token = await tokenRes.json();
+    if (token.access_token) return token;
+    last = token;
+  }
+  return last;
 }
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.locals.assetUrl = assetUrl;
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(
   session({
     secret: process.env.SESSION_SECRET || 'dev-secret-change-me',
@@ -158,6 +190,43 @@ app.get('/oauth/callback', async (req, res) => {
 
 app.get('/logout', (req, res) => {
   req.session.destroy(() => res.redirect('/'));
+});
+
+/** Discord Activity entry — embedded SDK auth → web session → dashboard. */
+app.get('/activity', (req, res) => {
+  if (req.session.discordId) return res.redirect('/dashboard');
+  const discordClientId = process.env.DISCORD_CLIENT_ID;
+  if (!discordClientId) {
+    return res.status(500).send('Set DISCORD_CLIENT_ID on the web service.');
+  }
+  res.render('activity', { discordClientId, baseUrl });
+});
+
+app.post('/activity/auth', async (req, res) => {
+  const { code } = req.body || {};
+  if (!code) return res.status(400).json({ ok: false, message: 'code required' });
+  try {
+    const token = await exchangeActivityOAuthCode(code);
+    if (!token?.access_token) {
+      const hint =
+        token?.error === 'invalid_grant'
+          ? 'Add http://127.0.0.1/callback to Discord OAuth2 redirects.'
+          : token?.error || 'OAuth exchange failed';
+      return res.status(401).json({ ok: false, message: hint });
+    }
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${token.access_token}` }
+    });
+    const user = await userRes.json();
+    if (!user?.id) return res.status(401).json({ ok: false, message: 'Could not load Discord user' });
+    req.session.discordId = user.id;
+    req.session.username = user.username;
+    GameService.profile(user.id, user.username);
+    res.json({ ok: true, redirect: '/dashboard' });
+  } catch (e) {
+    console.error('[activity/auth]', e);
+    res.status(500).json({ ok: false, message: 'Activity login failed.' });
+  }
 });
 
 app.get('/me', requireAuth, (req, res) => {
@@ -271,20 +340,21 @@ app.get('/dashboard', requireAuth, (req, res) => {
   });
 });
 
-/** Play hub — redirects to 2D launcher (Discord Activity or optional browser client). */
+/** Play hub — Discord Activity (dashboard) or optional legacy Phaser client. */
 app.get('/play', requireAuth, (req, res) => {
-  if (req.query.go === '1' && getGame2dUrl()) {
+  if (req.query.go === '2d' && getGame2dUrl()) {
     const launch2dUrl = buildLaunch2dUrl(req.session);
     if (launch2dUrl) return res.redirect(launch2dUrl);
   }
   res.render('play-2d', {
     launch2dUrl: buildLaunch2dUrl(req.session),
     game2dUrl: getGame2dUrl(),
-    launch2dHint: getLaunch2dHint()
+    launch2dHint: getLaunch2dHint(),
+    activityUrl: `${baseUrl}/activity`
   });
 });
 
-/** Launch 2D client as the logged-in Discord user (query params + API dev auth). */
+/** Optional Phaser client (legacy); primary play path is Discord Activity → /activity. */
 app.get('/play/2d', requireAuth, (req, res) => {
   const launch2dUrl = buildLaunch2dUrl(req.session);
   if (req.query.go === '1' && launch2dUrl) {
@@ -293,7 +363,8 @@ app.get('/play/2d', requireAuth, (req, res) => {
   res.render('play-2d', {
     launch2dUrl,
     game2dUrl: getGame2dUrl(),
-    launch2dHint: getLaunch2dHint()
+    launch2dHint: getLaunch2dHint(),
+    activityUrl: `${baseUrl}/activity`
   });
 });
 

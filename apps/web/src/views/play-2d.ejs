@@ -3,15 +3,16 @@
 
 <article class="realm-panel vine-panel" style="max-width:640px;margin:1rem auto">
   <h1 class="page-title">Play Westeros Realm</h1>
-  <p class="page-lead"><strong>Recommended:</strong> join a voice channel in Discord → tap <strong>Activities</strong> (rocket) → launch the game. Works on mobile and desktop.</p>
+  <p class="page-lead"><strong>Recommended:</strong> join a voice channel in Discord → tap <strong>Activities</strong> (rocket) → <strong>Westeros Realm</strong>. You get the full realm dashboard inside Discord.</p>
   <p class="stat"><%= launch2dHint %></p>
+  <p class="stat">Activity URL (Discord URL mapping): <code style="word-break:break-all"><%= typeof activityUrl !== 'undefined' ? activityUrl : '' %></code></p>
   <p class="stat">Setup: <a href="/map">Realm map</a> · <a href="/dashboard">Dashboard</a></p>
   <% if (launch2dUrl) { %>
   <hr style="border-color:rgba(139,26,26,0.35);margin:1rem 0" />
-  <p class="stat">Optional browser client (set <code>GAME_2D_URL</code> on web):</p>
+  <p class="stat">Optional legacy Phaser client (<code>GAME_2D_URL</code>):</p>
   <p class="stat"><code style="word-break:break-all"><%= launch2dUrl %></code></p>
   <div class="profile-actions" style="margin-top:1rem">
-    <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer">Open in browser</a>
+    <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer">Open Phaser client</a>
   <% } %>
     <a href="/dashboard" class="btn-wood">← Dashboard</a>
   </div>
