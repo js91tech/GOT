@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Timber shard">
+  <defs>
+    <linearGradient id="tW" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#92400e"/><stop stop-color="#451a03"/></linearGradient>
+    <filter id="tS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#tS)">
+    <path d="M16 48 L20 16 L44 20 L40 52 Z" fill="url(#tW)" stroke="#78350f"/>
+    <path d="M22 20 L38 22 M20 32 L42 34 M18 42 L40 44" stroke="#451a03" stroke-width="1" opacity="0.6"/>
+    <path d="M24 24 L28 40" stroke="#fde68a" stroke-width="1" opacity="0.3"/>
+    <ellipse cx="30" cy="50" rx="14" ry="3" fill="#000" opacity="0.2"/>
+  </g>
+</svg>

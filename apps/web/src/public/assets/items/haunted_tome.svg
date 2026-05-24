@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Haunted tome">
+  <defs>
+    <linearGradient id="htC" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#292524"/><stop stop-color="#0c0a09"/></linearGradient>
+    <radialGradient id="htG" cx="50%" cy="50%"><stop stop-color="#86efac"/><stop offset="100%" stop-color="#14532d"/></radialGradient>
+    <filter id="htS"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#22c55e" flood-opacity="0.35"/></filter>
+  </defs>
+  <g filter="url(#htS)">
+    <rect x="14" y="10" width="36" height="44" rx="2" fill="url(#htC)" stroke="#57534e"/>
+    <rect x="16" y="12" width="32" height="40" rx="1" fill="#1c1917"/>
+    <path d="M20 18 H44 M20 24 H40 M20 30 H42" stroke="#44403c" stroke-width="1"/>
+    <circle cx="32" cy="38" r="8" fill="url(#htG)" opacity="0.9"/>
+    <circle cx="29" cy="36" r="1.5" fill="#052e16"/>
+    <circle cx="35" cy="36" r="1.5" fill="#052e16"/>
+    <path d="M28 42 Q32 45 36 42" fill="none" stroke="#052e16" stroke-width="1"/>
+    <path d="M32 10 V54" stroke="#78350f" stroke-width="3"/>
+  </g>
+</svg>

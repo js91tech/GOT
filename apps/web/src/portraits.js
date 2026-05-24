@@ -1,3 +1,5 @@
+import { assetUrl } from './assets.js';
+
 const COUNT = 6;
 
 function hashString(s) {
@@ -10,5 +12,5 @@ function hashString(s) {
 export function portraitUrl(discordId, username) {
   const key = String(discordId || username || '0');
   const idx = hashString(key) % COUNT;
-  return `/public/assets/portraits/portrait-${idx}.svg`;
+  return assetUrl(`/public/assets/portraits/portrait-${idx}.svg`);
 }

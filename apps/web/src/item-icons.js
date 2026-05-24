@@ -1,15 +1,17 @@
+import { assetUrl } from './assets.js';
+
 const BASE = '/public/assets/items';
 
 const BY_ID = {
   rusty_blade: `${BASE}/sword.svg`,
-  valyrian_steel: `${BASE}/sword.svg`,
+  valyrian_steel: `${BASE}/frost_blade.svg`,
   iron_longsword: `${BASE}/sword.svg`,
-  hunting_knife: `${BASE}/sword.svg`,
+  hunting_knife: `${BASE}/dagger.svg`,
   leather_jerkin: `${BASE}/armor.svg`,
   chain_hauberk: `${BASE}/armor.svg`,
   round_shield: `${BASE}/armor.svg`,
   tower_shield: `${BASE}/armor.svg`,
-  cursed_blade: `${BASE}/sword.svg`,
+  cursed_blade: `${BASE}/frost_blade.svg`,
   cursed_gloves: `${BASE}/gauntlets.svg`,
   reversal_kit: `${BASE}/potion.svg`,
   war_spear: `${BASE}/spear.svg`,
@@ -18,12 +20,10 @@ const BY_ID = {
   plate_vest: `${BASE}/armor.svg`,
   armor_vest: `${BASE}/armor.svg`,
   smith_gloves: `${BASE}/gauntlets.svg`,
-  cursed_gloves: `${BASE}/gauntlets.svg`,
   scholar_tome: `${BASE}/tome.svg`,
   sigil_charm: `${BASE}/charm.svg`,
   domain_charm: `${BASE}/charm.svg`,
   healers_kit: `${BASE}/potion.svg`,
-  reversal_kit: `${BASE}/potion.svg`,
   cell_key: `${BASE}/key.svg`,
   prison_key: `${BASE}/key.svg`,
   relic_chest: `${BASE}/chest.svg`,
@@ -36,18 +36,18 @@ const BY_ID = {
   spirit_core: `${BASE}/gem.svg`,
   noble_seal: `${BASE}/bead.svg`,
   grade_bead: `${BASE}/bead.svg`,
-  timber_shard: `${BASE}/grain.svg`,
-  gold_dust: `${BASE}/bead.svg`,
-  wolf_pelt: `${BASE}/grain.svg`,
-  bandit_hood: `${BASE}/gauntlets.svg`,
-  deserter_cloak: `${BASE}/armor.svg`,
-  smuggler_knife: `${BASE}/sword.svg`,
-  grave_dust: `${BASE}/gem.svg`,
-  haunted_tome: `${BASE}/tome.svg`,
-  cultist_relic: `${BASE}/gem.svg`,
-  wildling_axe: `${BASE}/sword.svg`,
-  wight_shard: `${BASE}/gem.svg`,
-  frostbite_blade: `${BASE}/sword.svg`
+  timber_shard: `${BASE}/timber.svg`,
+  gold_dust: `${BASE}/gold_dust.svg`,
+  wolf_pelt: `${BASE}/pelt.svg`,
+  bandit_hood: `${BASE}/hood.svg`,
+  deserter_cloak: `${BASE}/cloak.svg`,
+  smuggler_knife: `${BASE}/dagger.svg`,
+  grave_dust: `${BASE}/dust.svg`,
+  haunted_tome: `${BASE}/haunted_tome.svg`,
+  cultist_relic: `${BASE}/cult_relic.svg`,
+  wildling_axe: `${BASE}/axe.svg`,
+  wight_shard: `${BASE}/shard.svg`,
+  frostbite_blade: `${BASE}/frost_blade.svg`
 };
 
 const BY_TYPE = {
@@ -59,5 +59,6 @@ const BY_TYPE = {
 };
 
 export function itemIconUrl(itemId, itemType) {
-  return BY_ID[itemId] || BY_TYPE[itemType] || `${BASE}/default.svg`;
+  const path = BY_ID[itemId] || BY_TYPE[itemType] || `${BASE}/default.svg`;
+  return assetUrl(path);
 }

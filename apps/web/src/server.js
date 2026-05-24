@@ -5,6 +5,8 @@ import express from 'express';
 import session from 'express-session';
 import { GameService, gotLabel } from '@westeros/game-core';
 import { gifForAction, HERO_IMAGE, MISSION_IMAGE, crestUrl } from './action-media.js';
+import { assetUrl } from './assets.js';
+import { classIconUrl } from './class-icons.js';
 import { itemIconUrl } from './item-icons.js';
 import { portraitUrl } from './portraits.js';
 import { fetchGuildMemberUsers } from './discord-guild.js';
@@ -78,6 +80,7 @@ function getLaunch2dHint() {
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+app.locals.assetUrl = assetUrl;
 app.use(express.urlencoded({ extended: true }));
 app.use(
   session({
@@ -183,6 +186,7 @@ app.get('/dashboard', requireAuth, (req, res) => {
     (i) => i.equip_slot || ['weapon', 'armor', 'gear'].includes(i.item_type)
   );
   const { sheet } = GameService.characterSheet(id, name);
+  const classProgress = GameService.classProgress(id, name);
   res.render('dashboard', {
     player,
     status,
@@ -194,6 +198,9 @@ app.get('/dashboard', requireAuth, (req, res) => {
     factions,
     house,
     houseCrest: house ? crestUrl(house.crest_key) : null,
+    playerPortrait: portraitUrl(id, name),
+    classInfo: classProgress.current,
+    classIcon: classIconUrl(player.class_id || 'squire'),
     flash: req.query.msg,
     flashAction: action,
     flashGif: gifForAction(action, flashOk),

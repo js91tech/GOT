@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Wight shard">
+  <defs>
+    <linearGradient id="wsI" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e0f2fe"/><stop stop-color="#0ea5e9"/></linearGradient>
+    <radialGradient id="wsG" cx="50%" cy="50%"><stop stop-color="#fff"/><stop offset="100%" stop-color="#38bdf8"/></radialGradient>
+    <filter id="wsS"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#0ea5e9" flood-opacity="0.45"/></filter>
+  </defs>
+  <g filter="url(#wsS)">
+    <path d="M32 6 L44 24 L38 58 L32 54 L26 58 L20 24 Z" fill="url(#wsI)" stroke="#7dd3fc"/>
+    <path d="M32 14 L36 28 L32 48 L28 28 Z" fill="url(#wsG)" opacity="0.7"/>
+    <path d="M24 30 L40 30 M26 38 L38 38" stroke="#fff" stroke-width="0.8" opacity="0.5"/>
+    <circle cx="32" cy="24" r="3" fill="#fff" opacity="0.6"/>
+  </g>
+</svg>

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Ranger">
+  <defs>
+    <linearGradient id="rgS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#166534"/><stop stop-color="#052e16"/></linearGradient>
+    <linearGradient id="rgW" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#78716c"/><stop stop-color="#44403c"/></linearGradient>
+    <filter id="rgF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#rgF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#rgS)" stroke="#22c55e"/>
+    <path d="M14 38 Q32 22 50 38" fill="none" stroke="url(#rgW)" stroke-width="3"/>
+    <path d="M50 38 L54 34 L50 30" fill="none" stroke="#78716c" stroke-width="2"/>
+    <line x1="32" y1="18" x2="32" y2="46" stroke="#44403c" stroke-width="1.5"/>
+    <path d="M28 46 L36 46 L34 52 L30 52 Z" fill="#44403c"/>
+  </g>
+</svg>

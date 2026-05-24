@@ -98,14 +98,52 @@ body.page-dashboard .site-nav a:hover {
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
+.dash-studio .profile-avatars {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.dash-studio .profile-portrait,
 .dash-studio .profile-crest {
-  width: 80px;
-  height: 80px;
-  padding: 6px;
+  width: 72px;
+  height: 72px;
+  padding: 5px;
   background: radial-gradient(circle, rgba(212, 175, 55, 0.15), transparent 70%);
   border: 2px solid var(--studio-border);
-  border-radius: 16px;
+  border-radius: 14px;
   filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.2));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.dash-studio .profile-inner--crest:hover .profile-portrait,
+.dash-studio .profile-inner--crest:hover .profile-crest {
+  transform: translateY(-2px);
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 16px rgba(212, 175, 55, 0.3));
+}
+
+.dash-studio .class-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: 0.45rem;
+  padding: 0.12rem 0.55rem 0.12rem 0.35rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  vertical-align: middle;
+  letter-spacing: 0.03em;
+  color: var(--studio-text);
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--studio-border);
+  border-radius: 999px;
+}
+
+.dash-studio .class-badge-icon {
+  width: 22px;
+  height: 22px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.45));
 }
 
 .dash-studio .profile-name {
@@ -183,11 +221,33 @@ body.page-dashboard .site-nav a:hover {
   text-shadow: 0 0 12px rgba(251, 146, 60, 0.5);
 }
 
+.dash-studio .resource-stone--ce-low {
+  animation: morale-pulse 2s ease-in-out infinite;
+}
+
+@keyframes morale-pulse {
+  0%, 100% { box-shadow: 0 0 24px rgba(251, 146, 60, 0.1); }
+  50% { box-shadow: 0 0 32px rgba(251, 146, 60, 0.35); }
+}
+
+.dash-studio .resource-icon-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 0.4rem;
+  background: radial-gradient(circle at 50% 35%, rgba(212, 175, 55, 0.12), rgba(0, 0, 0, 0.45));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
 .dash-studio .resource-icon-img {
   display: block;
   width: 44px;
   height: 44px;
-  margin: 0 auto 0.4rem;
+  margin: 0;
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 8px rgba(212, 175, 55, 0.15));
   transition: transform 0.2s ease, filter 0.2s ease;
 }
@@ -195,6 +255,11 @@ body.page-dashboard .site-nav a:hover {
 .dash-studio .resource-stone:hover .resource-icon-img {
   transform: scale(1.08);
   filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.6)) drop-shadow(0 0 12px rgba(212, 175, 55, 0.35));
+}
+
+.dash-studio .resource-stone:hover .resource-icon-frame {
+  border-color: rgba(212, 175, 55, 0.35);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.35), 0 0 16px rgba(212, 175, 55, 0.15);
 }
 
 .dash-studio .resource-label {
@@ -267,7 +332,18 @@ body.page-dashboard .site-nav a:hover {
 }
 
 .dash-studio .tile-art--train {
-  opacity: 0.78;
+  opacity: 0.82;
+  background-image: url('/public/assets/actions/train.svg?v=3');
+}
+
+.dash-studio .tile-art--mission {
+  opacity: 0.82;
+  background-image: url('/public/assets/actions/mission.svg?v=3');
+}
+
+.dash-studio .tile-art--worker {
+  opacity: 0.82;
+  background-image: url('/public/assets/actions/work.svg?v=3');
 }
 
 .dash-studio .action-tile--wheel {
@@ -278,9 +354,19 @@ body.page-dashboard .site-nav a:hover {
 
 .dash-studio .wheel-disc {
   border-color: var(--studio-accent-dim);
-  background: url('/public/assets/icons/wheel.svg') center / 92% no-repeat,
+  background: url('/public/assets/icons/wheel.svg?v=3') center / 92% no-repeat,
     conic-gradient(from 0deg, #78350f 0deg 45deg, #a16207 45deg 90deg, #57534e 90deg 135deg, #a16207 135deg 180deg, #78350f 180deg 225deg, #44403c 225deg 270deg, #a16207 270deg 315deg, #78350f 315deg 360deg);
   box-shadow: 0 0 24px rgba(212, 175, 55, 0.25), inset 0 0 16px rgba(0, 0, 0, 0.5);
+  animation: wheel-idle 18s linear infinite;
+}
+
+@keyframes wheel-idle {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dash-studio .wheel-btn:hover .wheel-disc {
+  animation-duration: 6s;
 }
 
 /* Bottom panels */

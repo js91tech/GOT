@@ -1,13 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Baratheon lord">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Maester">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#2a2418"/>
-      <stop offset="100%" stop-color="#121008"/>
-    </linearGradient>
+    <radialGradient id="p2bg" cx="50%" cy="25%" r="75%"><stop stop-color="#1e293b"/><stop offset="100%" stop-color="#020617"/></radialGradient>
+    <linearGradient id="p2robe" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#334155"/><stop stop-color="#0f172a"/></linearGradient>
+    <filter id="p2f"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.5"/></filter>
   </defs>
-  <rect width="96" height="96" rx="8" fill="url(#bg)"/>
-  <rect x="4" y="4" width="88" height="88" rx="6" fill="none" stroke="#fbbf24" stroke-width="2"/>
-  <circle cx="48" cy="34" r="14" fill="#d6cbb8"/>
-  <path d="M28 78 C28 58 38 48 48 48 C58 48 68 58 68 78 Z" fill="#57534e"/>
-  <path d="M40 26 h16 v8 h-16 z" fill="#fbbf24"/>
+  <rect width="96" height="96" rx="10" fill="url(#p2bg)"/>
+  <rect x="4" y="4" width="88" height="88" rx="8" fill="none" stroke="#64748b" stroke-width="1.5" opacity="0.4"/>
+  <g filter="url(#p2f)">
+    <path d="M20 78 C20 58 34 50 48 50 C62 50 76 58 76 78 Z" fill="url(#p2robe)" stroke="#475569"/>
+    <circle cx="48" cy="36" r="14" fill="#d1d5db" stroke="#9ca3af"/>
+    <circle cx="48" cy="52" r="10" fill="none" stroke="#cbd5e1" stroke-width="2.5"/>
+    <circle cx="48" cy="52" r="5" fill="none" stroke="#94a3b8"/>
+    <path d="M48 42 V62 M38 52 H58" stroke="#64748b" stroke-width="1" opacity="0.4"/>
+  </g>
 </svg>

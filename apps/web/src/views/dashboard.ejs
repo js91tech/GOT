@@ -29,12 +29,24 @@
 
   <section class="profile-panel">
     <div class="profile-inner profile-inner--crest">
-      <% if (typeof houseCrest !== 'undefined' && houseCrest) { %>
-      <img class="profile-crest" src="<%= houseCrest %>" alt="<%= house.name %>" width="80" height="80" />
-      <% } %>
+      <div class="profile-avatars">
+        <img class="profile-portrait" src="<%= playerPortrait %>" alt="<%= player.username %>" width="72" height="72" />
+        <% if (typeof houseCrest !== 'undefined' && houseCrest) { %>
+        <img class="profile-crest" src="<%= houseCrest %>" alt="<%= house.name %>" width="72" height="72" />
+        <% } %>
+      </div>
       <div class="profile-text">
-        <h1 class="profile-name"><%= player.username %> <span class="grade-tag"><%= player.grade %></span></h1>
-        <p class="profile-meta">Level <%= player.level %><% if (typeof house !== 'undefined' && house) { %> · <%= house.name %><% } %> · <%= player.gym_id.replace(/_/g, ' ') %></p>
+        <h1 class="profile-name">
+          <%= player.username %>
+          <span class="grade-tag"><%= player.grade %></span>
+          <% if (typeof classInfo !== 'undefined' && classInfo) { %>
+          <span class="class-badge" title="<%= classInfo.description %>">
+            <img class="class-badge-icon" src="<%= classIcon %>" alt="" width="22" height="22" />
+            <%= classInfo.name %>
+          </span>
+          <% } %>
+        </h1>
+        <p class="profile-meta">Level <%= player.level %><% if (typeof house !== 'undefined' && house) { %> · <%= house.name %><% } %> · <%= player.gym_id.replace(/_/g, ' ') %> · <a href="/class">Class path</a></p>
         <p class="play-2d-primary"><strong>Play in Discord:</strong> voice channel → Activities → Westeros Realm</p>
         <% if (launch2dUrl) { %>
         <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer">Open 2D in browser</a>
@@ -45,32 +57,32 @@
 
   <section class="resource-row" aria-label="Resources">
     <div class="resource-stone" data-icon="coins">
-      <img class="resource-icon-img" src="/public/assets/icons/gold.svg" alt="" width="40" height="40" />
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/gold.svg') %>" alt="Gold coins" width="40" height="40" /></div>
       <span class="resource-label">Coins</span>
       <span class="resource-value"><%= player.coins.toLocaleString() %></span>
     </div>
     <div class="resource-stone" data-icon="bank">
-      <img class="resource-icon-img" src="/public/assets/icons/vault.svg" alt="" width="40" height="40" />
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/vault.svg') %>" alt="Treasury vault" width="40" height="40" /></div>
       <span class="resource-label">Treasury</span>
       <span class="resource-value"><%= player.bank_balance.toLocaleString() %></span>
     </div>
-    <div class="resource-stone resource-stone--ce" data-icon="ce">
-      <img class="resource-icon-img" src="/public/assets/icons/morale.svg" alt="" width="40" height="40" />
+    <div class="resource-stone resource-stone--ce<%= player.ce <= status.morale_regen_cap * 0.25 ? ' resource-stone--ce-low' : '' %>" data-icon="ce">
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/morale.svg') %>" alt="Morale" width="40" height="40" /></div>
       <span class="resource-label">Morale</span>
-      <span class="resource-value"><%= player.ce %>/100</span>
+      <span class="resource-value"><%= player.ce %>/<%= player.ce > status.morale_regen_cap ? status.morale_overflow_cap : status.morale_regen_cap %></span>
     </div>
     <div class="resource-stone" data-icon="focus">
-      <img class="resource-icon-img" src="/public/assets/icons/focus.svg" alt="" width="40" height="40" />
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/focus.svg') %>" alt="Focus" width="40" height="40" /></div>
       <span class="resource-label">Focus</span>
-      <span class="resource-value"><%= player.focus %></span>
+      <span class="resource-value"><%= player.focus %>/<%= player.focus > status.focus_regen_cap ? status.focus_overflow_cap : status.focus_regen_cap %></span>
     </div>
     <div class="resource-stone" data-icon="wheel">
-      <img class="resource-icon-img" src="/public/assets/icons/wheel.svg" alt="" width="40" height="40" />
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/wheel.svg') %>" alt="Wheel of fate" width="40" height="40" /></div>
       <span class="resource-label">Wheel</span>
       <span class="resource-value"><%= status.wheel_spins_left %></span>
     </div>
     <div class="resource-stone" data-icon="company">
-      <img class="resource-icon-img" src="/public/assets/icons/company.svg" alt="" width="40" height="40" />
+      <div class="resource-icon-frame"><img class="resource-icon-img" src="<%= assetUrl('/public/assets/icons/company.svg') %>" alt="Company" width="40" height="40" /></div>
       <span class="resource-label">Company</span>
       <span class="resource-value resource-value--sm"><%= player.company_id || '—' %></span>
     </div>
@@ -106,7 +118,7 @@
 
     <article class="action-tile action-tile--mission">
       <h3>Realm mission</h3>
-      <div class="tile-art tile-art--mission" style="background-image:url('<%= typeof missionImage !== "undefined" ? missionImage : heroImage %>')" aria-hidden="true"></div>
+      <div class="tile-art tile-art--mission" aria-hidden="true"></div>
       <form method="post" action="/crime" class="tile-form">
         <select name="mission">
           <% crimes.forEach(function(c) { %>
@@ -154,21 +166,21 @@
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="tea" />
           <button type="submit" class="lounge-btn">
-            <img class="lounge-icon" src="/public/assets/icons/feast.svg" alt="" width="32" height="32" />
+            <img class="lounge-icon" src="<%= assetUrl('/public/assets/icons/feast.svg') %>" alt="Feast" width="32" height="32" />
             <span>Feast</span><em>+Focus</em>
           </button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="vow" />
           <button type="submit" class="lounge-btn">
-            <img class="lounge-icon" src="/public/assets/icons/oath.svg" alt="" width="32" height="32" />
+            <img class="lounge-icon" src="<%= assetUrl('/public/assets/icons/oath.svg') %>" alt="Oath of fealty" width="32" height="32" />
             <span>Oath of fealty</span><em>+Bravery</em>
           </button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="refill" />
           <button type="submit" class="lounge-btn">
-            <img class="lounge-icon" src="/public/assets/icons/rally.svg" alt="" width="32" height="32" />
+            <img class="lounge-icon" src="<%= assetUrl('/public/assets/icons/rally.svg') %>" alt="Rally morale" width="32" height="32" />
             <span>Rally morale</span><em>Full bar</em>
           </button>
         </form>

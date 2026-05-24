@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Wolf pelt">
+  <defs>
+    <linearGradient id="pF" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#78716c"/><stop stop-color="#292524"/></linearGradient>
+    <linearGradient id="pI" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d6d3d1"/><stop stop-color="#57534e"/></linearGradient>
+    <filter id="pS"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#pS)">
+    <path d="M12 44 Q32 20 52 44 L48 54 Q32 38 16 54 Z" fill="url(#pF)" stroke="#44403c"/>
+    <path d="M20 42 Q28 28 36 38 Q44 28 52 42" fill="none" stroke="#a8a29e" stroke-width="2"/>
+    <ellipse cx="24" cy="46" rx="8" ry="5" fill="url(#pI)" opacity="0.7"/>
+    <ellipse cx="40" cy="46" rx="8" ry="5" fill="url(#pI)" opacity="0.7"/>
+    <path d="M32 24 L34 34 L32 40 L30 34 Z" fill="#57534e"/>
+    <circle cx="32" cy="22" r="6" fill="#78716c" stroke="#44403c"/>
+    <path d="M26 20 L32 14 L38 20" fill="none" stroke="#44403c" stroke-width="1.5"/>
+  </g>
+</svg>

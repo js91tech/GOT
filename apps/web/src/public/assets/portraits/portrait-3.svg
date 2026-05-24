@@ -1,13 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Tyrell lord">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Ranger">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%" stop-color="#1a2818"/>
-      <stop offset="100%" stop-color="#0a1208"/>
-    </linearGradient>
+    <radialGradient id="p3bg" cx="50%" cy="25%" r="75%"><stop stop-color="#14532d"/><stop offset="100%" stop-color="#052e16"/></radialGradient>
+    <linearGradient id="p3hood" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#44403c"/><stop stop-color="#1c1917"/></linearGradient>
+    <filter id="p3f"><feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.5"/></filter>
   </defs>
-  <rect width="96" height="96" rx="8" fill="url(#bg)"/>
-  <rect x="4" y="4" width="88" height="88" rx="6" fill="none" stroke="#4ade80" stroke-width="2"/>
-  <circle cx="48" cy="34" r="14" fill="#e8dcc8"/>
-  <path d="M28 78 C28 58 38 48 48 48 C58 48 68 58 68 78 Z" fill="#166534"/>
-  <circle cx="48" cy="24" r="6" fill="#f472b6"/>
+  <rect width="96" height="96" rx="10" fill="url(#p3bg)"/>
+  <rect x="4" y="4" width="88" height="88" rx="8" fill="none" stroke="#22c55e" stroke-width="1.5" opacity="0.35"/>
+  <g filter="url(#p3f)">
+    <path d="M48 20 C34 20 24 32 24 46 C24 58 32 68 48 70 C64 68 72 58 72 46 C72 32 62 20 48 20 Z" fill="url(#p3hood)" stroke="#57534e"/>
+    <ellipse cx="48" cy="44" rx="12" ry="14" fill="#292524"/>
+    <circle cx="42" cy="42" r="2" fill="#450a0a"/>
+    <circle cx="54" cy="42" r="2" fill="#450a0a"/>
+    <path d="M20 78 C20 62 32 54 48 54 C64 54 76 62 76 78 Z" fill="#166534" stroke="#14532d"/>
+    <path d="M68 50 L84 44 L84 52 L68 56 Z" fill="#78716c" stroke="#57534e"/>
+  </g>
 </svg>

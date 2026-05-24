@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Knight">
+  <defs>
+    <linearGradient id="knS" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#64748b"/><stop stop-color="#1e293b"/></linearGradient>
+    <linearGradient id="knG" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#fde68a"/><stop stop-color="#b45309"/></linearGradient>
+    <filter id="knF"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-opacity="0.5"/></filter>
+  </defs>
+  <g filter="url(#knF)">
+    <path d="M32 6 L54 16 V48 L32 58 L10 48 V16 Z" fill="url(#knS)" stroke="#94a3b8"/>
+    <path d="M24 22 H40 V34 H24 Z" fill="#334155" stroke="#64748b"/>
+    <path d="M28 22 V18 H36 V22" fill="none" stroke="#64748b"/>
+    <rect x="30" y="26" width="4" height="6" fill="#0f172a"/>
+    <path d="M32 34 L28 42 L36 42 Z" fill="url(#knG)" stroke="#fde68a"/>
+    <path d="M20 38 L44 38" stroke="#475569" stroke-width="2"/>
+  </g>
+</svg>

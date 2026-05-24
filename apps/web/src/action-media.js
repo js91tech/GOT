@@ -1,28 +1,33 @@
+import { assetUrl } from './assets.js';
+
 /** Local SVG art for web action feedback and dashboard tiles. */
 const A = '/public/assets/actions';
 
 export const ACTION_IMAGES = {
-  train: `${A}/train.svg`,
-  crime_ok: `${A}/mission.svg`,
-  crime_fail: `${A}/battle.svg`,
-  work: `${A}/work.svg`,
-  attack: `${A}/battle.svg`,
-  mug: `${A}/battle.svg`,
-  rob: `${A}/battle.svg`,
-  wheel: `${A}/default.svg`,
-  lounge: `${A}/feast.svg`,
-  escape: `${A}/feast.svg`,
-  hospital: `${A}/feast.svg`,
-  jail: `${A}/battle.svg`,
-  default: `${A}/default.svg`
+  train: assetUrl(`${A}/train.svg`),
+  crime_ok: assetUrl(`${A}/mission.svg`),
+  crime_fail: assetUrl(`${A}/battle.svg`),
+  work: assetUrl(`${A}/work.svg`),
+  attack: assetUrl(`${A}/battle.svg`),
+  mug: assetUrl(`${A}/battle.svg`),
+  rob: assetUrl(`${A}/battle.svg`),
+  wheel: assetUrl(`${A}/default.svg`),
+  lounge: assetUrl(`${A}/feast.svg`),
+  escape: assetUrl(`${A}/feast.svg`),
+  hospital: assetUrl(`${A}/feast.svg`),
+  jail: assetUrl(`${A}/battle.svg`),
+  default: assetUrl(`${A}/default.svg`)
 };
 
-export const HERO_IMAGE = '/public/assets/hero-realm.svg';
-export const MISSION_IMAGE = `${A}/mission.svg`;
+export const HERO_IMAGE = assetUrl('/public/assets/hero-realm.svg');
+export const MISSION_IMAGE = assetUrl(`${A}/mission.svg`);
+export const TRAIN_IMAGE = assetUrl(`${A}/train.svg`);
+export const WORK_IMAGE = assetUrl(`${A}/work.svg`);
+export const WHEEL_IMAGE = assetUrl('/public/assets/icons/wheel.svg');
 
 export function crestUrl(crestKey) {
   if (!crestKey) return null;
-  return `/public/assets/crests/${crestKey}.svg`;
+  return assetUrl(`/public/assets/crests/${crestKey}.svg`);
 }
 
 export function gifForAction(action, success = true) {
