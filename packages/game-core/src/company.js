@@ -1,6 +1,7 @@
 import { getDb } from './db.js';
 import balance from './balance.json' with { type: 'json' };
 import { getOrCreatePlayer } from './player.js';
+import { getEffectiveWorkerStats } from './stats.js';
 import { applyLevelUps, audit, isBlocked, requireLevel } from './util.js';
 
 export function listCompanies() {
@@ -11,7 +12,7 @@ export function joinCompany(discordId, username, companyId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const co = db.prepare('SELECT * FROM company_definitions WHERE id = ?').get(companyId);
-  if (!co) return { ok: false, message: 'Companies: jujutsu_ops, cursed_logistics, shibuya_response, vault_security' };
+  if (!co) return { ok: false, message: 'Companies: kings_guard, coin_masters, river_patrol, vault_security' };
   const lvl = requireLevel(player, co.min_level, co.name);
   if (!lvl.ok) return { ok: false, message: lvl.message };
   db.prepare('UPDATE players SET company_id = ? WHERE id = ?').run(companyId, player.id);
@@ -38,7 +39,7 @@ export function companyWork(discordId, username) {
     }
   }
   const workerStat = co.worker_stat;
-  const statVal = player[workerStat] ?? 10;
+  const statVal = getEffectiveWorkerStats(player, db)[workerStat] ?? 10;
   const coins = Math.floor(co.base_coins * co.payout_mult * (1 + statVal / 100));
   const xp = Math.floor(co.base_xp * co.payout_mult);
   db.prepare(

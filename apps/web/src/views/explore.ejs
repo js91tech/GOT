@@ -1,52 +1,89 @@
-<%- include('partials/head', { loggedIn: true, title: 'Explore', pageClass: 'page-realm' }) %>
+<%- include('partials/head', { loggedIn: true, title: 'Explore', pageClass: 'page-realm page-dashboard' }) %>
+<link rel="stylesheet" href="/public/dashboard-studio.css" />
 <%- include('partials/realm-shell-open') %>
 
-<% if (flash) { %><div class="flash"><%= flash %></div><% } %>
+<div class="dash-page dash-studio">
+<% if (flash) { %><div class="map-flash explore-battle-log"><%= flash %></div><% } %>
+
 <h1 class="page-title">Explore the Realm</h1>
-<p class="page-lead">March through castles, wild lands, and hidden keeps across Westeros.</p>
+<p class="page-lead">March through castles and wild lands — when a mob appears, choose to fight or flee.</p>
 
 <pre class="explore-box"><%= exploreText %></pre>
 
-<div class="realm-grid">
+<% if (pendingEncounter) { %>
+<section class="realm-panel encounter-panel">
+  <h2>⚠️ Encounter!</h2>
+  <p class="encounter-mob">
+    <strong><%= pendingEncounter.mob.emoji %> <%= pendingEncounter.mob.name %></strong>
+    · Lv<%= pendingEncounter.mob.level %>
+    · STR <%= pendingEncounter.mob.strength %>
+    · DEF <%= pendingEncounter.mob.defense %>
+    · HP <%= pendingEncounter.mob.hp %>
+  </p>
+  <p class="stat">Attack to fight for loot, or flee — fleeing can fail and leave you wounded.</p>
+  <div class="encounter-actions">
+    <form method="post" action="/explore">
+      <input type="hidden" name="action" value="attack" />
+      <button type="submit" class="btn-realm btn-attack">⚔️ Attack</button>
+    </form>
+    <form method="post" action="/explore">
+      <input type="hidden" name="action" value="flee" />
+      <button type="submit" class="btn-wood btn-flee">🏃 Flee</button>
+    </form>
+  </div>
+</section>
+<% } %>
+
+<div class="realm-grid explore-actions <%= pendingEncounter ? 'explore-actions--blocked' : '' %>">
   <article class="realm-panel stone-frame">
     <h3>March</h3>
+    <p class="stat"><%= pendingEncounter ? 'Resolve the encounter first.' : 'Mobs may ambush you in dangerous rooms.' %></p>
     <form method="post" action="/explore">
       <input type="hidden" name="action" value="move" />
-      <select name="direction">
+      <select name="direction" <%= pendingEncounter ? 'disabled' : '' %>>
         <option value="north">North</option>
         <option value="south">South</option>
         <option value="east">East</option>
         <option value="west">West</option>
         <option value="up">Up</option>
       </select>
-      <button type="submit" class="btn-realm">Go</button>
+      <button type="submit" class="btn-realm" <%= pendingEncounter ? 'disabled' : '' %>>Go</button>
     </form>
   </article>
   <article class="realm-panel wood-panel">
     <h3>Travel</h3>
+    <p class="stat">Higher regions — deadlier foes, better loot.</p>
     <form method="post" action="/explore">
       <input type="hidden" name="action" value="travel" />
-      <select name="area">
-        <option value="tokyo_jujutsu_high">Winterfell</option>
-        <option value="shibuya_district">King's Landing</option>
-        <option value="jujutsu_high_kyoto">Oldtown</option>
-        <option value="sakurajima_colony">The Wall</option>
+      <select name="area" <%= pendingEncounter ? 'disabled' : '' %>>
+        <option value="winterfell">Winterfell (Lv1)</option>
+        <option value="kings_landing">King's Landing (Lv5)</option>
+        <option value="oldtown">Oldtown (Lv10)</option>
+        <option value="the_wall">The Wall (Lv15)</option>
       </select>
-      <button type="submit" class="btn-realm">Travel</button>
+      <button type="submit" class="btn-realm" <%= pendingEncounter ? 'disabled' : '' %>>Travel</button>
     </form>
   </article>
   <article class="realm-panel vine-panel">
-    <h3>Mine / Parley</h3>
-    <form method="post" action="/explore"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood">Prospect land</button></form>
+    <h3>Hunt &amp; gather</h3>
+    <form method="post" action="/explore"><input type="hidden" name="action" value="hunt" /><button type="submit" class="btn-realm" <%= pendingEncounter ? 'disabled' : '' %>>Hunt mobs</button></form>
+    <form method="post" action="/explore" style="margin-top:8px"><input type="hidden" name="action" value="mine" /><button type="submit" class="btn-wood" <%= pendingEncounter ? 'disabled' : '' %>>Prospect land</button></form>
     <form method="post" action="/explore" style="margin-top:8px">
       <input type="hidden" name="action" value="talk" />
-      <select name="npc"><option value="gojo">Maester</option><option value="yaga">Goldcloak Captain</option><option value="nanami">Septon</option><option value="maki">Hedge Knight</option></select>
-      <button type="submit" class="btn-realm">Parley</button>
+      <select name="npc" <%= pendingEncounter ? 'disabled' : '' %>>
+        <option value="maester">Maester</option>
+        <option value="goldcloak">Goldcloak Captain</option>
+        <option value="septon">Septon</option>
+        <option value="hedge_knight">Hedge Knight</option>
+      </select>
+      <button type="submit" class="btn-wood" <%= pendingEncounter ? 'disabled' : '' %>>Parley</button>
     </form>
   </article>
 </div>
 
+<p class="page-lead"><a href="/armory">Armory</a> · <a href="/character">Character sheet</a> · <a href="/dashboard">Dashboard</a></p>
 <a class="realm-back" href="/dashboard">← Dashboard</a>
+</div>
 
 <%- include('partials/realm-shell-close') %>
 <%- include('partials/foot') %>

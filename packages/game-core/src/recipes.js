@@ -10,7 +10,7 @@ export function forgeRecipe(discordId, username, recipeId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const recipe = db.prepare('SELECT * FROM forge_recipes WHERE id = ?').get(recipeId);
-  if (!recipe) return { ok: false, message: 'Recipes: cursed_blade, spirit_spear, armor_vest, domain_charm' };
+  if (!recipe) return { ok: false, message: 'Recipes: valyrian_steel, war_spear, plate_vest, sigil_charm' };
   const mats = JSON.parse(recipe.materials_json || '{}');
   for (const [itemId, qty] of Object.entries(mats)) {
     if (!removeItem(player.id, itemId, qty)) {
@@ -18,7 +18,7 @@ export function forgeRecipe(discordId, username, recipeId) {
     }
   }
   if (player.coins < recipe.coin_cost) return { ok: false, message: `Costs ${recipe.coin_cost} coins.` };
-  if (player.ce < recipe.ce_cost) return { ok: false, message: `Costs ${recipe.ce_cost} CE.` };
+  if (player.ce < recipe.ce_cost) return { ok: false, message: `Costs ${recipe.ce_cost} Morale.` };
   db.prepare('UPDATE players SET coins = coins - ?, ce = ce - ? WHERE id = ?').run(
     recipe.coin_cost,
     recipe.ce_cost,

@@ -8,7 +8,7 @@ const OUTCOMES = [
   { weight: 20, type: 'xp', min: 5, max: 50 },
   { weight: 15, type: 'rice', min: 1, max: 5 },
   { weight: 10, type: 'gold', min: 1, max: 1 },
-  { weight: 8, type: 'item', itemId: 'reversal_kit', qty: 1 },
+  { weight: 8, type: 'item', itemId: 'healers_kit', qty: 1 },
   { weight: 7, type: 'hospital' },
   { weight: 7, type: 'jail' },
   { weight: 8, type: 'jackpot', min: 5000, max: 25000 }
@@ -50,12 +50,12 @@ export function spinWheel(discordId, username) {
     case 'rice': {
       const amt = Math.floor(outcome.min + Math.random() * (outcome.max - outcome.min + 1));
       db.prepare('UPDATE players SET rice = rice + ? WHERE id = ?').run(amt, player.id);
-      message = `Wheel: +${amt} Cursed Rice!`;
+      message = `Wheel: +${amt} grain rations!`;
       break;
     }
     case 'gold': {
       db.prepare('UPDATE players SET gold_objects = gold_objects + 1 WHERE id = ?').run(player.id);
-      message = 'Wheel: +1 Cursed Object!';
+      message = 'Wheel: +1 royal relic!';
       break;
     }
     case 'item': {
@@ -76,7 +76,7 @@ export function spinWheel(discordId, username) {
         minutesFromNow(balance.jailMinutes),
         player.id
       );
-      message = 'Wheel: caught — Prison Realm!';
+      message = 'Wheel: caught — thrown in the Black Cells!';
       break;
     }
     case 'jackpot': {

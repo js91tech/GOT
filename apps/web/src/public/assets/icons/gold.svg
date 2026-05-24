@@ -1,1 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="#d4af37" stroke="#8b6914" stroke-width="2"/><text x="16" y="21" text-anchor="middle" fill="#1a1008" font-size="14" font-weight="bold">G</text></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fde68a"/>
+      <stop offset="50%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#92680a"/>
+    </linearGradient>
+    <filter id="gl"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#d4af37" flood-opacity="0.5"/></filter>
+  </defs>
+  <circle cx="32" cy="34" r="22" fill="url(#g)" stroke="#fde68a" stroke-width="2" filter="url(#gl)"/>
+  <ellipse cx="32" cy="28" rx="18" ry="6" fill="rgba(255,255,255,0.25)"/>
+  <text x="32" y="40" text-anchor="middle" fill="#3d2808" font-family="Georgia,serif" font-size="18" font-weight="bold">$</text>
+</svg>

@@ -1,0 +1,231 @@
+{
+  "winterfell": {
+    "tier": 1,
+    "encounter_base": 0.2,
+    "mobs": [
+      {
+        "id": "direwolf",
+        "name": "Direwolf",
+        "emoji": "🐺",
+        "level": 1,
+        "strength": 7,
+        "defense": 3,
+        "speed": 11,
+        "hp": 32,
+        "xp": 10,
+        "coins_min": 15,
+        "coins_max": 55,
+        "drops": [
+          { "item": "wolf_pelt", "chance": 0.4 },
+          { "item": "rusty_blade", "chance": 0.05 }
+        ]
+      },
+      {
+        "id": "forest_bandit",
+        "name": "Forest Bandit",
+        "emoji": "🗡️",
+        "level": 3,
+        "strength": 10,
+        "defense": 5,
+        "speed": 9,
+        "hp": 42,
+        "xp": 16,
+        "coins_min": 30,
+        "coins_max": 90,
+        "drops": [
+          { "item": "bandit_hood", "chance": 0.12 },
+          { "item": "wolf_pelt", "chance": 0.2 }
+        ]
+      },
+      {
+        "id": "deserter",
+        "name": "Northern Deserter",
+        "emoji": "⚔️",
+        "level": 5,
+        "strength": 12,
+        "defense": 7,
+        "speed": 8,
+        "hp": 55,
+        "xp": 22,
+        "coins_min": 45,
+        "coins_max": 120,
+        "drops": [
+          { "item": "deserter_cloak", "chance": 0.1 },
+          { "item": "hunting_knife", "chance": 0.04 }
+        ]
+      }
+    ]
+  },
+  "kings_landing": {
+    "tier": 2,
+    "encounter_base": 0.28,
+    "mobs": [
+      {
+        "id": "alley_thug",
+        "name": "Alley Thug",
+        "emoji": "🗡️",
+        "level": 6,
+        "strength": 14,
+        "defense": 6,
+        "speed": 12,
+        "hp": 58,
+        "xp": 24,
+        "coins_min": 50,
+        "coins_max": 140,
+        "drops": [
+          { "item": "smuggler_knife", "chance": 0.1 },
+          { "item": "gold_dust", "chance": 0.25 }
+        ]
+      },
+      {
+        "id": "goldcloak_turncoat",
+        "name": "Goldcloak Turncoat",
+        "emoji": "🛡️",
+        "level": 8,
+        "strength": 16,
+        "defense": 10,
+        "speed": 10,
+        "hp": 72,
+        "xp": 32,
+        "coins_min": 80,
+        "coins_max": 200,
+        "drops": [
+          { "item": "deserter_cloak", "chance": 0.14 },
+          { "item": "round_shield", "chance": 0.05 }
+        ]
+      },
+      {
+        "id": "dock_raider",
+        "name": "Dock Raider",
+        "emoji": "⚓",
+        "level": 10,
+        "strength": 18,
+        "defense": 8,
+        "speed": 14,
+        "hp": 65,
+        "xp": 38,
+        "coins_min": 100,
+        "coins_max": 260,
+        "drops": [
+          { "item": "smuggler_knife", "chance": 0.15 },
+          { "item": "grain_sack", "chance": 0.3 }
+        ]
+      }
+    ]
+  },
+  "oldtown": {
+    "tier": 3,
+    "encounter_base": 0.34,
+    "mobs": [
+      {
+        "id": "hedge_brigand",
+        "name": "Hedge Brigand",
+        "emoji": "🏹",
+        "level": 12,
+        "strength": 20,
+        "defense": 11,
+        "speed": 13,
+        "hp": 80,
+        "xp": 42,
+        "coins_min": 120,
+        "coins_max": 300,
+        "drops": [
+          { "item": "haunted_tome", "chance": 0.08 },
+          { "item": "grave_dust", "chance": 0.35 }
+        ]
+      },
+      {
+        "id": "maester_acolyte_gone_rogue",
+        "name": "Rogue Acolyte",
+        "emoji": "📜",
+        "level": 14,
+        "strength": 15,
+        "defense": 14,
+        "speed": 11,
+        "hp": 88,
+        "xp": 48,
+        "coins_min": 140,
+        "coins_max": 340,
+        "drops": [
+          { "item": "haunted_tome", "chance": 0.12 },
+          { "item": "scholar_tome", "chance": 0.03 }
+        ]
+      },
+      {
+        "id": "cultist",
+        "name": "Shadow Cultist",
+        "emoji": "🕯️",
+        "level": 16,
+        "strength": 22,
+        "defense": 12,
+        "speed": 15,
+        "hp": 95,
+        "xp": 55,
+        "coins_min": 180,
+        "coins_max": 420,
+        "drops": [
+          { "item": "cultist_relic", "chance": 0.2 },
+          { "item": "chain_hauberk", "chance": 0.04 }
+        ]
+      }
+    ]
+  },
+  "the_wall": {
+    "tier": 4,
+    "encounter_base": 0.42,
+    "mobs": [
+      {
+        "id": "wildling_scout",
+        "name": "Wildling Scout",
+        "emoji": "❄️",
+        "level": 18,
+        "strength": 24,
+        "defense": 14,
+        "speed": 18,
+        "hp": 105,
+        "xp": 62,
+        "coins_min": 200,
+        "coins_max": 500,
+        "drops": [
+          { "item": "wildling_axe", "chance": 0.1 },
+          { "item": "wight_shard", "chance": 0.28 }
+        ]
+      },
+      {
+        "id": "wight",
+        "name": "Wight",
+        "emoji": "💀",
+        "level": 20,
+        "strength": 26,
+        "defense": 18,
+        "speed": 10,
+        "hp": 120,
+        "xp": 75,
+        "coins_min": 250,
+        "coins_max": 600,
+        "drops": [
+          { "item": "wight_shard", "chance": 0.45 },
+          { "item": "frostbite_blade", "chance": 0.06 }
+        ]
+      },
+      {
+        "id": "ice_troll",
+        "name": "Ice Troll",
+        "emoji": "🧊",
+        "level": 24,
+        "strength": 32,
+        "defense": 22,
+        "speed": 6,
+        "hp": 160,
+        "xp": 95,
+        "coins_min": 350,
+        "coins_max": 900,
+        "drops": [
+          { "item": "frostbite_blade", "chance": 0.12 },
+          { "item": "dragonglass", "chance": 0.15 },
+          { "item": "plate_vest", "chance": 0.02 }
+        ]
+      }
+    ]
+  }
+}

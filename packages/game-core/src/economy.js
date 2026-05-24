@@ -4,6 +4,14 @@ import { getOrCreatePlayer, getInventory, addItem, removeItem } from './player.j
 import { applyLevelUps, audit, isBlocked, requireLevel } from './util.js';
 import { openGrabBag } from './phase3.js';
 import { companyWork } from './company.js';
+import { equipItem, slotForItem } from './equip.js';
+import { getEffectiveWorkerStats, getWorkCooldownReduction } from './stats.js';
+
+const JOB_WORKER_STAT = {
+  janitor: 'manual_labor',
+  instructor_assistant: 'technique',
+  curator: 'intelligence'
+};
 
 export function bank(discordId, username, action, amount) {
   const player = getOrCreatePlayer(discordId, username);
@@ -73,20 +81,50 @@ export function collectInvestment(discordId, username) {
   return { ok: true, message: `Investment matured! +${payout.toLocaleString()} to bank.`, player: getOrCreatePlayer(discordId, username) };
 }
 
-export function shopList() {
+export function shopList(type = null) {
   const db = getDb();
-  return db.prepare('SELECT * FROM item_definitions WHERE shop_price > 0 ORDER BY shop_price').all();
+  if (type === 'armory') {
+    return db
+      .prepare(
+        `SELECT * FROM item_definitions WHERE shop_price > 0 AND item_type IN ('weapon','armor')
+         ORDER BY min_level, shop_price`
+      )
+      .all();
+  }
+  if (type === 'gear') {
+    return db
+      .prepare(
+        `SELECT * FROM item_definitions WHERE shop_price > 0 AND item_type = 'gear'
+         ORDER BY min_level, shop_price`
+      )
+      .all();
+  }
+  if (type) {
+    return db
+      .prepare('SELECT * FROM item_definitions WHERE shop_price > 0 AND item_type = ? ORDER BY shop_price')
+      .all(type);
+  }
+  return db
+    .prepare('SELECT * FROM item_definitions WHERE shop_price > 0 ORDER BY item_type, min_level, shop_price')
+    .all();
+}
+
+export function shopListArmory() {
+  return shopList('armory');
 }
 
 export function shopBuy(discordId, username, itemId, quantity = 1) {
   const player = getOrCreatePlayer(discordId, username);
   const block = isBlocked(player);
   if (block.blocked && block.reason === 'jail') {
-    return { ok: false, message: 'Cannot shop while in Prison Realm.' };
+    return { ok: false, message: 'Cannot shop while in the Black Cells.' };
   }
   const db = getDb();
   const item = db.prepare('SELECT * FROM item_definitions WHERE id = ?').get(itemId);
   if (!item) return { ok: false, message: 'Item not found.' };
+  const minLevel = item.min_level ?? 1;
+  const lvl = requireLevel(player, minLevel, item.name);
+  if (!lvl.ok) return { ok: false, message: lvl.message };
   quantity = Math.max(1, Math.min(99, quantity));
   const cost = item.shop_price * quantity;
   if (player.coins < cost) return { ok: false, message: `Need ${cost} coins.` };
@@ -98,6 +136,17 @@ export function shopBuy(discordId, username, itemId, quantity = 1) {
     message: `Bought ${quantity}x ${item.name} for ${cost} coins.`,
     player: getOrCreatePlayer(discordId, username)
   };
+}
+
+export function shopBuyAndEquip(discordId, username, itemId) {
+  const buy = shopBuy(discordId, username, itemId, 1);
+  if (!buy.ok) return buy;
+  const db = getDb();
+  const item = db.prepare('SELECT item_type FROM item_definitions WHERE id = ?').get(itemId);
+  if (item && slotForItem(item.item_type)) {
+    return equipItem(discordId, username, itemId);
+  }
+  return buy;
 }
 
 export function work(discordId, username) {
@@ -112,20 +161,26 @@ export function work(discordId, username) {
   const lvl = requireLevel(player, job.min_level, job.name);
   if (!lvl.ok) return { ok: false, message: lvl.message };
   if (player.last_work_at) {
-    const next = new Date(player.last_work_at).getTime() + balance.workCooldownMinutes * 60000;
+    const cooldownMs = balance.workCooldownMinutes * 60000 * (1 - getWorkCooldownReduction(player, db));
+    const next = new Date(player.last_work_at).getTime() + cooldownMs;
     if (Date.now() < next) {
       const mins = Math.ceil((next - Date.now()) / 60000);
       return { ok: false, message: `Work cooldown: ${mins}m remaining.` };
     }
   }
+  const workerStat = JOB_WORKER_STAT[jobId] || 'manual_labor';
+  const statVal = getEffectiveWorkerStats(player, db)[workerStat] ?? 10;
+  const statFactor = balance.stats?.workStatFactor ?? 0.008;
+  const coinPayout = Math.floor(job.coin_payout * (1 + statVal * statFactor));
+  const xpPayout = Math.floor(job.xp_payout * (1 + statVal * (statFactor * 0.5)));
   db.prepare(
     `UPDATE players SET coins = coins + ?, xp = xp + ?, last_work_at = datetime('now') WHERE id = ?`
-  ).run(job.coin_payout, job.xp_payout, player.id);
-  applyLevelUps(db, { ...player, xp: player.xp + job.xp_payout });
-  audit(db, player.id, 'work', job.coin_payout, { jobId });
+  ).run(coinPayout, xpPayout, player.id);
+  applyLevelUps(db, { ...player, xp: player.xp + xpPayout });
+  audit(db, player.id, 'work', coinPayout, { jobId, workerStat, statVal });
   return {
     ok: true,
-    message: `${job.name}: +${job.coin_payout} coins, +${job.xp_payout} XP.`,
+    message: `${job.name}: +${coinPayout} coins, +${xpPayout} XP (${workerStat} ${statVal} helped).`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
@@ -150,12 +205,12 @@ export function useItem(discordId, username, itemId) {
   if (effects.hospitalClear && player.hospital_until) {
     removeItem(player.id, itemId, 1);
     db.prepare('UPDATE players SET hospital_until = NULL, hp = max_hp WHERE id = ?').run(player.id);
-    return { ok: true, message: 'Reversal Kit used. Released from infirmary!', player: getOrCreatePlayer(discordId, username) };
+    return { ok: true, message: 'Healer\'s kit used. Released from the maester\'s tent!', player: getOrCreatePlayer(discordId, username) };
   }
   if (effects.jailClear && player.jail_until) {
     removeItem(player.id, itemId, 1);
     db.prepare('UPDATE players SET jail_until = NULL WHERE id = ?').run(player.id);
-    return { ok: true, message: 'Prison Realm Key used. You are free!', player: getOrCreatePlayer(discordId, username) };
+    return { ok: true, message: 'Dungeon key used. You are free from the Black Cells!', player: getOrCreatePlayer(discordId, username) };
   }
   if (effects.grabBag) {
     return openGrabBag(discordId, username, true);

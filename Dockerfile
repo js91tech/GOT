@@ -18,6 +18,8 @@ COPY apps ./apps
 COPY scripts ./scripts
 COPY railway.toml ./
 
+RUN npm run generate:realm-map || true
+
 ENV NODE_ENV=production
 ENV SERVICE=stack
 ENV DATABASE_PATH=/data/westeros.db

@@ -5,6 +5,8 @@ import discord from 'discord.js';
 const { Client, GatewayIntentBits, Events, MessageFlags, Routes, InteractionResponseType } = discord;
 import { GameService } from '@westeros/game-core';
 import { handleCommand } from './commands.js';
+import { handleAutocomplete } from './autocomplete.js';
+import { handlePveButton } from './pve-buttons.js';
 import { registerSlashCommands } from './register-slash.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -70,6 +72,33 @@ client.once(Events.ClientReady, async (c) => {
 });
 
 client.on(Events.InteractionCreate, async (interaction) => {
+  if (interaction.isAutocomplete()) {
+    try {
+      const choices = await handleAutocomplete(interaction);
+      await interaction.respond(choices);
+    } catch (err) {
+      console.error('Autocomplete error:', err.message);
+      await interaction.respond([]).catch(() => {});
+    }
+    return;
+  }
+  if (interaction.isButton()) {
+    try {
+      if (interaction.customId?.startsWith('pve:')) {
+        await handlePveButton(interaction);
+        return;
+      }
+    } catch (err) {
+      console.error('Button error:', err.message);
+      const msg = err.message || 'Something went wrong.';
+      if (interaction.replied || interaction.deferred) {
+        await interaction.followUp({ content: msg, flags: MessageFlags.Ephemeral }).catch(() => {});
+      } else {
+        await interaction.reply({ content: msg, flags: MessageFlags.Ephemeral }).catch(() => {});
+      }
+    }
+    return;
+  }
   if (!interaction.isChatInputCommand()) return;
   try {
     if (interaction.commandName === 'play2d') {
@@ -93,9 +122,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const result = await handleCommand(interaction);
     const flags = result.ephemeral ? MessageFlags.Ephemeral : undefined;
     if (result.embed) {
-      await interaction.reply({ embeds: [result.embed], flags });
+      await interaction.reply({ embeds: [result.embed], flags, files: result.files, components: result.components });
     } else {
-      await interaction.reply({ content: result.content, flags });
+      await interaction.reply({ content: result.content, flags, files: result.files, components: result.components });
     }
   } catch (err) {
     console.error('Command error:', interaction.commandName, err);

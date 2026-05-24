@@ -1,1 +1,12 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><circle cx="16" cy="16" r="12" fill="#b45309" opacity="0.9"/><path d="M16 8 L18 14 L24 14 L19 18 L21 24 L16 20 L11 24 L13 18 L8 14 L14 14 Z" fill="#fde68a"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="f" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#c2410c"/>
+    </linearGradient>
+    <filter id="glow"><feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#fb923c" flood-opacity="0.6"/></filter>
+  </defs>
+  <path d="M32 8 C22 8 14 16 14 26 C14 38 32 56 32 56 C32 56 50 38 50 26 C50 16 42 8 32 8Z" fill="url(#f)" stroke="#fdba74" stroke-width="2" filter="url(#glow)"/>
+  <ellipse cx="32" cy="24" rx="10" ry="12" fill="rgba(255,255,255,0.2)"/>
+  <path d="M32 18 L32 34 M26 26 L38 26" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+</svg>

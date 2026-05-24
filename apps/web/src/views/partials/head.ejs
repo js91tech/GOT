@@ -8,6 +8,9 @@
   <% if (typeof pageClass !== 'undefined' && (String(pageClass).includes('page-realm') || pageClass === 'page-dashboard')) { %>
   <link rel="stylesheet" href="/public/theme.css" />
   <% } %>
+  <% if (typeof pageClass !== 'undefined' && String(pageClass).includes('page-dashboard')) { %>
+  <link rel="stylesheet" href="/public/dashboard-studio.css" />
+  <% } %>
   <link rel="icon" href="/public/assets/crests/stark.svg" type="image/svg+xml" />
   <script src="/public/tooltips.js" defer></script>
 </head>
@@ -17,6 +20,8 @@
   <nav class="site-nav">
     <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
       <a href="/dashboard">Dashboard</a>
+      <a href="/character">Character</a>
+      <a href="/armory">Armory</a>
       <a href="/map">Map</a>
       <a href="/shop">Shop</a>
       <a href="/pvp">PvP</a>

@@ -1,0 +1,94 @@
+<%- include('partials/head', { loggedIn: true, title: 'Character', pageClass: 'page-realm page-dashboard' }) %>
+<link rel="stylesheet" href="/public/dashboard-studio.css" />
+<%- include('partials/realm-shell-open') %>
+
+<div class="dash-page dash-studio">
+  <h1 class="page-title">Character sheet</h1>
+  <p class="page-lead">Effective stats include equipped gear. Train at the dashboard, buy gear at the <a href="/armory">armory</a>.</p>
+
+  <section class="character-hero">
+    <p class="power-rating">Combat power <strong><%= sheet.power %></strong> · HP <%= sheet.hp %>/<%= sheet.max_hp %></p>
+    <div class="modifier-row">
+      <span>Mission fail −<%= sheet.modifiers.missionFailReduction %>%</span>
+      <span>Mission coins +<%= sheet.modifiers.missionCoinBonus %>%</span>
+      <span>Mug haul +<%= sheet.modifiers.mugBonus %>%</span>
+      <span>Work cooldown −<%= sheet.modifiers.workCooldownReduction %>%</span>
+    </div>
+  </section>
+
+  <div class="character-grid">
+    <section class="realm-panel">
+      <h2>Combat stats</h2>
+      <table class="stat-table">
+        <thead><tr><th>Stat</th><th>Base</th><th>Gear</th><th>Total</th></tr></thead>
+        <tbody>
+          <% ['strength','defense','speed','dexterity'].forEach(function(s) { %>
+          <tr>
+            <td><%= s.charAt(0).toUpperCase() + s.slice(1) %></td>
+            <td><%= sheet.combat.base[s] %></td>
+            <td><%= sheet.combat.gear[s] ? '+'+sheet.combat.gear[s] : '—' %></td>
+            <td><strong><%= sheet.combat.effective[s] %></strong></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="realm-panel">
+      <h2>Worker stats</h2>
+      <table class="stat-table">
+        <thead><tr><th>Stat</th><th>Base</th><th>Gear</th><th>Total</th></tr></thead>
+        <tbody>
+          <% ['manual_labor','intelligence','endurance','technique'].forEach(function(s) { %>
+          <tr>
+            <td><%= s.replace('_',' ') %></td>
+            <td><%= sheet.worker.base[s] %></td>
+            <td><%= sheet.worker.gear[s] ? '+'+sheet.worker.gear[s] : '—' %></td>
+            <td><strong><%= sheet.worker.effective[s] %></strong></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </section>
+  </div>
+
+  <section class="realm-panel">
+    <h2>What stats do</h2>
+    <ul class="stat-guide">
+      <li><strong>Strength</strong> — <%= sheet.statEffects.strength %></li>
+      <li><strong>Defense</strong> — <%= sheet.statEffects.defense %></li>
+      <li><strong>Speed</strong> — <%= sheet.statEffects.speed %></li>
+      <li><strong>Dexterity</strong> — <%= sheet.statEffects.dexterity %></li>
+      <li><strong>Labor</strong> — <%= sheet.statEffects.manual_labor %></li>
+      <li><strong>Intelligence</strong> — <%= sheet.statEffects.intelligence %></li>
+      <li><strong>Endurance</strong> — <%= sheet.statEffects.endurance %></li>
+      <li><strong>Technique</strong> — <%= sheet.statEffects.technique %></li>
+    </ul>
+  </section>
+
+  <section class="realm-panel">
+    <h2>Equipped</h2>
+    <% if (sheet.equipped.length) { %>
+    <ul class="equipped-list">
+      <% sheet.equipped.forEach(function(e) { %>
+      <li><span class="slot-tag"><%= e.slot %></span> <strong><%= e.name %></strong> — <%= e.effects %></li>
+      <% }); %>
+    </ul>
+    <form method="post" action="/unequip" class="unequip-row">
+      <select name="slot">
+        <option value="weapon">Unequip weapon</option>
+        <option value="armor">Unequip armor</option>
+        <option value="gear">Unequip gear</option>
+      </select>
+      <button type="submit" class="btn-wood">Unequip</button>
+    </form>
+    <% } else { %>
+    <p class="stat">Nothing equipped — visit the <a href="/armory">armory</a>.</p>
+    <% } %>
+  </section>
+
+  <a class="realm-back" href="/dashboard">← Dashboard</a>
+</div>
+
+<%- include('partials/realm-shell-close') %>
+<%- include('partials/foot') %>

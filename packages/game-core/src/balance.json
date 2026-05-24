@@ -32,5 +32,49 @@
   "investmentMin": 30000000,
   "investmentDays": 20,
   "mugMaxPercent": 0.15,
-  "robMaxCoins": 50000
+  "robMaxCoins": 50000,
+  "combat": {
+    "strengthWeight": 2,
+    "defenseWeight": 1.5,
+    "speedWeight": 1,
+    "dexterityWeight": 1,
+    "levelWeight": 5,
+    "hpWeight": 0.5,
+    "strDmgFactor": 0.5,
+    "defMitigation": 0.25,
+    "speedEdgeFactor": 0.02,
+    "dexCritBonus": 0.015
+  },
+  "stats": {
+    "crimeDexReduction": 0.003,
+    "crimeStrCoinBonus": 0.004,
+    "crimeEndHospitalReduction": 0.002,
+    "mugDexBonus": 0.005,
+    "workSpeedCooldown": 0.004,
+    "workStatFactor": 0.008,
+    "trainTechniqueXpBonus": 0.003
+  },
+  "pve": {
+    "maxEncounterChance": 0.65,
+    "tierChanceBonus": 0.03,
+    "huntBonus": 0.35,
+    "hospitalMinutes": 10,
+    "maxRounds": 12,
+    "playerStrFactor": 0.45,
+    "mobStrFactor": 0.38,
+    "mobDefMitigation": 0.2,
+    "playerDefMitigation": 0.28,
+    "dexCritChance": 0.004,
+    "speedDodgeChance": 0.003,
+    "mobStrWeight": 2,
+    "mobDefWeight": 1.5,
+    "mobSpdWeight": 1,
+    "mobLevelWeight": 4,
+    "mobHpWeight": 0.4,
+    "fleeBase": 0.4,
+    "fleeSpeedFactor": 0.02,
+    "fleeDexFactor": 0.003,
+    "fleeMin": 0.15,
+    "fleeMax": 0.85
+  }
 }

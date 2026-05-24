@@ -38,7 +38,7 @@ export function trainWorker(discordId, username, stat, sets = 1) {
     totalGain += gain;
     totalXp += balance.trainXpGain;
   }
-  if (totalGain === 0) return { ok: false, message: 'Not enough CE for worker training.' };
+  if (totalGain === 0) return { ok: false, message: 'Not enough Morale for worker training.' };
   db.prepare(`UPDATE players SET ce = ?, ${workerStat} = ${workerStat} + ?, xp = xp + ? WHERE id = ?`).run(
     ce,
     totalGain,

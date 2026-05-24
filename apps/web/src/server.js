@@ -170,10 +170,20 @@ app.get('/dashboard', requireAuth, (req, res) => {
   const flashOk = req.query.ok !== '0';
   const factions = GameService.factions();
   const house = player.faction_id ? factions.find((f) => f.id === player.faction_id) : null;
+  const inventoryWithIcons = inventory.map((i) => ({
+    ...i,
+    iconUrl: itemIconUrl(i.item_id, i.item_type)
+  }));
+  const equippable = inventoryWithIcons.filter(
+    (i) => i.equip_slot || ['weapon', 'armor', 'gear'].includes(i.item_type)
+  );
+  const { sheet } = GameService.characterSheet(id, name);
   res.render('dashboard', {
     player,
     status,
-    inventory,
+    sheet,
+    inventory: inventoryWithIcons,
+    equippable,
     confinement,
     crimes,
     factions,
@@ -282,6 +292,42 @@ app.get('/shop', requireAuth, (req, res) => {
   res.render('shop', { items, flash: req.query.msg });
 });
 
+function mapArmoryItems(items) {
+  return items.map((item) => ({
+    ...item,
+    iconUrl: itemIconUrl(item.id, item.item_type)
+  }));
+}
+
+app.get('/armory', requireAuth, (req, res) => {
+  const { weapons, armor } = GameService.shopArmoryForPlayer(req.session.discordId, req.session.username);
+  res.render('armory', {
+    weapons: mapArmoryItems(weapons),
+    armor: mapArmoryItems(armor),
+    flash: req.query.msg
+  });
+});
+
+app.post('/armory/buy', requireAuth, (req, res) => {
+  const r = GameService.shopBuy(req.session.discordId, req.session.username, req.body.item, 1);
+  res.redirect('/armory?msg=' + encodeURIComponent(r.message));
+});
+
+app.post('/armory/equip', requireAuth, (req, res) => {
+  const r = GameService.shopBuyEquip(req.session.discordId, req.session.username, req.body.item);
+  res.redirect('/character?msg=' + encodeURIComponent(r.message));
+});
+
+app.get('/character', requireAuth, (req, res) => {
+  const { player, sheet } = GameService.characterSheet(req.session.discordId, req.session.username);
+  res.render('character', { player, sheet, flash: req.query.msg });
+});
+
+app.post('/unequip', requireAuth, (req, res) => {
+  const r = GameService.unequip(req.session.discordId, req.session.username, req.body.slot);
+  res.redirect('/character?msg=' + encodeURIComponent(r.message));
+});
+
 app.post('/shop/buy', requireAuth, (req, res) => {
   const r = GameService.shopBuy(req.session.discordId, req.session.username, req.body.item, req.body.quantity);
   res.redirect('/shop?msg=' + encodeURIComponent(r.message));
@@ -343,7 +389,7 @@ app.post('/advanced', requireAuth, (req, res) => {
   if (type === 'buyEstate') r = GameService.buyEstate(id, name, Number(req.body.tier));
   if (type === 'enroll') r = GameService.educationEnroll(id, name, req.body.courseId);
   if (type === 'joinCompany') r = GameService.joinCompany(id, name, req.body.companyId);
-  if (type === 'forge') r = GameService.forge(id, name, req.body.recipeId || 'cursed_blade');
+  if (type === 'forge') r = GameService.forge(id, name, req.body.recipeId || 'valyrian_steel');
   if (type === 'delve') r = GameService.delve(id, name);
   if (type === 'endDelve') r = GameService.endDelve(id, name);
   if (type === 'grabbag') r = GameService.openGrabBag(id, name);
@@ -368,16 +414,23 @@ app.post('/drug', requireAuth, (req, res) => {
 
 app.get('/explore', requireAuth, (req, res) => {
   const r = GameService.explore(req.session.discordId, req.session.username);
-  res.render('explore', { exploreText: r.message, flash: req.query.msg });
+  res.render('explore', {
+    exploreText: r.message,
+    flash: req.query.msg,
+    pendingEncounter: r.pendingEncounter || null
+  });
 });
 
 app.post('/explore', requireAuth, (req, res) => {
   const id = req.session.discordId;
   const name = req.session.username;
   let r;
-  if (req.body.action === 'move') r = GameService.exploreMove(id, name, req.body.direction);
+  if (req.body.action === 'attack') r = GameService.pveAttack(id, name);
+  else if (req.body.action === 'flee') r = GameService.pveFlee(id, name);
+  else if (req.body.action === 'move') r = GameService.exploreMove(id, name, req.body.direction);
   else if (req.body.action === 'travel') r = GameService.exploreTravel(id, name, req.body.area);
   else if (req.body.action === 'mine') r = GameService.exploreMine(id, name);
+  else if (req.body.action === 'hunt') r = GameService.exploreHunt(id, name);
   else if (req.body.action === 'talk') r = GameService.talkNpc(id, name, req.body.npc);
   else r = GameService.explore(id, name);
   res.redirect('/explore?msg=' + encodeURIComponent(r.message));

@@ -1,0 +1,74 @@
+{
+  "maester": {
+    "name": "Maester",
+    "emoji": "📜",
+    "dialogue": {
+      "0": {
+        "text": "My lord, the ravens bring word of unrest in the Riverlands. Steel your house and mind your ledgers.",
+        "responses": ["What of the North?", "I seek counsel."]
+      },
+      "1": {
+        "text": "Winter is coming — train your levies and keep grain in the vaults.",
+        "responses": ["Understood."]
+      },
+      "2": {
+        "text": "You have proven yourself a capable lord. Take this stipend for your house.",
+        "responses": ["Thank you, Maester."]
+      }
+    }
+  },
+  "goldcloak": {
+    "name": "Goldcloak Captain",
+    "emoji": "🛡️",
+    "dialogue": {
+      "0": {
+        "text": "Halt! The Crown's peace holds only while taxes flow and swords stay sheathed.",
+        "responses": ["I mean no trouble.", "Stand aside."]
+      },
+      "1": {
+        "text": "I've seen your face in the city. Keep your coin purse close — Flea Bottom is hungry.",
+        "responses": ["Noted."]
+      },
+      "2": {
+        "text": "For a loyal subject, I'll look the other way on a minor infraction.",
+        "responses": ["Much obliged."]
+      }
+    }
+  },
+  "septon": {
+    "name": "Septon",
+    "emoji": "⛪",
+    "dialogue": {
+      "0": {
+        "text": "The Seven watch over all lords — rich and poor alike. What burdens your soul?",
+        "responses": ["I seek blessing.", "Only passing through."]
+      },
+      "1": {
+        "text": "Faith and fealty go hand in hand. Rally your morale before you march to war.",
+        "responses": ["Wise words."]
+      },
+      "2": {
+        "text": "The gods favor the steadfast. May your harvest be plentiful.",
+        "responses": ["Seven blessings."]
+      }
+    }
+  },
+  "hedge_knight": {
+    "name": "Hedge Knight",
+    "emoji": "⚔️",
+    "dialogue": {
+      "0": {
+        "text": "Another lord with dreams of glory? I've seen a hundred like you — half are wormfood.",
+        "responses": ["Train with me.", "Dismissed."]
+      },
+      "1": {
+        "text": "Your stance improves. A true knight fights with strength AND wit.",
+        "responses": ["Again!"]
+      },
+      "2": {
+        "text": "You fight like a northman. Here — take this purse, buy better steel.",
+        "responses": ["For the Realm."]
+      }
+    }
+  }
+}

@@ -2,8 +2,8 @@ export const SCHEMA_SQL = `
 CREATE TABLE IF NOT EXISTS players (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   discord_id TEXT NOT NULL UNIQUE,
-  username TEXT NOT NULL DEFAULT 'Sorcerer',
-  world_id TEXT NOT NULL DEFAULT 'tokyo',
+  username TEXT NOT NULL DEFAULT 'Lord',
+  world_id TEXT NOT NULL DEFAULT 'north',
   level INTEGER NOT NULL DEFAULT 1,
   xp INTEGER NOT NULL DEFAULT 0,
   coins INTEGER NOT NULL DEFAULT 500,
@@ -23,10 +23,11 @@ CREATE TABLE IF NOT EXISTS players (
   technique INTEGER NOT NULL DEFAULT 10,
   gym_id TEXT NOT NULL DEFAULT 'training_grounds',
   company_id TEXT,
-  explore_area TEXT NOT NULL DEFAULT 'tokyo_jujutsu_high',
-  explore_room TEXT NOT NULL DEFAULT 'courtyard',
+  explore_area TEXT NOT NULL DEFAULT 'winterfell',
+  explore_room TEXT NOT NULL DEFAULT 'great_hall',
   npc_progress_json TEXT NOT NULL DEFAULT '{}',
   drug_cooldowns_json TEXT NOT NULL DEFAULT '{}',
+  pve_encounter_json TEXT NOT NULL DEFAULT '',
   hp INTEGER NOT NULL DEFAULT 100,
   max_hp INTEGER NOT NULL DEFAULT 100,
   bravery INTEGER NOT NULL DEFAULT 100,
@@ -55,7 +56,8 @@ CREATE TABLE IF NOT EXISTS item_definitions (
   description TEXT NOT NULL DEFAULT '',
   shop_price INTEGER NOT NULL DEFAULT 0,
   item_type TEXT NOT NULL DEFAULT 'consumable',
-  effects_json TEXT NOT NULL DEFAULT '{}'
+  effects_json TEXT NOT NULL DEFAULT '{}',
+  min_level INTEGER NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS inventory_items (

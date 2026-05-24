@@ -1,0 +1,55 @@
+<%- include('partials/head', { loggedIn: true, title: 'Armory', pageClass: 'page-realm page-dashboard' }) %>
+<link rel="stylesheet" href="/public/dashboard-studio.css" />
+<%- include('partials/realm-shell-open') %>
+
+<div class="dash-page dash-studio">
+  <% if (flash) { %><div class="map-flash"><%= flash %></div><% } %>
+  <h1 class="page-title">Armory</h1>
+  <p class="page-lead">Weapons and armor that change your effective stats — buy, equip, then train and run missions to grow stronger.</p>
+  <p class="page-lead"><a href="/character">View character sheet →</a></p>
+
+  <h2 class="section-title">Weapons</h2>
+  <section class="armory-grid">
+    <% weapons.forEach(function(item) { %>
+    <article class="realm-panel shop-card armory-card <%= item.locked ? 'armory-locked' : '' %>">
+      <div class="shop-card-head">
+        <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="64" height="64" />
+        <div class="shop-item-meta">
+          <strong><%= item.name %></strong>
+          <span class="shop-type-tag weapon-tag">Weapon · Lv<%= item.min_level %></span>
+          <span class="price"><%= item.shop_price.toLocaleString() %> gold</span>
+        </div>
+      </div>
+      <p class="stat effect-line"><%= item.effectLabel %></p>
+      <div class="armory-actions">
+        <form method="post" action="/armory/buy"><input type="hidden" name="item" value="<%= item.id %>" /><button type="submit" class="btn-wood" <%= item.locked ? 'disabled' : '' %>>Buy</button></form>
+        <form method="post" action="/armory/equip"><input type="hidden" name="item" value="<%= item.id %>" /><button type="submit" class="btn-realm" <%= item.locked ? 'disabled' : '' %>>Buy &amp; equip</button></form>
+      </div>
+    </article>
+    <% }); %>
+  </section>
+
+  <h2 class="section-title">Armor</h2>
+  <section class="armory-grid">
+    <% armor.forEach(function(item) { %>
+    <article class="realm-panel shop-card armory-card <%= item.locked ? 'armory-locked' : '' %>">
+      <div class="shop-card-head">
+        <img class="shop-item-icon" src="<%= item.iconUrl %>" alt="" width="64" height="64" />
+        <div class="shop-item-meta">
+          <strong><%= item.name %></strong>
+          <span class="shop-type-tag armor-tag">Armor · Lv<%= item.min_level %></span>
+          <span class="price"><%= item.shop_price.toLocaleString() %> gold</span>
+        </div>
+      </div>
+      <p class="stat effect-line"><%= item.effectLabel %></p>
+      <div class="armory-actions">
+        <form method="post" action="/armory/buy"><input type="hidden" name="item" value="<%= item.id %>" /><button type="submit" class="btn-wood" <%= item.locked ? 'disabled' : '' %>>Buy</button></form>
+        <form method="post" action="/armory/equip"><input type="hidden" name="item" value="<%= item.id %>" /><button type="submit" class="btn-realm" <%= item.locked ? 'disabled' : '' %>>Buy &amp; equip</button></form>
+      </div>
+    </article>
+    <% }); %>
+  </section>
+</div>
+
+<%- include('partials/realm-shell-close') %>
+<%- include('partials/foot') %>

@@ -7,8 +7,8 @@ test('xpForLevel scales', () => {
 });
 
 test('gradeName tiers', () => {
-  assert.equal(gradeName(1), 'Grade 4');
-  assert.equal(gradeName(80), 'Special Grade');
+  assert.equal(gradeName(1), 'Squire');
+  assert.equal(gradeName(80), 'Warden');
 });
 
 test('grade protection blocks bully', () => {

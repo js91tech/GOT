@@ -1,9 +1,13 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Work">
-  <rect width="320" height="180" fill="#141018"/>
-  <rect x="60" y="60" width="200" height="90" fill="#3a3028" stroke="#8a7048" stroke-width="2"/>
-  <rect x="80" y="80" width="40" height="30" fill="#5a4830"/>
-  <rect x="140" y="80" width="40" height="30" fill="#5a4830"/>
-  <rect x="200" y="80" width="40" height="30" fill="#5a4830"/>
-  <rect x="130" y="120" width="60" height="30" fill="#2a2018"/>
-  <circle cx="160" cy="45" r="18" fill="#f0c040" opacity="0.5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#14532d"/>
+      <stop offset="100%" stop-color="#052e16"/>
+    </linearGradient>
+  </defs>
+  <rect width="128" height="128" rx="12" fill="url(#bg)"/>
+  <rect x="36" y="48" width="56" height="40" rx="6" fill="#334155" stroke="#64748b" stroke-width="2"/>
+  <rect x="44" y="56" width="16" height="12" rx="2" fill="#475569"/>
+  <rect x="68" y="56" width="16" height="12" rx="2" fill="#475569"/>
+  <path d="M64 28 L70 48 L58 48 Z" fill="#d4af37" stroke="#fde68a"/>
 </svg>

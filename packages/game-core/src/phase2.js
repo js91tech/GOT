@@ -38,7 +38,7 @@ export function joinClan(discordId, username, clanId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const clan = db.prepare('SELECT * FROM clans WHERE id = ?').get(clanId);
-  if (!clan) return { ok: false, message: 'Clans: tokyo, kyoto, zenin' };
+  if (!clan) return { ok: false, message: 'Great Houses: stark, lannister, baratheon' };
   db.prepare('UPDATE players SET clan_id = ? WHERE id = ?').run(clanId, player.id);
   return { ok: true, message: `Joined ${clan.name}!`, player: getOrCreatePlayer(discordId, username) };
 }
@@ -131,13 +131,13 @@ export function goldList(discordId, username, goldAmount, price) {
   const player = getOrCreatePlayer(discordId, username);
   goldAmount = Math.floor(goldAmount);
   price = Math.floor(price);
-  if (goldAmount < 1 || player.gold_objects < goldAmount) return { ok: false, message: 'Not enough gold objects.' };
+  if (goldAmount < 1 || player.gold_objects < goldAmount) return { ok: false, message: 'Not enough royal relics.' };
   const db = getDb();
   db.prepare('UPDATE players SET gold_objects = gold_objects - ? WHERE id = ?').run(goldAmount, player.id);
   db.prepare(
     `INSERT INTO gold_market_listings (seller_id, gold_amount, price) VALUES (?, ?, ?)`
   ).run(player.id, goldAmount, price);
-  return { ok: true, message: 'Listed on Cursed Object exchange.', player: getOrCreatePlayer(discordId, username) };
+  return { ok: true, message: 'Listed on the royal relic exchange.', player: getOrCreatePlayer(discordId, username) };
 }
 
 export function goldBrowse() {
@@ -160,10 +160,10 @@ export function goldBuy(discordId, username, listingId) {
     player.id
   );
   db.prepare('DELETE FROM gold_market_listings WHERE id = ?').run(listingId);
-  return { ok: true, message: 'Purchased cursed objects!', player: getOrCreatePlayer(discordId, username) };
+  return { ok: true, message: 'Purchased royal relics!', player: getOrCreatePlayer(discordId, username) };
 }
 
-export function forge(discordId, username, recipeId = 'cursed_blade') {
+export function forge(discordId, username, recipeId = 'valyrian_steel') {
   return forgeRecipe(discordId, username, recipeId);
 }
 

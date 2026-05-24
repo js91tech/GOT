@@ -22,10 +22,10 @@ export function train(discordId, username, sets = 1, stat = 'strength') {
   const player = getOrCreatePlayer(discordId, username);
   const block = isBlocked(player);
   if (block.blocked && block.reason === 'jail') {
-    return { ok: false, message: 'You are confined in the Prison Realm. Only /wheel, /inventory, /use, /bust work.' };
+    return { ok: false, message: 'You are confined in the black cells. Only /wheel, /inventory, /use, /bust work.' };
   }
   if (block.blocked && block.reason === 'hospital') {
-    return { ok: false, message: 'You are in Shoko\'s infirmary. Use a Reversal Kit or wait.' };
+    return { ok: false, message: 'You are in the maester\'s tent. Use a Healer\'s Kit or wait.' };
   }
   const db = getDb();
   sets = Math.max(1, Math.min(20, sets));
@@ -51,7 +51,7 @@ export function train(discordId, username, sets = 1, stat = 'strength') {
     totalXp += balance.trainXpGain;
   }
   if (totalGain === 0) {
-    return { ok: false, message: 'Not enough CE or Focus. Rest at the CE lounge or wait for regen.' };
+    return { ok: false, message: 'Not enough morale or focus. Rest at the war camp or wait for regen.' };
   }
   db.prepare(
     `UPDATE players SET ce = ?, focus = ?, ${trainStat} = ${trainStat} + ?, xp = xp + ? WHERE id = ?`
@@ -60,6 +60,6 @@ export function train(discordId, username, sets = 1, stat = 'strength') {
   applyLevelUps(db, { ...player, xp: player.xp + totalXp });
   const updated = getOrCreatePlayer(discordId, username);
   let msg = `Training complete! +${totalGain} ${label}, +${totalXp} XP.`;
-  if (crits) msg += ` Black Flash procs: ${crits}!`;
+  if (crits) msg += ` Perfect form: ${crits}!`;
   return { ok: true, message: msg, player: updated };
 }

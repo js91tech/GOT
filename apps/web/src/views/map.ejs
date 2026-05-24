@@ -21,7 +21,12 @@
 
   <div class="map-layout">
     <div class="map-canvas-wrap">
-      <div id="realm-map" data-svg-url="/public/map/westeros.svg"></div>
+      <div class="map-view-tabs">
+        <button type="button" class="map-tab active" data-view="interactive">Holdings map</button>
+        <button type="button" class="map-tab" data-view="overview">All lands &amp; resources</button>
+      </div>
+      <div id="realm-map" class="map-view map-view-interactive" data-map-url="/public/map/realm-world.png"></div>
+      <div id="realm-map-overview" class="map-view map-view-overview" hidden></div>
     </div>
     <aside id="map-detail" class="map-panel">
       <h2>Realm</h2>

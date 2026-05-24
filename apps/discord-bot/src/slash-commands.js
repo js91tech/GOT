@@ -5,8 +5,8 @@ export function buildSlashCommands() {
     new SlashCommandBuilder()
       .setName('play2d')
       .setDescription('Launch the 2D game (Discord Activity)'),
-    new SlashCommandBuilder().setName('profile').setDescription('Your sorcerer profile'),
-    new SlashCommandBuilder().setName('status').setDescription('CE, timers, blockers'),
+    new SlashCommandBuilder().setName('profile').setDescription('Your lord profile'),
+    new SlashCommandBuilder().setName('status').setDescription('Morale, timers, blockers'),
     new SlashCommandBuilder()
       .setName('train')
       .setDescription('Train at the grounds (SoL-style stats)')
@@ -25,16 +25,16 @@ export function buildSlashCommands() {
       .addIntegerOption((o) => o.setName('sets').setDescription('Sets 1-20').setMinValue(1).setMaxValue(20)),
     new SlashCommandBuilder()
       .setName('crime')
-      .setDescription('Run a curse mission')
+      .setDescription('Run a realm mission')
       .addStringOption((o) =>
         o
           .setName('mission')
           .setDescription('Mission type (omit to list all)')
           .addChoices(
-            { name: 'Petty Cleanup', value: 'petty_cleanup' },
-            { name: 'Grade-4 Patrol', value: 'grade4_patrol' },
-            { name: 'Shibuya Sweep', value: 'shibuya_raid' },
-            { name: 'Special Exorcism', value: 'special_exorcism' }
+            { name: 'Petty Border Raid', value: 'petty_raid' },
+            { name: 'Border Patrol', value: 'border_patrol' },
+            { name: 'Sack the Village', value: 'sack_village' },
+            { name: 'Siege Assault', value: 'siege_assault' }
           )
       ),
     new SlashCommandBuilder().setName('work').setDescription('Do your job for coins and XP'),
@@ -47,9 +47,9 @@ export function buildSlashCommands() {
           .setDescription('Job to take')
           .setRequired(true)
           .addChoices(
-            { name: 'Janitor', value: 'janitor' },
-            { name: 'Instructor Assistant', value: 'instructor_assistant' },
-            { name: 'Curator', value: 'curator' }
+            { name: 'Stable Hand', value: 'janitor' },
+            { name: 'Squire', value: 'instructor_assistant' },
+            { name: 'Relic Keeper', value: 'curator' }
           )
       ),
     new SlashCommandBuilder()
@@ -79,12 +79,27 @@ export function buildSlashCommands() {
           .setRequired(true)
           .addChoices({ name: 'list', value: 'list' }, { name: 'buy', value: 'buy' })
       )
-      .addStringOption((o) => o.setName('item').setDescription('Item id'))
+      .addStringOption((o) => o.setName('item').setDescription('Item to buy').setAutocomplete(true))
       .addIntegerOption((o) => o.setName('quantity').setDescription('Qty')),
+    new SlashCommandBuilder()
+      .setName('armory')
+      .setDescription('Weapons & armor — buy and equip gear that boosts stats')
+      .addStringOption((o) =>
+        o
+          .setName('action')
+          .setDescription('Armory action')
+          .setRequired(true)
+          .addChoices(
+            { name: 'list', value: 'list' },
+            { name: 'buy', value: 'buy' },
+            { name: 'equip', value: 'equip' }
+          )
+      )
+      .addStringOption((o) => o.setName('item').setDescription('Weapon or armor').setAutocomplete(true)),
     new SlashCommandBuilder().setName('wheel').setDescription('Mission roulette spin'),
     new SlashCommandBuilder()
       .setName('lounge')
-      .setDescription('CE lounge')
+      .setDescription('War camp — feast, oath, rally morale')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -98,32 +113,32 @@ export function buildSlashCommands() {
       ),
     new SlashCommandBuilder()
       .setName('attack')
-      .setDescription('Duel another sorcerer')
-      .addUserOption((o) => o.setName('target').setDescription('Target sorcerer').setRequired(true)),
+      .setDescription('Duel another lord')
+      .addUserOption((o) => o.setName('target').setDescription('Target lord').setRequired(true)),
     new SlashCommandBuilder()
       .setName('mug')
       .setDescription('Steal coins')
-      .addUserOption((o) => o.setName('target').setDescription('Target sorcerer').setRequired(true)),
+      .addUserOption((o) => o.setName('target').setDescription('Target lord').setRequired(true)),
     new SlashCommandBuilder()
       .setName('rob')
       .setDescription('Rob coins (larger haul)')
-      .addUserOption((o) => o.setName('target').setDescription('Target sorcerer').setRequired(true)),
+      .addUserOption((o) => o.setName('target').setDescription('Target lord').setRequired(true)),
     new SlashCommandBuilder()
       .setName('bust')
-      .setDescription('Break ally out of Prison Realm')
+      .setDescription('Break ally out of the black cells')
       .addUserOption((o) => o.setName('target').setDescription('Ally to bust').setRequired(true)),
     new SlashCommandBuilder().setName('inventory').setDescription('Your items'),
     new SlashCommandBuilder()
       .setName('use')
       .setDescription('Use an item')
-      .addStringOption((o) => o.setName('item').setDescription('Item id').setRequired(true)),
+      .addStringOption((o) => o.setName('item').setDescription('Item from your inventory').setRequired(true).setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('education')
-      .setDescription('Jujutsu curriculum')
-      .addStringOption((o) => o.setName('enroll').setDescription('Course id: basics, black_flash, domain_theory')),
+      .setDescription('Maester curriculum')
+      .addStringOption((o) => o.setName('enroll').setDescription('Course to enroll in').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('clan')
-      .setDescription('School squad')
+      .setDescription('Great House squad')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -134,11 +149,11 @@ export function buildSlashCommands() {
             { name: 'deposit', value: 'deposit' }
           )
       )
-      .addStringOption((o) => o.setName('id').setDescription('Clan id or amount for deposit')),
+      .addStringOption((o) => o.setName('id').setDescription('Clan to join').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('estate')
       .setDescription('Housing')
-      .addIntegerOption((o) => o.setName('buy').setDescription('Tier to buy')),
+      .addIntegerOption((o) => o.setName('buy').setDescription('Estate tier to purchase').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('market')
       .setDescription('Item market')
@@ -152,13 +167,13 @@ export function buildSlashCommands() {
             { name: 'buy', value: 'buy' }
           )
       )
-      .addStringOption((o) => o.setName('item').setDescription('Item id'))
+      .addStringOption((o) => o.setName('item').setDescription('Item to sell').setAutocomplete(true))
       .addIntegerOption((o) => o.setName('quantity').setDescription('Quantity'))
       .addIntegerOption((o) => o.setName('price').setDescription('Price per unit'))
-      .addIntegerOption((o) => o.setName('listing').setDescription('Listing id to buy')),
+      .addIntegerOption((o) => o.setName('listing').setDescription('Listing to buy').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('gold')
-      .setDescription('Cursed object exchange')
+      .setDescription('Royal relic exchange')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -171,7 +186,7 @@ export function buildSlashCommands() {
       )
       .addIntegerOption((o) => o.setName('amount').setDescription('Gold amount'))
       .addIntegerOption((o) => o.setName('price').setDescription('Price per unit'))
-      .addIntegerOption((o) => o.setName('listing').setDescription('Listing id to buy')),
+      .addIntegerOption((o) => o.setName('listing').setDescription('Listing to buy').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('forge')
       .setDescription('Forge gear from recipes')
@@ -180,10 +195,10 @@ export function buildSlashCommands() {
           .setName('recipe')
           .setDescription('Recipe id (list with /forge no recipe)')
           .addChoices(
-            { name: 'Cursed Blade', value: 'cursed_blade' },
-            { name: 'Spirit Spear', value: 'spirit_spear' },
-            { name: 'Armor Vest', value: 'armor_vest' },
-            { name: 'Domain Charm', value: 'domain_charm' }
+            { name: 'Valyrian Steel', value: 'valyrian_steel' },
+            { name: 'War Spear', value: 'war_spear' },
+            { name: 'Plate Vest', value: 'plate_vest' },
+            { name: 'Sigil Charm', value: 'sigil_charm' }
           )
       ),
     new SlashCommandBuilder()
@@ -201,9 +216,9 @@ export function buildSlashCommands() {
           .setDescription('Gym id when setting')
           .addChoices(
             { name: 'Training Grounds', value: 'training_grounds' },
-            { name: 'Cursed Pit', value: 'cursed_pit' },
-            { name: 'Domain Chamber', value: 'domain_chamber' },
-            { name: 'Zenin Dojo', value: 'zenin_dojo' }
+            { name: 'War Yard', value: 'war_yard' },
+            { name: 'Royal Armory', value: 'royal_armory' },
+            { name: 'Kingsguard Yard', value: 'kingsguard_yard' }
           )
       ),
     new SlashCommandBuilder()
@@ -223,9 +238,12 @@ export function buildSlashCommands() {
       )
       .addIntegerOption((o) => o.setName('sets').setDescription('Sets 1-20').setMinValue(1).setMaxValue(20)),
     new SlashCommandBuilder()
+      .setName('character')
+      .setDescription('View combat power, gear bonuses, and what your stats do'),
+    new SlashCommandBuilder()
       .setName('equip')
       .setDescription('Equip weapon, armor, or gear')
-      .addStringOption((o) => o.setName('item').setDescription('Item id from inventory').setRequired(true)),
+      .addStringOption((o) => o.setName('item').setDescription('Gear from inventory').setRequired(true).setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('unequip')
       .setDescription('Unequip a slot')
@@ -249,7 +267,7 @@ export function buildSlashCommands() {
           .setDescription('Action')
           .addChoices({ name: 'list', value: 'list' }, { name: 'join', value: 'join' })
       )
-      .addStringOption((o) => o.setName('id').setDescription('Company id')),
+      .addStringOption((o) => o.setName('id').setDescription('Company to join').setAutocomplete(true)),
     new SlashCommandBuilder()
       .setName('drug')
       .setDescription('Boosters with cooldowns')
@@ -264,7 +282,7 @@ export function buildSlashCommands() {
           .setName('id')
           .setDescription('Drug id')
           .addChoices(
-            { name: 'CE Shot', value: 'ce_shot' },
+            { name: 'Morale Tonic', value: 'morale_tonic' },
             { name: 'Focus Tea', value: 'focus_tea' },
             { name: 'Resolve Pill', value: 'resolve_pill' },
             { name: 'Booster Serum', value: 'booster_serum' }
@@ -282,32 +300,46 @@ export function buildSlashCommands() {
             { name: 'look', value: 'look' },
             { name: 'move', value: 'move' },
             { name: 'travel', value: 'travel' },
-            { name: 'mine', value: 'mine' }
+            { name: 'mine', value: 'mine' },
+            { name: 'hunt', value: 'hunt' },
+            { name: 'attack', value: 'attack' },
+            { name: 'flee', value: 'flee' }
           )
       )
-      .addStringOption((o) => o.setName('direction').setDescription('north/south/east/west/up'))
+      .addStringOption((o) =>
+        o
+          .setName('direction')
+          .setDescription('Direction to move')
+          .addChoices(
+            { name: 'North', value: 'north' },
+            { name: 'South', value: 'south' },
+            { name: 'East', value: 'east' },
+            { name: 'West', value: 'west' },
+            { name: 'Up', value: 'up' }
+          )
+      )
       .addStringOption((o) =>
         o
           .setName('area')
           .setDescription('Area id for travel')
           .addChoices(
-            { name: 'Tokyo High', value: 'tokyo_jujutsu_high' },
-            { name: 'Shibuya', value: 'shibuya_district' },
-            { name: 'Kyoto', value: 'jujutsu_high_kyoto' },
-            { name: 'Sakurajima', value: 'sakurajima_colony' }
+            { name: 'Winterfell', value: 'winterfell' },
+            { name: "King's Landing", value: 'kings_landing' },
+            { name: 'Oldtown', value: 'oldtown' },
+            { name: 'The Wall', value: 'the_wall' }
           )
       ),
     new SlashCommandBuilder()
       .setName('escape')
-      .setDescription('Leave infirmary or Prison Realm')
+      .setDescription('Leave maester tent or black cells')
       .addStringOption((o) =>
         o
           .setName('place')
           .setDescription('Where you are confined')
           .setRequired(true)
           .addChoices(
-            { name: 'Infirmary (hospital)', value: 'hospital' },
-            { name: 'Prison Realm (jail)', value: 'jail' }
+            { name: "Maester's tent", value: 'hospital' },
+            { name: 'Black cells', value: 'jail' }
           )
       )
       .addStringOption((o) =>
@@ -317,7 +349,7 @@ export function buildSlashCommands() {
           .addChoices(
             { name: 'Pay coins', value: 'pay' },
             { name: 'Use item', value: 'item' },
-            { name: 'CE technique (hospital only)', value: 'ce' }
+            { name: 'Rally morale (tent only)', value: 'ce' }
           )
       ),
     new SlashCommandBuilder()
@@ -329,10 +361,10 @@ export function buildSlashCommands() {
           .setDescription('NPC id')
           .setRequired(true)
           .addChoices(
-            { name: 'Gojo', value: 'gojo' },
-            { name: 'Yaga', value: 'yaga' },
-            { name: 'Nanami', value: 'nanami' },
-            { name: 'Maki', value: 'maki' }
+            { name: 'Maester', value: 'maester' },
+            { name: 'Goldcloak Captain', value: 'goldcloak' },
+            { name: 'Septon', value: 'septon' },
+            { name: 'Hedge Knight', value: 'hedge_knight' }
           )
       ),
     new SlashCommandBuilder()
@@ -344,12 +376,12 @@ export function buildSlashCommands() {
           .setDescription('Trade action')
           .addChoices({ name: 'list', value: 'list' }, { name: 'buy', value: 'buy' }, { name: 'sell', value: 'sell' })
       )
-      .addStringOption((o) => o.setName('id').setDescription('Commodity id'))
+      .addStringOption((o) => o.setName('id').setDescription('Commodity to trade').setAutocomplete(true))
       .addIntegerOption((o) => o.setName('quantity').setDescription('Quantity')),
-    new SlashCommandBuilder().setName('delve').setDescription('Enter curse spirit nest'),
+    new SlashCommandBuilder().setName('delve').setDescription('Enter ancient crypts'),
     new SlashCommandBuilder()
       .setName('grabbag')
-      .setDescription('Curse capsules')
+      .setDescription('Relic chests')
       .addStringOption((o) =>
         o
           .setName('action')
@@ -362,7 +394,7 @@ export function buildSlashCommands() {
       .addIntegerOption((o) => o.setName('count').setDescription('How many to buy or open')),
     new SlashCommandBuilder()
       .setName('leaderboard')
-      .setDescription('Top sorcerers')
+      .setDescription('Top lords')
       .addStringOption((o) =>
         o
           .setName('type')
@@ -387,10 +419,10 @@ export function buildSlashCommands() {
           .setDescription('Region')
           .setRequired(true)
           .addChoices(
-            { name: 'Tokyo', value: 'tokyo' },
-            { name: 'Osaka', value: 'osaka' },
-            { name: 'Kyoto', value: 'kyoto' },
-            { name: 'Sendai', value: 'sendai' }
+            { name: 'The North', value: 'north' },
+            { name: 'Riverlands', value: 'riverlands' },
+            { name: 'The West', value: 'west' },
+            { name: 'The Reach', value: 'reach' }
           )
       ),
     new SlashCommandBuilder()
@@ -432,7 +464,7 @@ export function buildSlashCommands() {
       )
       .addStringOption((o) => o.setName('name').setDescription('Guild name (create)'))
       .addStringOption((o) => o.setName('tag').setDescription('Guild tag 2-5 chars (create)'))
-      .addIntegerOption((o) => o.setName('id').setDescription('Guild id (join)'))
+      .addIntegerOption((o) => o.setName('id').setDescription('Guild to join').setAutocomplete(true))
       .addIntegerOption((o) => o.setName('amount').setDescription('Gold to deposit')),
     new SlashCommandBuilder()
       .setName('realm')
@@ -440,8 +472,9 @@ export function buildSlashCommands() {
       .addStringOption((o) =>
         o
           .setName('region')
-          .setDescription('Region detail')
+          .setDescription('Region detail or all lands map')
           .addChoices(
+            { name: '🗺 All lands (map + resources)', value: 'all' },
             { name: 'Winterfell', value: 'winterfell' },
             { name: 'Dreadfort', value: 'dreadfort' },
             { name: 'White Harbor', value: 'white_harbor' },

@@ -1,0 +1,18 @@
+{
+  "width": 811,
+  "height": 1024,
+  "regions": [
+    { "id": "winterfell", "cx": 278, "cy": 128, "r": 52, "subtitle": "Frozen North" },
+    { "id": "dreadfort", "cx": 418, "cy": 148, "r": 48, "subtitle": "Ancient Stronghold" },
+    { "id": "white_harbor", "cx": 338, "cy": 218, "r": 46, "subtitle": "Coastal Keep" },
+    { "id": "twins", "cx": 398, "cy": 288, "r": 44, "subtitle": "Crossroads Inn" },
+    { "id": "pyke", "cx": 98, "cy": 372, "r": 42, "subtitle": "Iron Islands" },
+    { "id": "riverrun", "cx": 376, "cy": 408, "r": 46, "subtitle": "Riverlands" },
+    { "id": "dragonstone", "cx": 648, "cy": 338, "r": 50, "subtitle": "Targaryen Seat" },
+    { "id": "casterly_rock", "cx": 152, "cy": 488, "r": 48, "subtitle": "Westerlands" },
+    { "id": "kings_landing", "cx": 618, "cy": 488, "r": 52, "subtitle": "The Capital" },
+    { "id": "highgarden", "cx": 338, "cy": 578, "r": 48, "subtitle": "The Reach" },
+    { "id": "oldtown", "cx": 198, "cy": 718, "r": 46, "subtitle": "Faith of the Seven" },
+    { "id": "storms_end", "cx": 578, "cy": 678, "r": 48, "subtitle": "Durrandon Seat" }
+  ]
+}

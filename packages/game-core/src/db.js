@@ -3,6 +3,10 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { SCHEMA_SQL } from './schema.js';
+import { migrateGotTheme } from './migrate-got-theme.js';
+import { migrateCharacterBuild } from './migrate-character-build.js';
+import { migrateExplorePve } from './migrate-explore-pve.js';
+import { migratePveEncounter } from './migrate-pve-encounter.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -91,8 +95,8 @@ function migrate(db) {
       ['technique', 'INTEGER NOT NULL DEFAULT 10'],
       ['gym_id', "TEXT NOT NULL DEFAULT 'training_grounds'"],
       ['company_id', 'TEXT'],
-      ['explore_area', "TEXT NOT NULL DEFAULT 'tokyo_jujutsu_high'"],
-      ['explore_room', "TEXT NOT NULL DEFAULT 'courtyard'"],
+      ['explore_area', "TEXT NOT NULL DEFAULT 'winterfell'"],
+      ['explore_room', "TEXT NOT NULL DEFAULT 'great_hall'"],
       ['npc_progress_json', "TEXT NOT NULL DEFAULT '{}'"],
       ['drug_cooldowns_json', "TEXT NOT NULL DEFAULT '{}'"]
     ];
@@ -124,6 +128,22 @@ function migrate(db) {
     }
     seedWesterosRealm(db);
     db.pragma('user_version = 4');
+  }
+  if (version < 5) {
+    migrateGotTheme(db);
+    db.pragma('user_version = 5');
+  }
+  if (version < 6) {
+    migrateCharacterBuild(db);
+    db.pragma('user_version = 6');
+  }
+  if (version < 7) {
+    migrateExplorePve(db);
+    db.pragma('user_version = 7');
+  }
+  if (version < 8) {
+    migratePveEncounter(db);
+    db.pragma('user_version = 8');
   }
 }
 
@@ -167,10 +187,10 @@ function seedWesterosRealm(db) {
 
 function seedPhase4(db) {
   const gyms = [
-    ['training_grounds', 'Training Grounds', 'Standard Jujutsu High gym', 1.0, 1, 0],
-    ['cursed_pit', 'Cursed Pit', 'High CE density training', 1.15, 5, 25000],
-    ['domain_chamber', 'Domain Chamber', 'Elite multiplier', 1.3, 20, 250000],
-    ['zenin_dojo', 'Zenin Dojo', 'Speed and dex focus', 1.2, 12, 100000]
+    ['training_grounds', 'Training Grounds', 'Standard castle yard', 1.0, 1, 0],
+    ['war_yard', 'War Yard', 'High morale density training', 1.15, 5, 25000],
+    ['royal_armory', 'Royal Armory', 'Elite multiplier', 1.3, 20, 250000],
+    ['kingsguard_yard', "Kingsguard Yard", 'Speed and dex focus', 1.2, 12, 100000]
   ];
   const insGym = db.prepare(
     `INSERT OR IGNORE INTO gym_definitions (id, name, description, train_multiplier, min_level, unlock_cost) VALUES (?, ?, ?, ?, ?, ?)`
@@ -178,9 +198,9 @@ function seedPhase4(db) {
   for (const r of gyms) insGym.run(...r);
 
   const companies = [
-    ['jujutsu_ops', 'Jujutsu Ops Division', 'manual_labor', 300, 100, 1.25, 1],
-    ['cursed_logistics', 'Cursed Logistics', 'intelligence', 400, 120, 1.3, 5],
-    ['shibuya_response', 'Shibuya Response Unit', 'endurance', 500, 140, 1.35, 10],
+    ['kings_guard', "King's Guard", 'manual_labor', 300, 100, 1.25, 1],
+    ['coin_masters', 'Coin Masters Guild', 'intelligence', 400, 120, 1.3, 5],
+    ['river_patrol', 'Riverlands Patrol', 'endurance', 500, 140, 1.35, 10],
     ['vault_security', 'Vault Security Corp', 'technique', 600, 160, 1.4, 18]
   ];
   const insCo = db.prepare(
@@ -189,7 +209,7 @@ function seedPhase4(db) {
   for (const r of companies) insCo.run(...r);
 
   const drugs = [
-    ['ce_shot', 'CE Shot', 'Restore 40 CE', 500, 45, '{"ce":40}'],
+    ['morale_tonic', 'Morale Tonic', 'Restore 40 morale', 500, 45, '{"ce":40}'],
     ['focus_tea', 'Focus Tea', '+30 Focus', 350, 30, '{"focus":30}'],
     ['resolve_pill', 'Resolve Pill', '+25 Resolve and Bravery', 400, 60, '{"resolve":25,"bravery":25}'],
     ['booster_serum', 'Booster Serum', '+2 all combat stats', 2500, 180, '{"strength":2,"defense":2,"speed":2,"dexterity":2}']
@@ -200,10 +220,10 @@ function seedPhase4(db) {
   for (const r of drugs) insDrug.run(...r);
 
   const recipes = [
-    ['cursed_blade', 'Cursed Blade', 'cursed_blade', '{"iron_ore":2,"spirit_core":1}', 10000, 50],
-    ['spirit_spear', 'Spirit Spear', 'spirit_spear', '{"iron_ore":5,"spirit_core":2}', 25000, 100],
-    ['armor_vest', 'Cursed Armor Vest', 'armor_vest', '{"iron_ore":4}', 8000, 40],
-    ['domain_charm', 'Domain Charm', 'domain_charm', '{"spirit_core":3,"grade_bead":1}', 100000, 200]
+    ['valyrian_steel', 'Valyrian Steel', 'valyrian_steel', '{"iron_ingot":2,"dragonglass":1}', 10000, 50],
+    ['war_spear', 'War Spear', 'war_spear', '{"iron_ingot":5,"dragonglass":2}', 25000, 100],
+    ['plate_vest', 'Plate Vest', 'plate_vest', '{"iron_ingot":4}', 8000, 40],
+    ['sigil_charm', 'Sigil Charm', 'sigil_charm', '{"dragonglass":3,"noble_seal":1}', 100000, 200]
   ];
   const insRec = db.prepare(
     `INSERT OR IGNORE INTO forge_recipes (id, name, output_item, materials_json, coin_cost, ce_cost) VALUES (?, ?, ?, ?, ?, ?)`
@@ -211,36 +231,31 @@ function seedPhase4(db) {
   for (const r of recipes) insRec.run(...r);
 
   const extraItems = [
-    ['spirit_spear', 'Spirit Spear', 'Piercing weapon', 0, 'weapon', '{"strength":5,"speed":2}'],
-    ['armor_vest', 'Cursed Armor Vest', 'Chest protection', 0, 'armor', '{"defense":4,"max_hp":15}'],
-    ['domain_charm', 'Domain Charm', 'Technique amplifier', 0, 'gear', '{"trainMult":1.08,"dexterity":2}'],
-    ['cursed_gloves', 'Cursed Gloves', 'Worker gear', 3500, 'gear', '{"manual_labor":3}'],
+    ['war_spear', 'War Spear', 'Piercing weapon', 0, 'weapon', '{"strength":5,"speed":2}'],
+    ['plate_vest', 'Plate Vest', 'Chest protection', 0, 'armor', '{"defense":4,"max_hp":15}'],
+    ['sigil_charm', 'Sigil Charm', 'Technique amplifier', 0, 'gear', '{"trainMult":1.08,"dexterity":2}'],
+    ['smith_gloves', 'Smith Gloves', 'Worker gear', 3500, 'gear', '{"manual_labor":3}'],
     ['scholar_tome', 'Scholar Tome', 'Study aid', 4000, 'gear', '{"intelligence":3}']
   ];
   const insItem = db.prepare(
     `INSERT OR IGNORE INTO item_definitions (id, name, description, shop_price, item_type, effects_json) VALUES (?, ?, ?, ?, ?, ?)`
   );
   for (const r of extraItems) insItem.run(...r);
-  insItem.run(
-    'prison_key',
-    'Prison Realm Key',
-    'Escape jail instantly',
-    12000,
-    'consumable',
-    '{"jailClear":true}'
-  );
+  insItem.run('cell_key', 'Cell Key', 'Escape the black cells instantly', 12000, 'consumable', '{"jailClear":true}');
 }
 
 function seedWorld(db) {
   const items = [
-    ['reversal_kit', 'Reversal Kit', 'Clears hospital early', 500, 'consumable', '{"hospitalClear":true}'],
+    ['healers_kit', "Healer's Kit", 'Clears maester tent early', 500, 'consumable', '{"hospitalClear":true}'],
     ['training_weights', 'Training Weights', '+5% train gains', 2500, 'gear', '{"trainMult":1.05}'],
-    ['cursed_blade', 'Cursed Blade', '+3 strength', 8000, 'weapon', '{"strength":3}'],
-    ['rice_bundle', 'Cursed Rice Bundle', 'Lounge currency x10', 200, 'material', '{"rice":10}'],
-    ['iron_ore', 'Cursed Iron', 'Forging material', 1500, 'material', '{"forge":true}'],
-    ['spirit_core', 'Spirit Core', 'Forging material', 5000, 'material', '{"forge":true}'],
-    ['grab_bag', 'Curse Capsule', 'Mystery loot', 50000, 'consumable', '{"grabBag":true}'],
-    ['prison_key', 'Prison Realm Key', 'Escape jail instantly', 12000, 'consumable', '{"jailClear":true}']
+    ['valyrian_steel', 'Valyrian Steel Blade', '+3 strength', 8000, 'weapon', '{"strength":3}'],
+    ['grain_bundle', 'Grain Bundle', 'War camp rations x10', 200, 'material', '{"rice":10}'],
+    ['iron_ingot', 'Iron Ingot', 'Forging material', 1500, 'material', '{"forge":true}'],
+    ['dragonglass', 'Dragonglass Shard', 'Rare forging material', 5000, 'material', '{"forge":true}'],
+    ['relic_chest', 'Relic Chest', 'Mystery loot', 50000, 'consumable', '{"grabBag":true}'],
+    ['cell_key', 'Cell Key', 'Escape the black cells instantly', 12000, 'consumable', '{"jailClear":true}'],
+    ['timber_shard', 'Timber Bundle', 'Building material', 800, 'material', '{}'],
+    ['gold_dust', 'Gold Dust', 'Refined gold dust', 2000, 'material', '{}']
   ];
   const insItem = db.prepare(
     `INSERT OR IGNORE INTO item_definitions (id, name, description, shop_price, item_type, effects_json)
@@ -249,10 +264,10 @@ function seedWorld(db) {
   for (const row of items) insItem.run(...row);
 
   const crimes = [
-    ['petty_cleanup', 'Petty Curse Cleanup', 1, 5, 29, 50, 0.05, 0.02, 0.01],
-    ['grade4_patrol', 'Grade-4 Patrol', 5, 15, 45, 120, 0.12, 0.08, 0.05],
-    ['shibuya_raid', 'Shibuya Incident Sweep', 15, 30, 80, 400, 0.2, 0.15, 0.1],
-    ['special_exorcism', 'Special Grade Exorcism', 30, 50, 150, 1200, 0.35, 0.25, 0.18]
+    ['petty_raid', 'Petty Border Raid', 1, 5, 29, 50, 0.05, 0.02, 0.01],
+    ['border_patrol', 'Border Patrol', 5, 15, 45, 120, 0.12, 0.08, 0.05],
+    ['sack_village', 'Sack the Village', 15, 30, 80, 400, 0.2, 0.15, 0.1],
+    ['siege_assault', 'Siege Assault', 30, 50, 150, 1200, 0.35, 0.25, 0.18]
   ];
   const insCrime = db.prepare(
     `INSERT OR IGNORE INTO crime_definitions
@@ -262,9 +277,9 @@ function seedWorld(db) {
   for (const row of crimes) insCrime.run(...row);
 
   const jobs = [
-    ['janitor', 'Jujutsu High Janitor', 100, 50, 1],
-    ['instructor_assistant', 'Instructor Assistant', 500, 200, 5],
-    ['curator', 'Cursed Object Curator', 2000, 800, 15]
+    ['janitor', 'Stable Hand', 100, 50, 1],
+    ['instructor_assistant', 'Squire', 500, 200, 5],
+    ['curator', 'Relic Keeper', 2000, 800, 15]
   ];
   const insJob = db.prepare(
     `INSERT OR IGNORE INTO job_definitions (id, name, coin_payout, xp_payout, min_level) VALUES (?, ?, ?, ?, ?)`
@@ -272,9 +287,9 @@ function seedWorld(db) {
   for (const row of jobs) insJob.run(...row);
 
   const clans = [
-    ['tokyo', 'Tokyo Jujutsu High', 'Main campus squad'],
-    ['kyoto', 'Kyoto Sister School', 'Traditional techniques'],
-    ['zenin', 'Zenin Clan', 'Ten Shadows legacy']
+    ['stark', 'House Stark', 'Winter is coming'],
+    ['lannister', 'House Lannister', 'Hear me roar'],
+    ['baratheon', 'House Baratheon', 'Ours is the fury']
   ];
   const insClan = db.prepare(
     `INSERT OR IGNORE INTO clans (id, name, description, bank_balance) VALUES (?, ?, ?, 0)`
@@ -286,7 +301,7 @@ function seedWorld(db) {
     [1, 'Dorm Room', 50000, 1.05],
     [2, 'Faculty Quarters', 500000, 1.12],
     [3, 'Safe House', 5000000, 1.25],
-    [4, 'Domain Loft', 50000000, 1.4]
+    [4, 'Dragonstone Keep', 50000000, 1.4]
   ];
   const insEstate = db.prepare(
     `INSERT OR IGNORE INTO estate_tiers (tier, name, cost, train_multiplier) VALUES (?, ?, ?, ?)`
@@ -294,9 +309,9 @@ function seedWorld(db) {
   for (const row of estates) insEstate.run(...row);
 
   const education = [
-    ['basics', 'Cursed Energy Basics', 0, 1000, '{"trainMult":1.02}'],
-    ['black_flash', 'Black Flash Theory', 10, 50000, '{"critBonus":0.05}'],
-    ['domain_theory', 'Domain Expansion Theory', 25, 500000, '{"strength":2}']
+    ['swordcraft', 'Swordcraft Basics', 0, 1000, '{"trainMult":1.02}'],
+    ['critical_strike', 'Critical Strike Theory', 10, 50000, '{"critBonus":0.05}'],
+    ['siegecraft', 'Siegecraft', 25, 500000, '{"strength":2}']
   ];
   const insEdu = db.prepare(
     `INSERT OR IGNORE INTO education_courses (id, name, min_level, cost, bonus_json) VALUES (?, ?, ?, ?, ?)`
@@ -304,9 +319,9 @@ function seedWorld(db) {
   for (const row of education) insEdu.run(...row);
 
   const commodities = [
-    ['cursed_rice', 'Cursed Rice', 100, 120],
-    ['spirit_amber', 'Spirit Amber', 500, 480],
-    ['grade_bead', 'Grade Bead', 2500, 2300]
+    ['grain_sack', 'Grain Sack', 100, 120],
+    ['dragonglass_dust', 'Dragonglass Dust', 500, 480],
+    ['noble_seal', 'Noble Seal', 2500, 2300]
   ];
   const insComm = db.prepare(
     `INSERT OR IGNORE INTO commodities (id, name, base_price, current_price) VALUES (?, ?, ?, ?)`

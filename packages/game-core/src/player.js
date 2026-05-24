@@ -3,7 +3,7 @@ import balance from './balance.json' with { type: 'json' };
 import { processTicks } from './tick.js';
 import { applyLevelUps, audit, gradeName, isBlocked } from './util.js';
 
-export function getOrCreatePlayer(discordId, username = 'Sorcerer') {
+export function getOrCreatePlayer(discordId, username = 'Lord') {
   const db = getDb();
   let player = db.prepare('SELECT * FROM players WHERE discord_id = ?').get(discordId);
   if (!player) {
@@ -13,7 +13,7 @@ export function getOrCreatePlayer(discordId, username = 'Sorcerer') {
     ).run(discordId, username, balance.ceMax, 100, 100, 10);
     player = db.prepare('SELECT * FROM players WHERE discord_id = ?').get(discordId);
     db.prepare(
-      `INSERT INTO inventory_items (player_id, item_id, quantity) VALUES (?, 'reversal_kit', 5)`
+      `INSERT INTO inventory_items (player_id, item_id, quantity) VALUES (?, 'healers_kit', 5)`
     ).run(player.id);
     audit(db, player.id, 'register', 0, {});
   }

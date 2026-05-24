@@ -1,0 +1,168 @@
+{
+  "winterfell": {
+    "name": "Winterfell",
+    "min_level": 1,
+    "rooms": {
+      "great_hall": {
+        "name": "Great Hall",
+        "emoji": "🏰",
+        "description": "Torches flicker on stone walls. The Stark direwolf banners hang above the high table.",
+        "exits": { "north": "godswood", "east": "courtyard", "south": "gatehouse" },
+        "npcs": ["maester"],
+        "mineable": false,
+        "encounter_mult": 0
+      },
+      "courtyard": {
+        "name": "Training Yard",
+        "emoji": "⚔️",
+        "description": "Squires drill with wooden swords while ravens circle the towers.",
+        "exits": { "west": "great_hall", "north": "godswood", "east": "mine_shaft" },
+        "npcs": ["hedge_knight"],
+        "mineable": false,
+        "encounter_mult": 1.2
+      },
+      "godswood": {
+        "name": "Godswood",
+        "emoji": "🌲",
+        "description": "Heart trees and ancient oaks. Iron deposits glint beneath the roots. Wolves prowl the shadows.",
+        "exits": { "south": "great_hall", "southwest": "courtyard" },
+        "npcs": ["septon"],
+        "mineable": true,
+        "materials": ["iron_ingot", "timber_shard"],
+        "encounter_mult": 1.6
+      },
+      "mine_shaft": {
+        "name": "Northern Mine",
+        "emoji": "⛏️",
+        "description": "A cold mine cut into the bedrock beneath the castle. Deserters hide in the dark.",
+        "exits": { "west": "courtyard" },
+        "npcs": [],
+        "mineable": true,
+        "materials": ["iron_ingot", "dragonglass"],
+        "encounter_mult": 1.7
+      },
+      "gatehouse": {
+        "name": "Gatehouse",
+        "emoji": "🚪",
+        "description": "Goldcloaks inspect wagons bound for the Kingsroad.",
+        "exits": { "north": "great_hall" },
+        "npcs": ["goldcloak"],
+        "mineable": false,
+        "encounter_mult": 0.8
+      }
+    }
+  },
+  "kings_landing": {
+    "name": "King's Landing",
+    "min_level": 5,
+    "rooms": {
+      "red_keep": {
+        "name": "Red Keep",
+        "emoji": "👑",
+        "description": "Marble halls and Lannister guards. The city roars beyond the walls.",
+        "exits": { "south": "flea_bottom", "east": "royal_mint" },
+        "npcs": ["goldcloak"],
+        "mineable": false,
+        "encounter_mult": 0
+      },
+      "flea_bottom": {
+        "name": "Flea Bottom",
+        "emoji": "🏘️",
+        "description": "Narrow alleys, taverns, and whispers of plots. Thieves lurk in every shadow.",
+        "exits": { "north": "red_keep", "west": "blackwater_docks" },
+        "npcs": ["hedge_knight"],
+        "mineable": false,
+        "encounter_mult": 1.8
+      },
+      "royal_mint": {
+        "name": "Royal Mint",
+        "emoji": "💰",
+        "description": "Gold coins stacked in vaults. Guards watch every scale.",
+        "exits": { "west": "red_keep" },
+        "npcs": ["maester"],
+        "mineable": true,
+        "materials": ["gold_dust", "iron_ingot"],
+        "encounter_mult": 1.1
+      },
+      "blackwater_docks": {
+        "name": "Blackwater Docks",
+        "emoji": "⚓",
+        "description": "Ships unload grain and timber. Smugglers and dock raiders haunt the piers.",
+        "exits": { "east": "flea_bottom" },
+        "npcs": ["septon"],
+        "mineable": true,
+        "materials": ["grain_sack", "timber_shard"],
+        "encounter_mult": 1.6
+      }
+    }
+  },
+  "oldtown": {
+    "name": "Oldtown",
+    "min_level": 10,
+    "rooms": {
+      "citadel_gate": {
+        "name": "Citadel Gate",
+        "emoji": "📜",
+        "description": "Maesters in grey chains pass scrolls between towers.",
+        "exits": { "south": "honeywine", "east": "scriptorium" },
+        "npcs": ["maester"],
+        "mineable": false,
+        "encounter_mult": 0
+      },
+      "honeywine": {
+        "name": "Honeywine River",
+        "emoji": "🍷",
+        "description": "Merchant barges and Tyrell grain shipments. Brigands stalk the riverbanks.",
+        "exits": { "north": "citadel_gate" },
+        "npcs": ["septon"],
+        "mineable": true,
+        "materials": ["grain_sack", "timber_shard"],
+        "encounter_mult": 1.5
+      },
+      "scriptorium": {
+        "name": "Scriptorium",
+        "emoji": "✒️",
+        "description": "Ancient tomes describe dragons, siegecraft, and lost houses. Cultists whisper in the stacks.",
+        "exits": { "west": "citadel_gate" },
+        "npcs": ["hedge_knight"],
+        "mineable": false,
+        "encounter_mult": 1.3
+      }
+    }
+  },
+  "the_wall": {
+    "name": "The Wall",
+    "min_level": 15,
+    "rooms": {
+      "castle_black": {
+        "name": "Castle Black",
+        "emoji": "🧊",
+        "description": "The Night's Watch gathers around a weirwood fire.",
+        "exits": { "north": "frozen_pass", "east": "armory" },
+        "npcs": ["goldcloak"],
+        "mineable": false,
+        "encounter_mult": 0.5
+      },
+      "frozen_pass": {
+        "name": "Frozen Pass",
+        "emoji": "❄️",
+        "description": "Beyond the Wall wind howls. Wildlings, wights, and worse roam the ice.",
+        "exits": { "south": "castle_black" },
+        "npcs": [],
+        "mineable": true,
+        "materials": ["dragonglass", "iron_ingot"],
+        "encounter_mult": 2
+      },
+      "armory": {
+        "name": "Night's Watch Armory",
+        "emoji": "🗡️",
+        "description": "Black blades and obsidian daggers line the racks.",
+        "exits": { "west": "castle_black" },
+        "npcs": ["maester"],
+        "mineable": true,
+        "materials": ["dragonglass", "iron_ingot"],
+        "encounter_mult": 1.2
+      }
+    }
+  }
+}

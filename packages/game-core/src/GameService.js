@@ -1,4 +1,6 @@
 import { getOrCreatePlayer, getPlayerByDiscord, getInventory, getStatus } from './player.js';
+import { getCharacterSheet, formatItemEffects } from './stats.js';
+import { getDb } from './db.js';
 import { train } from './train.js';
 import { listGyms, setGym as setGymAction } from './gym.js';
 import { trainWorker as trainWorkerAction } from './worker.js';
@@ -13,6 +15,7 @@ import {
   talkNpc,
   listNpcsInRoom
 } from './explore.js';
+import { exploreHunt as exploreHuntAction, pveAttack as pveAttackAction, pveFlee as pveFleeAction } from './explore-pve.js';
 import { listRecipes, forgeRecipe as forgeRecipeAction } from './recipes.js';
 import {
   escapeHospital,
@@ -27,6 +30,8 @@ import {
   collectInvestment as collectInvestmentAction,
   shopList,
   shopBuy as shopBuyAction,
+  shopListArmory,
+  shopBuyAndEquip as shopBuyAndEquipAction,
   work as workAction,
   setJob as setJobAction,
   useItem as useItemAction
@@ -61,7 +66,6 @@ import {
   adminAction
 } from './phase3.js';
 import { startTickScheduler } from './tick.js';
-import { getDb } from './db.js';
 import { listFactions, joinFaction } from './faction.js';
 import {
   createGuild,
@@ -79,7 +83,9 @@ import {
   declareWar,
   contributeSiege,
   warStatus,
-  mapBootstrap
+  mapBootstrap,
+  realmMapLegend,
+  realmMapPngPath
 } from './territory.js';
 
 export class GameService {
@@ -126,8 +132,33 @@ export class GameService {
   static shop() {
     return shopList();
   }
+  static shopArmory() {
+    return shopListArmory();
+  }
+  static shopGear() {
+    return shopList('gear');
+  }
   static shopBuy(discordId, username, itemId, qty) {
     return shopBuyAction(discordId, username, itemId, qty);
+  }
+  static shopBuyEquip(discordId, username, itemId) {
+    return shopBuyAndEquipAction(discordId, username, itemId);
+  }
+  static shopArmoryForPlayer(discordId, username) {
+    const player = getOrCreatePlayer(discordId, username);
+    const items = shopListArmory().map((item) => ({
+      ...item,
+      effectLabel: formatItemEffects(item.effects_json),
+      locked: player.level < (item.min_level ?? 1)
+    }));
+    return {
+      weapons: items.filter((i) => i.item_type === 'weapon'),
+      armor: items.filter((i) => i.item_type === 'armor')
+    };
+  }
+  static characterSheet(discordId, username) {
+    const player = getOrCreatePlayer(discordId, username);
+    return { ok: true, player, sheet: getCharacterSheet(player, getDb()) };
   }
   static work(discordId, username) {
     return workAction(discordId, username);
@@ -238,6 +269,15 @@ export class GameService {
   static exploreMine(discordId, username) {
     return exploreMine(discordId, username);
   }
+  static exploreHunt(discordId, username) {
+    return exploreHuntAction(discordId, username);
+  }
+  static pveAttack(discordId, username) {
+    return pveAttackAction(discordId, username);
+  }
+  static pveFlee(discordId, username) {
+    return pveFleeAction(discordId, username);
+  }
   static talkNpc(discordId, username, npcId) {
     return talkNpc(discordId, username, npcId);
   }
@@ -323,6 +363,12 @@ export class GameService {
   }
   static realm(baseUrl) {
     return realmSummary(baseUrl);
+  }
+  static realmMapLegend() {
+    return realmMapLegend();
+  }
+  static realmMapPngPath() {
+    return realmMapPngPath();
   }
   static declareWar(discordId, username, territoryId) {
     return declareWar(discordId, username, territoryId);

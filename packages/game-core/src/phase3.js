@@ -5,7 +5,7 @@ import { applyLevelUps } from './util.js';
 
 export function delve(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
-  if (player.ce < 20) return { ok: false, message: 'Delve requires 20 CE.' };
+  if (player.ce < 20) return { ok: false, message: 'Delve requires 20 Morale.' };
   const db = getDb();
   const active = db
     .prepare(`SELECT * FROM delve_runs WHERE player_id = ? AND status = 'active'`)
@@ -19,7 +19,7 @@ export function delve(discordId, username) {
       player.id
     );
     if (active) db.prepare(`UPDATE delve_runs SET status = 'failed' WHERE id = ?`).run(active.id);
-    return { ok: false, message: `Curse nest depth ${depth} — injured! Sent to infirmary.` };
+    return { ok: false, message: `Crypt depth ${depth} — wounded! Sent to the maester's tent.` };
   }
   const coins = Math.floor(200 * depth + Math.random() * 500);
   const xp = Math.floor(10 * depth);
@@ -34,7 +34,7 @@ export function delve(discordId, username) {
   } else {
     db.prepare(`INSERT INTO delve_runs (player_id, depth) VALUES (?, ?)`).run(player.id, depth);
   }
-  if (roll(0.1)) addItem(player.id, 'spirit_core', 1);
+  if (roll(0.1)) addItem(player.id, 'dragonglass', 1);
   audit(db, player.id, 'delve', coins, { depth });
   return {
     ok: true,
@@ -56,35 +56,35 @@ export function buyGrabBags(discordId, username, count = 1) {
   count = Math.min(2000, Math.max(1, Math.floor(count)));
   const unitCost = 5000;
   const total = unitCost * count;
-  if (player.coins < total) return { ok: false, message: `Need ${total} coins for ${count} capsules.` };
+  if (player.coins < total) return { ok: false, message: `Need ${total} coins for ${count} relic chests.` };
   const db = getDb();
   db.prepare('UPDATE players SET coins = coins - ? WHERE id = ?').run(total, player.id);
-  addItem(player.id, 'grab_bag', count);
+  addItem(player.id, 'relic_chest', count);
   return {
     ok: true,
-    message: `Bought ${count} Curse Capsules.`,
+    message: `Bought ${count} relic chests.`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
 
 export function openGrabBag(discordId, username, fromInventory = false) {
   const player = getOrCreatePlayer(discordId, username);
-  if (fromInventory && !removeItem(player.id, 'grab_bag', 1)) {
-    return { ok: false, message: 'No Curse Capsule in inventory.' };
+  if (fromInventory && !removeItem(player.id, 'relic_chest', 1)) {
+    return { ok: false, message: 'No relic chest in inventory.' };
   }
   const db = getDb();
   const rollTable = [
     () => ({ msg: '+500 coins', fn: () => db.prepare('UPDATE players SET coins = coins + 500 WHERE id = ?').run(player.id) }),
-    () => ({ msg: '+1 gold object', fn: () => db.prepare('UPDATE players SET gold_objects = gold_objects + 1 WHERE id = ?').run(player.id) }),
-    () => ({ msg: 'Power Gym Scroll (train +10%)', fn: () => addItem(player.id, 'training_weights', 1) }),
-    () => ({ msg: '+50 rice', fn: () => db.prepare('UPDATE players SET rice = rice + 50 WHERE id = ?').run(player.id) }),
-    () => ({ msg: 'Explosives (forge mat)', fn: () => addItem(player.id, 'iron_ore', 3) })
+    () => ({ msg: '+1 royal relic', fn: () => db.prepare('UPDATE players SET gold_objects = gold_objects + 1 WHERE id = ?').run(player.id) }),
+    () => ({ msg: 'Training weights (+10% war yard gains)', fn: () => addItem(player.id, 'training_weights', 1) }),
+    () => ({ msg: '+50 grain rations', fn: () => db.prepare('UPDATE players SET rice = rice + 50 WHERE id = ?').run(player.id) }),
+    () => ({ msg: 'Timber bundle', fn: () => addItem(player.id, 'timber_shard', 3) })
   ];
   const pick = rollTable[Math.floor(Math.random() * rollTable.length)]();
   pick.fn();
   return {
     ok: true,
-    message: `Curse Capsule opened: ${pick.msg}`,
+    message: `Relic chest opened: ${pick.msg}`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
@@ -121,7 +121,7 @@ export function leaderboard(kind = 'level', limit = 10) {
 }
 
 export function setWorld(discordId, username, worldId) {
-  const allowed = ['tokyo', 'osaka', 'kyoto', 'sendai'];
+  const allowed = ['north', 'riverlands', 'west', 'reach'];
   if (!allowed.includes(worldId)) return { ok: false, message: `Worlds: ${allowed.join(', ')}` };
   getDb().prepare('UPDATE players SET world_id = ? WHERE id = ?').run(
     worldId,

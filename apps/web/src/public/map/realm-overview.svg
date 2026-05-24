@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1100" role="img" aria-label="Westeros Realm map and resources">
+  <defs>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#142838"/>
+    </linearGradient>
+    <linearGradient id="land" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3a3428"/>
+      <stop offset="100%" stop-color="#2a2418"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1100" fill="#0c0a08"/>
+  <text x="450" y="42" text-anchor="middle" fill="#d4af37" font-family="Georgia, serif" font-size="28" letter-spacing="6">WESTEROS REALM</text>
+  <text x="450" y="68" text-anchor="middle" fill="#b0a090" font-family="Georgia, serif" font-size="14">Lands, hourly yields, and resource types</text>
+  <g transform="translate(50,80) scale(1.35)">
+    <rect width="560" height="720" fill="url(#sea)" rx="8"/>
+    <path d="M 120 48 C 180 32, 260 38, 320 55 C 380 72, 420 95, 440 130 L 455 180 C 470 220, 480 280, 475 340 C 470 400, 450 460, 420 510 C 390 560, 340 600, 280 620 C 220 640, 160 635, 110 610 C 70 590, 45 550, 38 500 C 30 450, 35 400, 50 350 C 65 300, 55 250, 48 200 C 42 150, 55 100, 80 70 C 95 55, 108 50, 120 48 Z" fill="url(#land)" stroke="#8a7a58" stroke-width="2.5"/>
+    <g id="regions" font-family="Georgia, serif" font-size="9" fill="#e8dcc8" text-anchor="middle">
+      <g id="winterfell"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 200 95 L 250 85 L 270 115 L 255 145 L 210 140 L 185 120 Z"/><text x="228" y="118">Winterfell</text><text x="228" y="130" fill="#d4af37" font-size="8">GRAIN 120/hr</text></g>
+      <g id="dreadfort"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 290 100 L 330 95 L 345 125 L 325 150 L 285 145 L 275 120 Z"/><text x="308" y="124">Dreadfort</text><text x="308" y="136" fill="#d4af37" font-size="8">IRON 80/hr</text></g>
+      <g id="white_harbor"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 230 155 L 280 150 L 295 180 L 275 205 L 225 200 L 215 175 Z"/><text x="252" y="178">White Harbor</text><text x="252" y="190" fill="#d4af37" font-size="8">TIMBER 100/hr</text></g>
+      <g id="pyke"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 55 305 L 95 298 L 105 325 L 85 345 L 50 338 L 45 318 Z"/><text x="72" y="324">Pyke</text><text x="72" y="336" fill="#d4af37" font-size="8">IRON 140/hr</text></g>
+      <g id="twins"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 240 220 L 290 215 L 305 245 L 285 270 L 235 265 L 225 240 Z"/><text x="262" y="244">The Twins</text><text x="262" y="256" fill="#d4af37" font-size="8">GOLD 90/hr</text></g>
+      <g id="riverrun"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 210 275 L 260 270 L 275 300 L 255 325 L 205 320 L 195 295 Z"/><text x="232" y="298">Riverrun</text><text x="232" y="310" fill="#d4af37" font-size="8">GRAIN 110/hr</text></g>
+      <g id="casterly_rock"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 95 380 L 145 372 L 160 402 L 140 430 L 90 425 L 80 400 Z"/><text x="118" y="401">Casterly Rock</text><text x="118" y="413" fill="#d4af37" font-size="8">GOLD 180/hr</text></g>
+      <g id="highgarden"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 180 420 L 240 412 L 258 445 L 235 475 L 175 468 L 165 442 Z"/><text x="208" y="444">Highgarden</text><text x="208" y="456" fill="#d4af37" font-size="8">GRAIN 150/hr</text></g>
+      <g id="oldtown"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 115 480 L 165 475 L 178 505 L 158 530 L 108 525 L 100 500 Z"/><text x="136" y="504">Oldtown</text><text x="136" y="516" fill="#d4af37" font-size="8">TIMBER 85/hr</text></g>
+      <g id="kings_landing"><path fill="#5c1010" stroke="#d4af37" stroke-width="2" d="M 320 340 L 375 332 L 395 365 L 370 395 L 315 388 L 305 360 Z"/><text x="345" y="364" fill="#fde68a">King's Landing</text><text x="345" y="376" fill="#d4af37" font-size="8">GOLD 200/hr</text></g>
+      <g id="dragonstone"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 400 300 L 440 292 L 452 320 L 435 345 L 395 340 L 388 315 Z"/><text x="418" y="321">Dragonstone</text><text x="418" y="333" fill="#d4af37" font-size="8">GOLD 130/hr</text></g>
+      <g id="storms_end"><path fill="#4a4038" stroke="#8b1a1a" stroke-width="1.5" d="M 350 430 L 400 422 L 418 455 L 395 485 L 345 478 L 335 450 Z"/><text x="373" y="454">Storm's End</text><text x="373" y="466" fill="#d4af37" font-size="8">TIMBER 95/hr</text></g>
+    </g>
+  </g>
+  <g transform="translate(40,820)" font-family="Georgia, serif" font-size="13">
+    <rect x="0" y="0" width="820" height="250" fill="#1a1410" stroke="#8b1a1a" stroke-width="2" rx="6"/>
+    <text x="410" y="28" text-anchor="middle" fill="#d4af37" font-size="18">Resource legend</text>
+    <text x="30" y="58" fill="#e8dcc8">GRAIN - farms and breadbaskets (Winterfell, Riverrun, Highgarden)</text>
+    <text x="30" y="82" fill="#e8dcc8">IRON - mines and forges (Dreadfort, Pyke)</text>
+    <text x="30" y="106" fill="#e8dcc8">TIMBER - forests and shipyards (White Harbor, Oldtown, Storm's End)</text>
+    <text x="30" y="130" fill="#e8dcc8">GOLD - crowns and trade hubs (Twins, King's Landing, Casterly Rock, Dragonstone)</text>
+    <text x="30" y="162" fill="#b0a090" font-size="11">Guild-held lands pass hourly yield to treasury. Use /realm region:all or /map on the web dashboard.</text>
+    <text x="30" y="200" fill="#d4af37" font-size="12">Winterfell 120 | Dreadfort 80 | White Harbor 100 | Pyke 140 | Twins 90 | Riverrun 110</text>
+    <text x="30" y="222" fill="#d4af37" font-size="12">King's Landing 200 | Storm's End 95 | Highgarden 150 | Casterly Rock 180 | Oldtown 85 | Dragonstone 130</text>
+  </g>
+</svg>

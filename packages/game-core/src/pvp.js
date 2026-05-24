@@ -9,7 +9,7 @@ import {
   minutesFromNow,
   roll
 } from './util.js';
-import { getCombatPower, getEffectiveStats } from './stats.js';
+import { getCombatPower, getEffectiveStats, getEffectiveMaxHp, getMugBonus } from './stats.js';
 
 function spendCe(db, player, percent) {
   const cost = Math.ceil((balance.ceMax * percent) / 100);
@@ -35,22 +35,24 @@ export function attack(discordId, username, targetDiscordId) {
   if (!check.ok) return { ok: false, message: check.message };
   const db = getDb();
   const ceCost = spendCe(db, attacker, balance.attackCeCostPercent);
-  if (ceCost === null) return { ok: false, message: 'Not enough CE for a duel (33%).' };
+  if (ceCost === null) return { ok: false, message: 'Not enough Morale for a duel (33%).' };
   const aPow = getCombatPower(attacker, db);
   const dPow = getCombatPower(defender, db);
   const aStats = getEffectiveStats(attacker, db);
   const dStats = getEffectiveStats(defender, db);
-  const speedEdge = (aStats.speed - dStats.speed) * 0.02;
+  const cb = balance.combat || {};
+  const speedEdge = (aStats.speed - dStats.speed) * (cb.speedEdgeFactor ?? 0.02);
   const aRoll = aPow * (0.85 + Math.random() * 0.3 + speedEdge);
   const dRoll = dPow * (0.85 + Math.random() * 0.3 - speedEdge * 0.5);
   let message;
   let xpGain = 15;
   if (aRoll >= dRoll) {
-    const rawDmg = Math.floor(10 + aStats.strength * 0.5);
-    const dmg = Math.max(1, rawDmg - Math.floor(dStats.defense * 0.25));
+    const rawDmg = Math.floor(10 + aStats.strength * (cb.strDmgFactor ?? 0.5));
+    const dmg = Math.max(1, rawDmg - Math.floor(dStats.defense * (cb.defMitigation ?? 0.25)));
+    const effectiveMax = getEffectiveMaxHp(defender, db);
     const newHp = Math.max(0, defender.hp - dmg);
     db.prepare('UPDATE players SET hp = ? WHERE id = ?').run(newHp, defender.id);
-    if (newHp <= 0 || roll(0.4)) {
+    if (newHp <= 0 || newHp < effectiveMax * 0.25 || roll(0.4)) {
       const until = minutesFromNow(balance.hospitalMinutes);
       db.prepare('UPDATE players SET hospital_until = ?, hp = max_hp WHERE id = ?').run(until, defender.id);
     }
@@ -76,10 +78,10 @@ export function mug(discordId, username, targetDiscordId) {
   if (!check.ok) return { ok: false, message: check.message };
   const db = getDb();
   if (spendCe(db, attacker, balance.mugCeCostPercent) === null) {
-    return { ok: false, message: 'Not enough CE to mug (15%).' };
+    return { ok: false, message: 'Not enough Morale to mug (15%).' };
   }
   const maxSteal = Math.floor(defender.coins * balance.mugMaxPercent);
-  const stolen = Math.min(maxSteal, Math.floor(500 + Math.random() * 2000));
+  const stolen = Math.min(maxSteal, Math.floor((500 + Math.random() * 2000) * getMugBonus(attacker, db)));
   if (stolen <= 0) return { ok: false, message: 'Target has no coins to mug.' };
   db.prepare('UPDATE players SET coins = coins - ? WHERE id = ?').run(stolen, defender.id);
   db.prepare('UPDATE players SET coins = coins + ?, xp = xp + 5 WHERE id = ?').run(stolen, attacker.id);
@@ -102,11 +104,11 @@ export function rob(discordId, username, targetDiscordId) {
     .prepare('SELECT COUNT(*) as c FROM market_listings WHERE seller_id = ?')
     .get(defender.id);
   if (listings.c > 0) {
-    return { ok: false, message: 'Cannot rob while target has active market listings (SoL rule).' };
+    return { ok: false, message: 'Cannot rob while target has active market listings (realm law).' };
   }
   const db = getDb();
   if (spendCe(db, attacker, balance.robCeCostPercent) === null) {
-    return { ok: false, message: 'Not enough CE to rob (25%).' };
+    return { ok: false, message: 'Not enough Morale to rob (25%).' };
   }
   const stolen = Math.min(defender.coins, balance.robMaxCoins, Math.floor(1000 + Math.random() * 10000));
   if (stolen <= 0) return { ok: false, message: 'Nothing to rob.' };
@@ -126,7 +128,7 @@ export function bustOut(discordId, username, targetDiscordId) {
   const target = getPlayerByDiscord(targetDiscordId);
   if (!target) return { ok: false, message: 'Target not found.' };
   if (!target.jail_until || new Date(target.jail_until).getTime() <= Date.now()) {
-    return { ok: false, message: 'They are not in the Prison Realm.' };
+    return { ok: false, message: 'They are not in the Black Cells.' };
   }
   const db = getDb();
   db.prepare('UPDATE players SET jail_until = NULL WHERE id = ?').run(target.id);

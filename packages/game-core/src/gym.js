@@ -15,7 +15,7 @@ export function setGym(discordId, username, gymId) {
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const gym = db.prepare('SELECT * FROM gym_definitions WHERE id = ?').get(gymId);
-  if (!gym) return { ok: false, message: 'Gyms: training_grounds, cursed_pit, domain_chamber, zenin_dojo' };
+  if (!gym) return { ok: false, message: 'Gyms: training_grounds, war_yard, royal_armory, kingsguard_yard' };
   const lvl = requireLevel(player, gym.min_level, gym.name);
   if (!lvl.ok) return { ok: false, message: lvl.message };
   if (gym.unlock_cost > 0 && player.coins < gym.unlock_cost) {

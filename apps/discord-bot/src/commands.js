@@ -1,5 +1,9 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { AttachmentBuilder } from 'discord.js';
 import { GameService } from '@westeros/game-core';
 import { playerEmbed } from './embed.js';
+import { pveEncounterComponents } from './pve-buttons.js';
 
 /** Prefer GameService message; avoid bogus "Done." from `msg || ok ? 'Done.'` precedence. */
 function formatResultMessage(result) {
@@ -11,14 +15,16 @@ function formatResultMessage(result) {
 function reply(result, interaction, extra = {}) {
   const text = formatResultMessage(result);
   const ephemeral = result.ok === false;
+  const components = result.encounterPending ? pveEncounterComponents() : undefined;
   if (result.player) {
     return {
       embed: playerEmbed(result.player, text),
       ephemeral,
+      components,
       ...extra
     };
   }
-  return { content: text, ephemeral, ...extra };
+  return { content: text, ephemeral, components, ...extra };
 }
 
 export async function handleCommand(interaction) {
@@ -49,12 +55,12 @@ export async function handleCommand(interaction) {
     const s = GameService.status(uid, name);
     return {
       content:
-        `**${s.grade}** Lv.${s.level} | CE ${s.ce} | Wheel spins left: ${s.wheel_spins_left}\n` +
+        `**${s.grade}** Lv.${s.level} | Morale ${s.ce} | Wheel spins left: ${s.wheel_spins_left}\n` +
         `STR ${s.strength} DEF ${s.defense} SPD ${s.speed} DEX ${s.dexterity}\n` +
         `Worker: LAB ${s.manual_labor} INT ${s.intelligence} END ${s.endurance} TEC ${s.technique}\n` +
         `Gym: ${s.gym_id || 'training_grounds'}${s.company_id ? ` | Company: ${s.company_id}` : ''}\n` +
-        (s.hospital_until ? `Infirmary until: ${s.hospital_until} — /escape place:hospital\n` : '') +
-        (s.jail_until ? `Prison Realm until: ${s.jail_until} — /escape place:jail or /bust\n` : '') +
+        (s.hospital_until ? `Maester's tent until: ${s.hospital_until} — /escape place:hospital\n` : '') +
+        (s.jail_until ? `Black cells until: ${s.jail_until} — /escape place:jail or /bust\n` : '') +
         `Login streak: ${s.login_streak}`
     };
   }
@@ -106,6 +112,42 @@ export async function handleCommand(interaction) {
       GameService.shopBuy(uid, name, interaction.options.getString('item'), interaction.options.getInteger('quantity') || 1),
       interaction
     );
+  }
+  if (cmd === 'armory') {
+    const action = interaction.options.getString('action');
+    if (action === 'list') {
+      const { weapons, armor } = GameService.shopArmoryForPlayer(uid, name);
+      const fmt = (i) => `\`${i.id}\` ${i.name} (Lv${i.min_level}) — ${i.shop_price}c · ${i.effectLabel}${i.locked ? ' 🔒' : ''}`;
+      const lines = [
+        '**Weapons**',
+        ...(weapons.length ? weapons.map(fmt) : ['— none —']),
+        '',
+        '**Armor**',
+        ...(armor.length ? armor.map(fmt) : ['— none —'])
+      ];
+      return { content: lines.join('\n') };
+    }
+    const item = interaction.options.getString('item');
+    if (action === 'equip') return reply(GameService.shopBuyEquip(uid, name, item), interaction);
+    return reply(GameService.shopBuy(uid, name, item, 1), interaction);
+  }
+  if (cmd === 'character') {
+    const { sheet } = GameService.characterSheet(uid, name);
+    const c = sheet.combat;
+    const w = sheet.worker;
+    const lines = [
+      `**Combat power ${sheet.power}** · HP ${sheet.hp}/${sheet.max_hp}`,
+      `STR ${c.effective.strength} · DEF ${c.effective.defense} · SPD ${c.effective.speed} · DEX ${c.effective.dexterity}`,
+      `Worker — LAB ${w.effective.manual_labor} · INT ${w.effective.intelligence} · END ${w.effective.endurance} · TEC ${w.effective.technique}`,
+      '',
+      `Mission fail −${sheet.modifiers.missionFailReduction}% · coins +${sheet.modifiers.missionCoinBonus}% · mug +${sheet.modifiers.mugBonus}% · work cd −${sheet.modifiers.workCooldownReduction}%`
+    ];
+    if (sheet.equipped.length) {
+      lines.push('', '**Equipped**', ...sheet.equipped.map((e) => `${e.slot}: ${e.name} (${e.effects})`));
+    } else {
+      lines.push('', '_No gear equipped — `/armory list`_');
+    }
+    return { content: lines.join('\n') };
   }
   if (cmd === 'wheel') return reply(GameService.wheel(uid, name), interaction);
   if (cmd === 'lounge') return reply(GameService.lounge(uid, name, interaction.options.getString('action')), interaction);
@@ -237,8 +279,11 @@ export async function handleCommand(interaction) {
     const action = interaction.options.getString('action');
     if (action === 'look') return reply(GameService.explore(uid, name), interaction);
     if (action === 'move') return reply(GameService.exploreMove(uid, name, interaction.options.getString('direction') || 'north'), interaction);
-    if (action === 'travel') return reply(GameService.exploreTravel(uid, name, interaction.options.getString('area') || 'tokyo_jujutsu_high'), interaction);
+    if (action === 'travel') return reply(GameService.exploreTravel(uid, name, interaction.options.getString('area') || 'winterfell'), interaction);
     if (action === 'mine') return reply(GameService.exploreMine(uid, name), interaction);
+    if (action === 'hunt') return reply(GameService.exploreHunt(uid, name), interaction);
+    if (action === 'attack') return reply(GameService.pveAttack(uid, name), interaction);
+    if (action === 'flee') return reply(GameService.pveFlee(uid, name), interaction);
   }
   if (cmd === 'talk') return reply(GameService.talkNpc(uid, name, interaction.options.getString('npc')), interaction);
   if (cmd === 'commodity') {
@@ -321,6 +366,19 @@ export async function handleCommand(interaction) {
   }
   if (cmd === 'realm') {
     const region = interaction.options.getString('region');
+    if (region === 'all') {
+      const legend = GameService.realmMapLegend();
+      const pngPath = GameService.realmMapPngPath();
+      const baseUrl = process.env.WEB_BASE_URL || '';
+      const link = baseUrl ? `\nInteractive map: ${baseUrl.replace(/\/$/, '')}/map` : '';
+      const payload = {
+        content: `**Realm lands & hourly resources**\n${legend}${link}`.slice(0, 2000)
+      };
+      if (pngPath) {
+        payload.files = [new AttachmentBuilder(pngPath, { name: 'realm-map.png' })];
+      }
+      return payload;
+    }
     if (region) {
       const detail = GameService.territory(region, uid, name);
       if (!detail.ok) return { content: detail.message, ephemeral: true };

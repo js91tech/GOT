@@ -8,13 +8,21 @@
       <stop offset="0%" stop-color="#3a3428"/>
       <stop offset="100%" stop-color="#2a2418"/>
     </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6a7888"/>
+      <stop offset="50%" stop-color="#9aa8b8"/>
+      <stop offset="100%" stop-color="#6a7888"/>
+    </linearGradient>
     <filter id="coast-glow">
       <feGaussianBlur stdDeviation="1.5" result="b"/>
       <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
     </filter>
   </defs>
   <rect width="560" height="720" fill="url(#sea)"/>
-  <!-- Stylized landmass (original silhouette, not official art) -->
+  <!-- The Wall -->
+  <rect x="90" y="72" width="380" height="6" fill="url(#wall)" rx="1"/>
+  <text x="280" y="68" text-anchor="middle" fill="#9aa8b8" font-family="Georgia, serif" font-size="8" letter-spacing="2">THE WALL</text>
+  <!-- Stylized landmass -->
   <path id="landmass" d="
     M 120 48
     C 180 32, 260 38, 320 55
@@ -31,7 +39,7 @@
     C 95 55, 108 50, 120 48
     Z
   " fill="url(#land)" stroke="#8a7a58" stroke-width="2.5" filter="url(#coast-glow)"/>
-  <!-- Narrow sea (The Bite / coast indent) -->
+  <!-- Narrow sea (The Bite) -->
   <path d="M 395 155 Q 410 200 400 250 Q 385 280 370 260 Q 360 220 375 170 Z" fill="url(#sea)" opacity="0.85"/>
   <!-- Dorne spur -->
   <path d="M 300 610 Q 340 650 380 680 Q 400 700 420 710 L 400 720 L 280 720 Q 260 680 280 640 Z" fill="url(#land)" stroke="#8a7a58" stroke-width="1.5"/>
@@ -45,51 +53,63 @@
   <g id="regions" font-family="Georgia, serif" font-size="10" fill="#e8dcc8" text-anchor="middle">
     <g id="winterfell">
       <path class="region-fill" d="M 200 95 L 250 85 L 270 115 L 255 145 L 210 140 L 185 120 Z"/>
-      <text class="region-label" x="228" y="122">Winterfell</text>
+      <text class="region-label" x="228" y="118">Winterfell</text>
+      <text class="resource-badge" x="228" y="130">grain 120/hr</text>
     </g>
     <g id="dreadfort">
       <path class="region-fill" d="M 290 100 L 330 95 L 345 125 L 325 150 L 285 145 L 275 120 Z"/>
-      <text class="region-label" x="308" y="128">Dreadfort</text>
+      <text class="region-label" x="308" y="124">Dreadfort</text>
+      <text class="resource-badge" x="308" y="136">iron 80/hr</text>
     </g>
     <g id="white_harbor">
       <path class="region-fill" d="M 230 155 L 280 150 L 295 180 L 275 205 L 225 200 L 215 175 Z"/>
-      <text class="region-label" x="252" y="182">White Harbor</text>
+      <text class="region-label" x="252" y="178">White Harbor</text>
+      <text class="resource-badge" x="252" y="190">timber 100/hr</text>
     </g>
     <g id="pyke">
       <path class="region-fill" d="M 55 305 L 95 298 L 105 325 L 85 345 L 50 338 L 45 318 Z"/>
-      <text class="region-label" x="72" y="328">Pyke</text>
+      <text class="region-label" x="72" y="324">Pyke</text>
+      <text class="resource-badge" x="72" y="336">iron 140/hr</text>
     </g>
     <g id="twins">
       <path class="region-fill" d="M 240 220 L 290 215 L 305 245 L 285 270 L 235 265 L 225 240 Z"/>
-      <text class="region-label" x="262" y="248">The Twins</text>
+      <text class="region-label" x="262" y="244">The Twins</text>
+      <text class="resource-badge" x="262" y="256">gold 90/hr</text>
     </g>
     <g id="riverrun">
       <path class="region-fill" d="M 210 275 L 260 270 L 275 300 L 255 325 L 205 320 L 195 295 Z"/>
-      <text class="region-label" x="232" y="302">Riverrun</text>
+      <text class="region-label" x="232" y="298">Riverrun</text>
+      <text class="resource-badge" x="232" y="310">grain 110/hr</text>
     </g>
     <g id="casterly_rock">
       <path class="region-fill" d="M 95 380 L 145 372 L 160 402 L 140 430 L 90 425 L 80 400 Z"/>
-      <text class="region-label" x="118" y="405">Casterly Rock</text>
+      <text class="region-label" x="118" y="401">Casterly Rock</text>
+      <text class="resource-badge" x="118" y="413">gold 180/hr</text>
     </g>
     <g id="highgarden">
       <path class="region-fill" d="M 180 420 L 240 412 L 258 445 L 235 475 L 175 468 L 165 442 Z"/>
-      <text class="region-label" x="208" y="448">Highgarden</text>
+      <text class="region-label" x="208" y="444">Highgarden</text>
+      <text class="resource-badge" x="208" y="456">grain 150/hr</text>
     </g>
     <g id="oldtown">
       <path class="region-fill" d="M 115 480 L 165 475 L 178 505 L 158 530 L 108 525 L 100 500 Z"/>
-      <text class="region-label" x="136" y="508">Oldtown</text>
+      <text class="region-label" x="136" y="504">Oldtown</text>
+      <text class="resource-badge" x="136" y="516">timber 85/hr</text>
     </g>
     <g id="kings_landing">
-      <path class="region-fill" d="M 320 340 L 375 332 L 395 365 L 370 395 L 315 388 L 305 360 Z"/>
-      <text class="region-label" x="345" y="368">King's Landing</text>
+      <path class="region-fill region-capital" d="M 320 340 L 375 332 L 395 365 L 370 395 L 315 388 L 305 360 Z"/>
+      <text class="region-label" x="345" y="364" fill="#fde68a">King's Landing</text>
+      <text class="resource-badge" x="345" y="376">gold 200/hr</text>
     </g>
     <g id="dragonstone">
       <path class="region-fill" d="M 400 300 L 440 292 L 452 320 L 435 345 L 395 340 L 388 315 Z"/>
-      <text class="region-label" x="418" y="325">Dragonstone</text>
+      <text class="region-label" x="418" y="321">Dragonstone</text>
+      <text class="resource-badge" x="418" y="333">gold 130/hr</text>
     </g>
     <g id="storms_end">
       <path class="region-fill" d="M 350 430 L 400 422 L 418 455 L 395 485 L 345 478 L 335 450 Z"/>
-      <text class="region-label" x="373" y="458">Storm's End</text>
+      <text class="region-label" x="373" y="454">Storm's End</text>
+      <text class="resource-badge" x="373" y="466">timber 95/hr</text>
     </g>
   </g>
   <g opacity="0.55" transform="translate(480,580)">

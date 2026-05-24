@@ -2,6 +2,13 @@ import { getDb } from './db.js';
 import { getOrCreatePlayer } from './player.js';
 import { getPlayerGuild, isGuildOfficer } from './guild.js';
 import { listFactions } from './faction.js';
+import { resourceIcon, resourceLabel } from './got-theme.js';
+import { getEffectiveStats } from './stats.js';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const SIEGE_TARGET = 100;
 const SIEGE_HOURS = 24;
@@ -165,9 +172,8 @@ export function contributeSiege(discordId, username) {
     .get(player.guild_id);
   if (!siege) return { ok: false, message: 'Your guild has no active siege.' };
 
-  const power = Math.floor(
-    (player.strength + player.defense) / 4 + 5 + Math.random() * 10
-  );
+  const stats = getEffectiveStats(player, db);
+  const power = Math.floor((stats.strength + stats.defense) / 4 + 5 + Math.random() * 10);
   const newProgress = Math.min(SIEGE_TARGET, siege.progress + power);
   db.prepare('UPDATE territory_sieges SET progress = ? WHERE id = ?').run(newProgress, siege.id);
 
@@ -263,4 +269,26 @@ export function mapBootstrap(discordId, username) {
     player,
     guild: getPlayerGuild(player)
   };
+}
+
+export function realmMapLegend() {
+  return listTerritoriesWithControl()
+    .map(
+      (t) =>
+        `${resourceIcon(t.resource_type)} **${t.display_name}** — ${resourceLabel(t.resource_type)} · ${t.base_yield_per_hour}/hr · ${t.owner_label}`
+    )
+    .join('\n');
+}
+
+export function realmMapPngPath() {
+  const candidates = [
+    process.env.REALM_MAP_PNG,
+    path.join(__dirname, '../../../apps/discord-bot/assets/realm-map.png'),
+    path.join(__dirname, '../../../apps/web/src/public/map/realm-world.png'),
+    path.join(__dirname, '../../../apps/web/src/public/map/realm-map.png')
+  ].filter(Boolean);
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
 }

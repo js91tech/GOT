@@ -1,99 +1,95 @@
 <%- include('partials/head', { loggedIn: true, title: 'Dashboard', pageClass: 'page-realm page-dashboard' }) %>
 <%- include('partials/realm-shell-open') %>
 
-<div class="dash-page">
-  <span class="dash-ornament dash-ornament--tl" aria-hidden="true"></span>
-  <span class="dash-ornament dash-ornament--tr" aria-hidden="true"></span>
-
+<div class="dash-page dash-studio">
   <% if (flash) { %>
   <div class="flash-wrap <%= flashOk ? '' : 'error' %>">
-    <% if (flashGif) { %><img class="flash-gif" src="<%= flashGif %>" alt="Action" loading="lazy" /><% } %>
+    <% if (flashGif) { %><img class="flash-gif" src="<%= flashGif %>" alt="" loading="lazy" /><% } %>
     <div class="flash-text"><%= flash %></div>
   </div>
   <% } %>
 
   <% if (confinement && confinement.confined) { %>
-  <section class="alert-panel vine-frame">
-    <h3><%= confinement.reason === 'jail' ? '⛓ The Black Cells' : '🏥 Maester\'s Tent' %></h3>
+  <section class="alert-panel">
+    <h3><%= confinement.reason === 'jail' ? 'The Black Cells' : "Maester's Tent" %></h3>
     <p><strong><%= confinement.minutesLeft %> minutes</strong> remaining · until <%= confinement.until %></p>
     <div class="escape-actions">
       <% if (confinement.reason === 'hospital') { %>
         <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="pay" /><button type="submit" class="btn-stone">Pay medical bill</button></form>
         <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="ce" /><button type="submit" class="btn-wood">Rally morale (40)</button></form>
-        <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="item" /><button type="submit" class="btn-wood">Use Reversal Kit</button></form>
+        <form method="post" action="/escape"><input type="hidden" name="place" value="hospital" /><input type="hidden" name="method" value="item" /><button type="submit" class="btn-wood">Healer's kit</button></form>
       <% } else { %>
         <form method="post" action="/escape"><input type="hidden" name="place" value="jail" /><input type="hidden" name="method" value="pay" /><button type="submit" class="btn-stone">Pay bail</button></form>
-        <form method="post" action="/escape"><input type="hidden" name="place" value="jail" /><input type="hidden" name="method" value="item" /><button type="submit" class="btn-wood">Prison Key</button></form>
+        <form method="post" action="/escape"><input type="hidden" name="place" value="jail" /><input type="hidden" name="method" value="item" /><button type="submit" class="btn-wood">Dungeon Key</button></form>
         <a class="btn-wood" href="/pvp">Ask ally to bust you</a>
       <% } %>
     </div>
   </section>
   <% } %>
 
-  <section class="profile-panel vine-frame">
+  <section class="profile-panel">
     <div class="profile-inner profile-inner--crest">
       <% if (typeof houseCrest !== 'undefined' && houseCrest) { %>
-      <img class="profile-crest" src="<%= houseCrest %>" alt="<%= house.name %>" width="72" height="72" />
+      <img class="profile-crest" src="<%= houseCrest %>" alt="<%= house.name %>" width="80" height="80" />
       <% } %>
       <div class="profile-text">
-      <h1 class="profile-name"><%= player.username %> <span class="grade-tag"><%= player.grade %></span></h1>
-      <p class="profile-meta">Level <%= player.level %><% if (typeof house !== 'undefined' && house) { %> · <%= house.name %><% } %> · Yard: <%= player.gym_id %></p>
-      <div class="profile-actions profile-actions--2d">
-        <p class="play-2d-primary"><strong>Play in Discord:</strong> join a voice channel → <strong>Activities</strong> (rocket) → Westeros Realm</p>
+        <h1 class="profile-name"><%= player.username %> <span class="grade-tag"><%= player.grade %></span></h1>
+        <p class="profile-meta">Level <%= player.level %><% if (typeof house !== 'undefined' && house) { %> · <%= house.name %><% } %> · <%= player.gym_id.replace(/_/g, ' ') %></p>
+        <p class="play-2d-primary"><strong>Play in Discord:</strong> voice channel → Activities → Westeros Realm</p>
         <% if (launch2dUrl) { %>
-        <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer" data-tip="Optional browser link to the hosted 2D client. Main path is Discord Activity in a voice channel.">Open 2D in browser</a>
+        <a href="<%= launch2dUrl %>" class="btn-launch-2d" target="_blank" rel="noopener noreferrer">Open 2D in browser</a>
         <% } %>
-        <span class="profile-sync"><%= launch2dHint %></span>
-      </div>
       </div>
     </div>
   </section>
 
   <section class="resource-row" aria-label="Resources">
     <div class="resource-stone" data-icon="coins">
-      <span class="resource-icon" aria-hidden="true"></span>
+      <img class="resource-icon-img" src="/public/assets/icons/gold.svg" alt="" width="40" height="40" />
       <span class="resource-label">Coins</span>
       <span class="resource-value"><%= player.coins.toLocaleString() %></span>
     </div>
     <div class="resource-stone" data-icon="bank">
-      <span class="resource-icon" aria-hidden="true"></span>
-      <span class="resource-label">Bank</span>
+      <img class="resource-icon-img" src="/public/assets/icons/vault.svg" alt="" width="40" height="40" />
+      <span class="resource-label">Treasury</span>
       <span class="resource-value"><%= player.bank_balance.toLocaleString() %></span>
     </div>
     <div class="resource-stone resource-stone--ce" data-icon="ce">
-      <span class="resource-icon" aria-hidden="true"></span>
+      <img class="resource-icon-img" src="/public/assets/icons/morale.svg" alt="" width="40" height="40" />
       <span class="resource-label">Morale</span>
       <span class="resource-value"><%= player.ce %>/100</span>
     </div>
     <div class="resource-stone" data-icon="focus">
-      <span class="resource-icon" aria-hidden="true"></span>
+      <img class="resource-icon-img" src="/public/assets/icons/focus.svg" alt="" width="40" height="40" />
       <span class="resource-label">Focus</span>
       <span class="resource-value"><%= player.focus %></span>
     </div>
     <div class="resource-stone" data-icon="wheel">
-      <span class="resource-icon" aria-hidden="true"></span>
-      <span class="resource-label">Wheel spins</span>
+      <img class="resource-icon-img" src="/public/assets/icons/wheel.svg" alt="" width="40" height="40" />
+      <span class="resource-label">Wheel</span>
       <span class="resource-value"><%= status.wheel_spins_left %></span>
     </div>
     <div class="resource-stone" data-icon="company">
-      <span class="resource-icon" aria-hidden="true"></span>
+      <img class="resource-icon-img" src="/public/assets/icons/company.svg" alt="" width="40" height="40" />
       <span class="resource-label">Company</span>
       <span class="resource-value resource-value--sm"><%= player.company_id || '—' %></span>
     </div>
   </section>
 
-  <section class="combat-slab metal-frame">
+  <section class="combat-slab">
     <div class="combat-stats">
-      <span>STR <strong><%= player.strength %></strong></span>
-      <span>DEF <strong><%= player.defense %></strong></span>
-      <span>SPD <strong><%= player.speed %></strong></span>
-      <span>DEX <strong><%= player.dexterity %></strong></span>
+      <span>STR <strong><%= sheet.combat.effective.strength %></strong><% if (sheet.combat.gear.strength) { %> <em class="gear-bonus">(+<%= sheet.combat.gear.strength %>)</em><% } %></span>
+      <span>DEF <strong><%= sheet.combat.effective.defense %></strong><% if (sheet.combat.gear.defense) { %> <em class="gear-bonus">(+<%= sheet.combat.gear.defense %>)</em><% } %></span>
+      <span>SPD <strong><%= sheet.combat.effective.speed %></strong><% if (sheet.combat.gear.speed) { %> <em class="gear-bonus">(+<%= sheet.combat.gear.speed %>)</em><% } %></span>
+      <span>DEX <strong><%= sheet.combat.effective.dexterity %></strong><% if (sheet.combat.gear.dexterity) { %> <em class="gear-bonus">(+<%= sheet.combat.gear.dexterity %>)</em><% } %></span>
+      <span class="power-chip">Power <%= sheet.power %></span>
     </div>
-    <p class="worker-line">Worker — LAB <strong><%= player.manual_labor %></strong> · INT <strong><%= player.intelligence %></strong> · END <strong><%= player.endurance %></strong> · TEC <strong><%= player.technique %></strong></p>
+    <p class="worker-line">Worker — LAB <strong><%= sheet.worker.effective.manual_labor %></strong> · INT <strong><%= sheet.worker.effective.intelligence %></strong> · END <strong><%= sheet.worker.effective.endurance %></strong> · TEC <strong><%= sheet.worker.effective.technique %></strong></p>
+    <p class="worker-line"><a href="/character">Full character sheet</a> · <a href="/armory">Armory</a></p>
   </section>
 
   <section class="action-row">
-    <article class="action-tile stone-frame action-tile--train">
+    <article class="action-tile action-tile--train">
       <h3>Train combat</h3>
       <div class="tile-art tile-art--train" aria-hidden="true"></div>
       <form method="post" action="/train" class="tile-form">
@@ -108,7 +104,7 @@
       </form>
     </article>
 
-    <article class="action-tile wood-frame action-tile--mission">
+    <article class="action-tile action-tile--mission">
       <h3>Realm mission</h3>
       <div class="tile-art tile-art--mission" style="background-image:url('<%= typeof missionImage !== "undefined" ? missionImage : heroImage %>')" aria-hidden="true"></div>
       <form method="post" action="/crime" class="tile-form">
@@ -121,7 +117,7 @@
       </form>
     </article>
 
-    <article class="action-tile wood-frame action-tile--worker">
+    <article class="action-tile action-tile--worker">
       <h3>Worker training</h3>
       <div class="tile-art tile-art--worker" aria-hidden="true"></div>
       <form method="post" action="/worker" class="tile-form">
@@ -137,7 +133,7 @@
     </article>
 
     <article class="action-tile action-tile--wheel">
-      <h3>Wheel</h3>
+      <h3>Wheel of fate</h3>
       <form method="post" action="/wheel" class="wheel-form">
         <button type="submit" class="wheel-btn" aria-label="Spin wheel">
           <span class="wheel-disc" aria-hidden="true"></span>
@@ -151,21 +147,30 @@
   </section>
 
   <section class="bottom-row">
-    <article class="lounge-panel glow-purple vine-frame">
+    <article class="lounge-panel">
       <h3>War Camp</h3>
       <p class="panel-sub">Rest &amp; rally</p>
       <div class="lounge-actions">
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="tea" />
-          <button type="submit" class="lounge-btn" data-icon="tea"><span>Feast</span><em>Tea</em></button>
+          <button type="submit" class="lounge-btn">
+            <img class="lounge-icon" src="/public/assets/icons/feast.svg" alt="" width="32" height="32" />
+            <span>Feast</span><em>+Focus</em>
+          </button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="vow" />
-          <button type="submit" class="lounge-btn" data-icon="vow"><span>Oath</span><em>Vow</em></button>
+          <button type="submit" class="lounge-btn">
+            <img class="lounge-icon" src="/public/assets/icons/oath.svg" alt="" width="32" height="32" />
+            <span>Oath of fealty</span><em>+Bravery</em>
+          </button>
         </form>
         <form method="post" action="/lounge">
           <input type="hidden" name="action" value="refill" />
-          <button type="submit" class="lounge-btn" data-icon="refill"><span>Morale</span><em>Refill</em></button>
+          <button type="submit" class="lounge-btn">
+            <img class="lounge-icon" src="/public/assets/icons/rally.svg" alt="" width="32" height="32" />
+            <span>Rally morale</span><em>Full CE</em>
+          </button>
         </form>
       </div>
     </article>
@@ -173,7 +178,6 @@
     <article class="shelf-panel wood-shelf">
       <h3>Treasury</h3>
       <p class="panel-sub">Vault &amp; investments</p>
-      <div class="shelf-deco" aria-hidden="true"></div>
       <form method="post" action="/bank" class="tile-form">
         <select name="action">
           <option value="deposit">Deposit</option>
@@ -188,24 +192,28 @@
 
     <article class="shelf-panel wood-shelf gear-shelf">
       <h3>Armory</h3>
-      <p class="panel-sub">Equip &amp; training yard</p>
-      <div class="shelf-deco gear-deco" aria-hidden="true"></div>
+      <p class="panel-sub">Equip &amp; war yard</p>
       <form method="post" action="/gym" class="tile-form tile-form--inline">
-        <input type="hidden" name="gymId" value="cursed_pit" />
+        <input type="hidden" name="gymId" value="war_yard" />
         <button type="submit" class="btn-wood">War yard</button>
       </form>
       <form method="post" action="/equip" class="tile-form">
-        <input name="item" placeholder="item id" />
-        <button type="submit" class="btn-realm">Equip</button>
+        <select name="item" aria-label="Item to equip">
+          <option value="">— Select gear —</option>
+          <% equippable.forEach(function(i) { %>
+          <option value="<%= i.item_id %>"><%= i.name %> ×<%= i.quantity %></option>
+          <% }); %>
+        </select>
+        <button type="submit" class="btn-realm" <%= equippable.length ? '' : 'disabled' %>>Equip</button>
       </form>
     </article>
 
-    <aside class="inventory-panel stone-frame">
+    <aside class="inventory-panel">
       <h3>Inventory</h3>
       <ul class="inventory-list">
         <% inventory.forEach(function(i) { %>
           <li>
-            <span class="inv-icon" aria-hidden="true"></span>
+            <img class="inv-icon-img" src="<%= i.iconUrl %>" alt="" width="36" height="36" loading="lazy" />
             <span class="inv-text"><%= i.name %> ×<%= i.quantity %><% if (i.equip_slot) { %> <em>(<%= i.equip_slot %>)</em><% } %></span>
           </li>
         <% }); %>

@@ -75,7 +75,7 @@
       submit: 'Execute the selected PvP action.'
     },
     '/bust': {
-      panel: 'Free this player from Prison Realm (ally help).',
+      panel: 'Free this player from the Black Cells (ally help).',
       submit: 'Attempt bust.'
     },
     '/drug': {
@@ -115,7 +115,7 @@
     'Rally morale (40)': 'Spend 40 morale to walk out of the maester\'s tent.',
     'Use Reversal Kit': 'Consume a Reversal Kit from inventory.',
     'Pay bail': 'Pay coins to leave the black cells early.',
-    'Prison Key': 'Use a prison key item from inventory.',
+    'Dungeon Key': 'Use a dungeon key item from inventory.',
     'Ask ally to bust you': 'Open PvP so an ally can break you out.'
   };
 
@@ -217,7 +217,7 @@
         if (h3) bind(h3, advancedTip(form));
         form.querySelectorAll('input, select, button').forEach((el) => {
           const name = el.getAttribute('name');
-          if (name === 'clanId') bind(el, 'Clan id, e.g. tokyo');
+          if (name === 'clanId') bind(el, 'Clan id, e.g. stark');
           if (name === 'tier') bind(el, 'Estate tier number to purchase');
           if (name === 'courseId') bind(el, 'Course id from the list above');
           if (name === 'companyId') bind(el, 'Company id, e.g. kings_guard');

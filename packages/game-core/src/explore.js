@@ -3,8 +3,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getDb } from './db.js';
 import { getOrCreatePlayer, addItem } from './player.js';
-import { audit, minutesFromNow, roll } from './util.js';
-import { applyLevelUps, requireLevel } from './util.js';
+import { audit, minutesFromNow, roll, applyLevelUps, requireLevel } from './util.js';
+import { EXPLORE_AREAS, EXPLORE_NPCS, resolveLegacyId } from './got-theme.js';
+import { tryPveEncounter, formatRiskLine, getPendingEncounter, mustResolveEncounter } from './explore-pve.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let areasCache = null;
@@ -35,92 +36,133 @@ function defaultRoom(areaId) {
 export function exploreStatus(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
   const areas = loadAreas();
-  const areaId = player.explore_area || 'tokyo_jujutsu_high';
+  const areaId = resolveLegacyId(player.explore_area || 'winterfell');
   const roomId = player.explore_room || defaultRoom(areaId);
   const area = areas[areaId];
-  if (!area) return { ok: false, message: 'Unknown area.' };
+  if (!area) return { ok: false, message: 'Unknown region.' };
   const room = area.rooms[roomId];
-  if (!room) return { ok: false, message: 'Invalid room.' };
+  if (!room) return { ok: false, message: 'Invalid location.' };
   const exits = Object.entries(room.exits || {})
     .map(([dir, dest]) => `${dir} → ${dest}`)
     .join(', ');
-  const npcs = (room.npcs || []).join(', ') || 'none';
+  const npcs = (room.npcs || []).map((id) => loadNpcs()[id]?.name || id).join(', ') || 'none';
+  const riskLine = formatRiskLine(areaId, room);
+  const pending = getPendingEncounter(player);
+  let message =
+    `**${area.name}** — ${room.emoji || ''} ${room.name}\n${room.description}\n` +
+    `${riskLine}\n` +
+    `Exits: ${exits || 'none'}\nNPCs: ${npcs}\nMineable: ${room.mineable ? 'yes (/explore mine)' : 'no'}`;
+  if (pending) {
+    message += `\n\n⚠️ **Engaged:** ${pending.mob.emoji} ${pending.mob.name} (Lv${pending.mob.level}) — attack or flee!`;
+  }
   return {
     ok: true,
-    message:
-      `**${area.name}** — ${room.emoji || ''} ${room.name}\n${room.description}\n` +
-      `Exits: ${exits || 'none'}\nNPCs: ${npcs}\nMineable: ${room.mineable ? 'yes (/explore mine)' : 'no'}`,
-    player
+    message,
+    player,
+    areaId,
+    roomId,
+    pendingEncounter: pending,
+    encounterPending: Boolean(pending)
   };
 }
 
+function appendEncounter(status, discordId, username, areaId, room) {
+  const encounter = tryPveEncounter(discordId, username, { areaId, room });
+  if (!encounter?.message) return status;
+  return {
+    ...status,
+    message: `${status.message}\n\n${encounter.message}`,
+    encounter,
+    encounterPending: Boolean(encounter.encounterPending || encounter.pending),
+    pendingEncounter: encounter.pending ? { mob: encounter.mob, areaId } : status.pendingEncounter
+  };
+}
+
+function guardEncounter(discordId, username) {
+  const player = getOrCreatePlayer(discordId, username);
+  return mustResolveEncounter(player);
+}
+
 export function exploreTravel(discordId, username, areaId) {
+  const blocked = guardEncounter(discordId, username);
+  if (blocked) return blocked;
   const areas = loadAreas();
-  if (!areas[areaId]) {
-    return { ok: false, message: 'Areas: tokyo_jujutsu_high, shibuya_district, jujutsu_high_kyoto, sakurajima_colony' };
+  const resolved = resolveLegacyId(areaId);
+  if (!areas[resolved]) {
+    return { ok: false, message: `Regions: ${EXPLORE_AREAS.join(', ')}` };
   }
   const player = getOrCreatePlayer(discordId, username);
-  const area = areas[areaId];
+  const area = areas[resolved];
   const lvl = requireLevel(player, area.min_level || 1, area.name);
   if (!lvl.ok) return { ok: false, message: lvl.message };
-  const roomId = defaultRoom(areaId);
+  const roomId = defaultRoom(resolved);
   getDb().prepare('UPDATE players SET explore_area = ?, explore_room = ? WHERE id = ?').run(
-    areaId,
+    resolved,
     roomId,
     player.id
   );
-  return exploreStatus(discordId, username);
+  const room = area.rooms[roomId];
+  const status = exploreStatus(discordId, username);
+  return appendEncounter(status, discordId, username, resolved, room);
 }
 
 export function exploreMove(discordId, username, direction) {
+  const blocked = guardEncounter(discordId, username);
+  if (blocked) return blocked;
   const player = getOrCreatePlayer(discordId, username);
   const areas = loadAreas();
-  const areaId = player.explore_area || 'tokyo_jujutsu_high';
+  const areaId = resolveLegacyId(player.explore_area || 'winterfell');
   const roomId = player.explore_room || defaultRoom(areaId);
   const room = areas[areaId]?.rooms?.[roomId];
-  if (!room) return { ok: false, message: 'You are lost. Use /explore travel tokyo_jujutsu_high' };
+  if (!room) return { ok: false, message: 'You are lost. Use /explore travel winterfell' };
   const dir = direction.toLowerCase();
   const nextRoom = room.exits?.[dir];
   if (!nextRoom) return { ok: false, message: `No exit ${dir}. Exits: ${Object.keys(room.exits || {}).join(', ')}` };
   getDb().prepare('UPDATE players SET explore_room = ? WHERE id = ?').run(nextRoom, player.id);
-  return exploreStatus(discordId, username);
+  const next = areas[areaId].rooms[nextRoom];
+  const status = exploreStatus(discordId, username);
+  return appendEncounter(status, discordId, username, areaId, next);
 }
 
 export function exploreMine(discordId, username) {
+  const blocked = guardEncounter(discordId, username);
+  if (blocked) return blocked;
   const player = getOrCreatePlayer(discordId, username);
   const areas = loadAreas();
-  const areaId = player.explore_area || 'tokyo_jujutsu_high';
+  const areaId = resolveLegacyId(player.explore_area || 'winterfell');
   const roomId = player.explore_room || defaultRoom(areaId);
   const room = areas[areaId]?.rooms?.[roomId];
-  if (!room?.mineable) return { ok: false, message: 'Cannot mine here. Find a mineable room (e.g. cursed_pit).' };
-  if (player.ce < 15) return { ok: false, message: 'Mining costs 15 CE.' };
+  if (!room?.mineable) {
+    return { ok: false, message: 'Cannot mine here. Find a mine or godswood (e.g. Northern Mine, Frozen Pass).' };
+  }
+  if (player.ce < 15) return { ok: false, message: 'Mining costs 15 morale.' };
   const db = getDb();
   db.prepare('UPDATE players SET ce = ce - 15 WHERE id = ?').run(player.id);
-  const mats = room.materials || ['iron_ore'];
-  const itemId = mats[Math.floor(Math.random() * mats.length)];
-  const mapped =
-    { cursed_residue: 'iron_ore', spirit_fragment: 'spirit_core', bone_shard: 'iron_ore' }[itemId] || itemId;
+  const mats = room.materials || ['iron_ingot'];
+  const raw = mats[Math.floor(Math.random() * mats.length)];
+  const itemId = resolveLegacyId(raw);
   const qty = roll(0.2) ? 2 : 1;
-  addItem(player.id, mapped, qty);
+  addItem(player.id, itemId, qty);
   const coins = Math.floor(50 + Math.random() * 150);
   db.prepare('UPDATE players SET coins = coins + ?, xp = xp + 5 WHERE id = ?').run(coins, player.id);
   applyLevelUps(db, { ...player, xp: player.xp + 5 });
-  audit(db, player.id, 'explore_mine', coins, { room: roomId, item: mapped });
+  audit(db, player.id, 'explore_mine', coins, { room: roomId, item: itemId });
   return {
     ok: true,
-    message: `Mined ${qty}x ${mapped} and +${coins} coins.`,
+    message: `Mined ${qty}x ${itemId} and +${coins} coins.`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
 
 export function talkNpc(discordId, username, npcId, responseIndex = 0) {
   const npcs = loadNpcs();
-  const npc = npcs[npcId];
-  if (!npc) return { ok: false, message: 'NPCs: gojo, yaga, nanami, maki' };
+  const resolved = resolveLegacyId(npcId);
+  const npc = npcs[resolved];
+  if (!npc) return { ok: false, message: `NPCs: ${EXPLORE_NPCS.join(', ')}` };
   const player = getOrCreatePlayer(discordId, username);
   const db = getDb();
   const progress = JSON.parse(player.npc_progress_json || '{}');
-  const step = progress[npcId] ?? 0;
+  const step = progress[resolved] ?? progress[npcId] ?? 0;
   const dialogue = npc.dialogue?.[String(step)];
   if (!dialogue) {
     return { ok: false, message: `${npc.name} has nothing more to say.` };
@@ -129,7 +171,7 @@ export function talkNpc(discordId, username, npcId, responseIndex = 0) {
   if (responseIndex > 0 && dialogue.responses?.length) {
     nextStep = Math.min(step + 1, Object.keys(npc.dialogue).length - 1);
   }
-  progress[npcId] = nextStep;
+  progress[resolved] = nextStep;
   db.prepare('UPDATE players SET npc_progress_json = ? WHERE id = ?').run(JSON.stringify(progress), player.id);
   let bonus = '';
   if (nextStep >= 3 && step < 3) {
@@ -147,7 +189,7 @@ export function talkNpc(discordId, username, npcId, responseIndex = 0) {
 export function listNpcsInRoom(discordId, username) {
   const player = getOrCreatePlayer(discordId, username);
   const areas = loadAreas();
-  const areaId = player.explore_area || 'tokyo_jujutsu_high';
+  const areaId = resolveLegacyId(player.explore_area || 'winterfell');
   const roomId = player.explore_room || defaultRoom(areaId);
   const npcIds = areas[areaId]?.rooms?.[roomId]?.npcs || [];
   const npcs = loadNpcs();

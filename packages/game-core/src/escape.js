@@ -20,30 +20,30 @@ export function escapeHospital(discordId, username, method = 'pay') {
   const player = getOrCreatePlayer(discordId, username);
   const block = isBlocked(player);
   if (!block.blocked || block.reason !== 'hospital') {
-    return { ok: false, message: 'You are not in Shoko\'s infirmary.' };
+    return { ok: false, message: 'You are not in the maester\'s tent.' };
   }
   const db = getDb();
   if (method === 'item') {
-    const inv = getInventory(player.id).find((i) => i.item_id === 'reversal_kit');
+    const inv = getInventory(player.id).find((i) => i.item_id === 'healers_kit' || i.item_id === 'reversal_kit');
     if (!inv || inv.quantity < 1) {
       return {
         ok: false,
-        message: 'Need a **Reversal Kit** in inventory (`/use reversal_kit`) or pay bail / use CE escape.'
+        message: 'Need a **Healer\'s Kit** in inventory (`/use healers_kit`) or pay the medical bill / rally morale.'
       };
     }
-    removeItem(player.id, 'reversal_kit', 1);
+    removeItem(player.id, inv.item_id, 1);
     db.prepare('UPDATE players SET hospital_until = NULL, hp = max_hp WHERE id = ?').run(player.id);
     audit(db, player.id, 'escape_hospital', 0, { method: 'item' });
     return {
       ok: true,
-      message: 'Reversal Kit used — you leave the infirmary at full HP!',
+      message: 'Healer\'s Kit used — you leave the tent at full HP!',
       player: getOrCreatePlayer(discordId, username)
     };
   }
   if (method === 'ce') {
     const cost = balance.hospitalCeEscape ?? 40;
     if (player.ce < cost) {
-      return { ok: false, message: `CE escape costs ${cost} CE. You have ${player.ce}.` };
+      return { ok: false, message: `Rally morale costs ${cost}. You have ${player.ce}.` };
     }
     db.prepare('UPDATE players SET ce = ce - ?, hospital_until = NULL, hp = max_hp WHERE id = ?').run(
       cost,
@@ -52,7 +52,7 @@ export function escapeHospital(discordId, username, method = 'pay') {
     audit(db, player.id, 'escape_hospital', cost, { method: 'ce' });
     return {
       ok: true,
-      message: `Reverse Cursed Technique — spent ${cost} CE and left the infirmary!`,
+      message: `Rallied ${cost} morale and left the maester's tent!`,
       player: getOrCreatePlayer(discordId, username)
     };
   }
@@ -70,7 +70,7 @@ export function escapeHospital(discordId, username, method = 'pay') {
   audit(db, player.id, 'escape_hospital', coinCost, { method: 'pay' });
   return {
     ok: true,
-    message: `Paid **${coinCost.toLocaleString()}** coins — discharged from the infirmary!`,
+    message: `Paid **${coinCost.toLocaleString()}** coins — discharged from the maester's tent!`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
@@ -79,23 +79,23 @@ export function escapeJail(discordId, username, method = 'pay') {
   const player = getOrCreatePlayer(discordId, username);
   const block = isBlocked(player);
   if (!block.blocked || block.reason !== 'jail') {
-    return { ok: false, message: 'You are not in the Prison Realm.' };
+    return { ok: false, message: 'You are not in the black cells.' };
   }
   const db = getDb();
   if (method === 'item') {
-    const inv = getInventory(player.id).find((i) => i.item_id === 'prison_key');
+    const inv = getInventory(player.id).find((i) => i.item_id === 'cell_key' || i.item_id === 'prison_key');
     if (!inv || inv.quantity < 1) {
       return {
         ok: false,
-        message: 'Need a **Prison Realm Key** (`prison_key` from shop) or pay bail. Allies can `/bust` you out.'
+        message: 'Need a **Cell Key** (`cell_key` from shop) or pay bail. Allies can `/bust` you out.'
       };
     }
-    removeItem(player.id, 'prison_key', 1);
+    removeItem(player.id, inv.item_id, 1);
     db.prepare('UPDATE players SET jail_until = NULL WHERE id = ?').run(player.id);
     audit(db, player.id, 'escape_jail', 0, { method: 'item' });
     return {
       ok: true,
-      message: 'Prison Realm Key used — you are free!',
+      message: 'Cell Key used — you are free!',
       player: getOrCreatePlayer(discordId, username)
     };
   }
@@ -110,12 +110,11 @@ export function escapeJail(discordId, username, method = 'pay') {
   audit(db, player.id, 'escape_jail', coinCost, { method: 'pay' });
   return {
     ok: true,
-    message: `Posted **${coinCost.toLocaleString()}** coin bail — released from the Prison Realm!`,
+    message: `Posted **${coinCost.toLocaleString()}** coin bail — released from the black cells!`,
     player: getOrCreatePlayer(discordId, username)
   };
 }
 
-/** Pay to reduce jail/hospital timer by half (optional early release discount) */
 export function waitOutStatus(discordId, username) {
   const conf = getConfinementStatus(getOrCreatePlayer(discordId, username));
   if (!conf.confined) return { ok: true, message: 'You are not confined — free to act.' };
@@ -123,7 +122,7 @@ export function waitOutStatus(discordId, username) {
     ok: false,
     message:
       conf.reason === 'jail'
-        ? `Prison Realm: **${conf.minutesLeft}m** left (until ${conf.until}). Use /escape jail, /escape pay, prison_key, or ally /bust.`
-        : `Infirmary: **${conf.minutesLeft}m** left. Use /escape hospital, reversal_kit, pay bail, or CE escape.`
+        ? `Black cells: **${conf.minutesLeft}m** left (until ${conf.until}). Use /escape jail, pay bail, cell_key, or ally /bust.`
+        : `Maester's tent: **${conf.minutesLeft}m** left. Use /escape hospital, healers_kit, pay bill, or rally morale.`
   };
 }

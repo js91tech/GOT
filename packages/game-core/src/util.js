@@ -1,4 +1,5 @@
 import balance from './balance.json' with { type: 'json' };
+import { lordRank } from './got-theme.js';
 
 export { balance };
 
@@ -7,11 +8,7 @@ export function xpForLevel(level) {
 }
 
 export function gradeName(level) {
-  if (level >= 80) return 'Special Grade';
-  if (level >= 50) return 'Grade 1';
-  if (level >= 30) return 'Grade 2';
-  if (level >= 15) return 'Grade 3';
-  return 'Grade 4';
+  return lordRank(level);
 }
 
 /** Clear level-gate feedback for Discord and web. */
@@ -53,14 +50,14 @@ export function isBlocked(player) {
 export function canAttack(attacker, defender) {
   if (attacker.id === defender.id) return { ok: false, message: 'You cannot target yourself.' };
   if (defender.level < balance.gradeProtectionLevel && attacker.level - defender.level > balance.gradeProtectionGap) {
-    return { ok: false, message: `${defender.username} has Grade protection (under level ${balance.gradeProtectionLevel}).` };
+    return { ok: false, message: `${defender.username} has ward protection (under level ${balance.gradeProtectionLevel}).` };
   }
   if (attacker.level < balance.gradeProtectionLevel && defender.level - attacker.level > balance.gradeProtectionGap) {
-    return { ok: false, message: 'They are too strong for you while you have Grade protection.' };
+    return { ok: false, message: 'They are too strong for you while you have ward protection.' };
   }
   const dBlock = isBlocked(defender);
   if (dBlock.blocked && dBlock.reason === 'hospital') {
-    return { ok: false, message: 'Target is in Shoko\'s infirmary.' };
+    return { ok: false, message: 'Target is in the maester\'s tent.' };
   }
   return { ok: true };
 }
