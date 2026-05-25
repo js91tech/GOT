@@ -2,7 +2,16 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import discord from 'discord.js';
-const { Client, GatewayIntentBits, Events, MessageFlags, Routes, InteractionResponseType } = discord;
+const {
+  Client,
+  GatewayIntentBits,
+  Events,
+  MessageFlags,
+  EmbedBuilder,
+  ActionRowBuilder,
+  ButtonBuilder,
+  ButtonStyle
+} = discord;
 import { GameService } from '@westeros/game-core';
 import { handleCommand } from './commands.js';
 import { handleAutocomplete } from './autocomplete.js';
@@ -42,53 +51,43 @@ if (serviceMode !== 'stack') {
 client.on('error', (err) => console.error('Discord client error:', err));
 process.on('unhandledRejection', (err) => console.error('Unhandled rejection:', err));
 
-function webActivityUrl() {
+function webBaseUrl() {
   const raw =
     process.env.WEB_BASE_URL ||
     (process.env.RAILWAY_PUBLIC_DOMAIN ? `https://${process.env.RAILWAY_PUBLIC_DOMAIN}` : '');
-  const base = String(raw).trim().replace(/\/$/, '');
-  return base ? `${base}/activity` : 'https://YOUR-WEB-URL/activity';
+  return String(raw).trim().replace(/\/$/, '');
 }
 
-function play2dFailureMessage(launchErr) {
-  const code = launchErr?.code ?? launchErr?.rawError?.code;
-  const activityUrl = webActivityUrl();
+function buildPlayReply() {
+  const base = webBaseUrl();
+  const loginUrl = base ? `${base}/login` : null;
+  const dashboardUrl = base ? `${base}/dashboard` : null;
 
-  if (code === 50234) {
-    return (
-      '**Embedded App is not enabled** on this Discord application (error 50234).\n\n' +
-      'In the [Discord Developer Portal](https://discord.com/developers/applications) → your app:\n' +
-      '1. **Activities** → turn on **Embedded App**\n' +
-      '2. **URL Mappings** → root `/` → `' +
-      activityUrl +
-      '`\n' +
-      '3. **OAuth2** redirects include `http://127.0.0.1/callback` and `https://127.0.0.1/callback`\n\n' +
-      `Until Activities are configured, open the dashboard in a browser: ${activityUrl}\n` +
-      'Or join a voice channel → **Activities** (rocket) after step 1–2.'
-    );
+  if (!loginUrl) {
+    return {
+      content:
+        'Set **WEB_BASE_URL** on Railway (e.g. `https://westerosdiscord-bot-production.up.railway.app`) so /play2d can link to the dashboard.',
+      ephemeral: true
+    };
   }
 
-  if (code === 50035 || /activity|embedded|mapping/i.test(launchErr?.message || '')) {
-    return (
-      'Could not launch the Activity. Check Discord portal: **Activities ON**, URL mapping root → `' +
-      activityUrl +
-      '`. Join a voice channel and try **Activities** (rocket) or `/play2d` again.'
-    );
-  }
+  const embed = new EmbedBuilder()
+    .setTitle('Westeros Realm')
+    .setDescription('Click below to open the realm dashboard. Sign in with Discord to claim your lord.')
+    .setColor(0xc8a96a);
 
-  return `Could not launch Activity: ${launchErr?.message || 'Unknown error'}\n\nDashboard: ${activityUrl}`;
-}
+  const row = new ActionRowBuilder().addComponents(
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Link)
+      .setLabel('Open Dashboard')
+      .setURL(loginUrl),
+    new ButtonBuilder()
+      .setStyle(ButtonStyle.Link)
+      .setLabel('Direct link')
+      .setURL(dashboardUrl)
+  );
 
-async function launchPlay2dActivity(interaction) {
-  if (typeof interaction.launchActivity === 'function') {
-    await interaction.launchActivity();
-    console.log('play2d: launchActivity OK');
-    return;
-  }
-  await interaction.client.rest.post(Routes.interactionCallback(interaction.id, interaction.token), {
-    body: { type: InteractionResponseType.LaunchActivity }
-  });
-  console.log('play2d: LaunchActivity via REST fallback');
+  return { embed, row, ephemeral: true };
 }
 
 client.once(Events.ClientReady, async (c) => {
@@ -138,17 +137,13 @@ client.on(Events.InteractionCreate, async (interaction) => {
   }
   if (!interaction.isChatInputCommand()) return;
   try {
-    if (interaction.commandName === 'play2d') {
-      try {
-        await launchPlay2dActivity(interaction);
-      } catch (launchErr) {
-        console.error('play2d failed:', launchErr?.raw ?? launchErr);
-        const content = play2dFailureMessage(launchErr);
-        if (!interaction.replied && !interaction.deferred) {
-          await interaction
-            .reply({ content, flags: MessageFlags.Ephemeral })
-            .catch((e) => console.error('play2d reply failed:', e.message));
-        }
+    if (interaction.commandName === 'play2d' || interaction.commandName === 'play') {
+      const r = buildPlayReply();
+      const flags = r.ephemeral ? MessageFlags.Ephemeral : undefined;
+      if (r.embed) {
+        await interaction.reply({ embeds: [r.embed], components: r.row ? [r.row] : [], flags });
+      } else {
+        await interaction.reply({ content: r.content, flags });
       }
       return;
     }

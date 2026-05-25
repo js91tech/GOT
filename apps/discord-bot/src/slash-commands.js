@@ -4,7 +4,10 @@ export function buildSlashCommands() {
   return [
     new SlashCommandBuilder()
       .setName('play2d')
-      .setDescription('Launch Westeros Realm (Discord Activity — realm dashboard)'),
+      .setDescription('Open the Westeros Realm dashboard (browser link)'),
+    new SlashCommandBuilder()
+      .setName('play')
+      .setDescription('Open the Westeros Realm dashboard (browser link)'),
     new SlashCommandBuilder().setName('profile').setDescription('Your lord profile'),
     new SlashCommandBuilder().setName('status').setDescription('Morale, timers, blockers'),
     new SlashCommandBuilder()
