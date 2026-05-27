@@ -47,6 +47,22 @@ export function ensureSchemaPatches(db) {
   } catch (e) {
     if (!String(e.message).includes('duplicate column')) throw e;
   }
+
+  // Territory yield timing: track when each holding was last paid so the
+  // periodic tick can pay proportional to elapsed time instead of crediting
+  // the full per-hour amount on every minute-long tick.
+  try {
+    db.exec("ALTER TABLE territory_control ADD COLUMN last_yield_at TEXT");
+    // Existing rows have NULL; backfill to 'now' so the first post-migration
+    // payout doesn't dump weeks of seed-time arrears.
+    db.prepare(
+      `UPDATE territory_control SET last_yield_at = datetime('now')
+       WHERE last_yield_at IS NULL`
+    ).run();
+  } catch (e) {
+    if (!String(e.message).includes('duplicate column')) throw e;
+  }
+
   try {
     db.prepare(
       `UPDATE players SET focus_updated_at = energy_updated_at

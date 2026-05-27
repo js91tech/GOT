@@ -229,19 +229,28 @@ export function resolveSiege(siegeId) {
   db.prepare("UPDATE territory_sieges SET status = 'won' WHERE id = ?").run(siegeId);
   const garrison = 50;
   db.prepare(
-    `INSERT INTO territory_control (territory_id, owner_type, owner_id, garrison_power, captured_at, tax_rate)
-     VALUES (?, 'guild', ?, ?, datetime('now'), 0.1)
+    `INSERT INTO territory_control (territory_id, owner_type, owner_id, garrison_power, captured_at, last_yield_at, tax_rate)
+     VALUES (?, 'guild', ?, ?, datetime('now'), datetime('now'), 0.1)
      ON CONFLICT(territory_id) DO UPDATE SET
        owner_type = 'guild',
        owner_id = excluded.owner_id,
        garrison_power = excluded.garrison_power,
-       captured_at = datetime('now')`
+       captured_at = datetime('now'),
+       last_yield_at = datetime('now')`
   ).run(siege.territory_id, siege.attacker_guild_id, garrison);
 }
 
+// Minimum elapsed time between payouts. Prevents wasted writes when the
+// scheduler fires more often than meaningful yield can accrue (yields are
+// rounded down via Math.floor).
+const MIN_YIELD_INTERVAL_MS = 60 * 1000;
+const RESOURCE_SHARE_RATE = 0.1;
+
 export function processSiegesAndYields() {
   const db = getDb();
-  const now = Date.now();
+  const nowMs = Date.now();
+  const nowIso = new Date(nowMs).toISOString();
+
   const expired = db
     .prepare(`SELECT * FROM territory_sieges WHERE status = 'active' AND ends_at < datetime('now')`)
     .all();
@@ -250,21 +259,73 @@ export function processSiegesAndYields() {
     else db.prepare("UPDATE territory_sieges SET status = 'failed' WHERE id = ?").run(s.id);
   }
 
-  const controls = db.prepare('SELECT * FROM territory_control WHERE owner_type = ?').all('guild');
+  const controls = db.prepare('SELECT * FROM territory_control').all();
+  const upsertResource = db.prepare(
+    `INSERT INTO player_resources (player_id, resource_type, quantity) VALUES (?, ?, ?)
+     ON CONFLICT(player_id, resource_type) DO UPDATE SET
+       quantity = quantity + excluded.quantity`
+  );
+  const updateLastYield = db.prepare(
+    'UPDATE territory_control SET last_yield_at = ? WHERE territory_id = ?'
+  );
+
   for (const c of controls) {
     const t = db.prepare('SELECT * FROM territories WHERE id = ?').get(c.territory_id);
     if (!t) continue;
-    const yieldAmt = Math.floor(t.base_yield_per_hour * (1 - (c.tax_rate || 0.1)));
-    if (yieldAmt > 0) {
-      db.prepare('UPDATE guilds SET treasury = treasury + ? WHERE id = ?').run(yieldAmt, c.owner_id);
-      db.prepare(
-        `INSERT INTO player_resources (player_id, resource_type, quantity)
-         SELECT leader_player_id, ?, ?
-         FROM guilds WHERE id = ?
-         ON CONFLICT(player_id, resource_type) DO UPDATE SET
-           quantity = quantity + excluded.quantity`
-      ).run(t.resource_type, Math.floor(yieldAmt * 0.1), c.owner_id);
+
+    const lastIso = c.last_yield_at || c.captured_at;
+    const lastMs = lastIso ? new Date(lastIso).getTime() : nowMs;
+    const elapsedMs = nowMs - lastMs;
+    if (elapsedMs < MIN_YIELD_INTERVAL_MS) continue;
+
+    const elapsedHours = elapsedMs / 3600000;
+    const grossYield = t.base_yield_per_hour * elapsedHours;
+    const netYield = Math.floor(grossYield * (1 - (c.tax_rate ?? 0.1)));
+    if (netYield <= 0) continue;
+
+    if (c.owner_type === 'guild') {
+      // Treasury collects the full net yield; members split a 10% resource share.
+      db.prepare('UPDATE guilds SET treasury = treasury + ? WHERE id = ?').run(
+        netYield,
+        c.owner_id
+      );
+
+      const resourcePool = Math.floor(netYield * RESOURCE_SHARE_RATE);
+      if (resourcePool > 0) {
+        const members = db
+          .prepare('SELECT player_id FROM guild_members WHERE guild_id = ?')
+          .all(c.owner_id);
+        if (members.length === 0) {
+          // No members on file — fall back to the guild leader so the share
+          // isn't silently dropped.
+          const leader = db
+            .prepare('SELECT leader_player_id AS pid FROM guilds WHERE id = ?')
+            .get(c.owner_id);
+          if (leader?.pid) upsertResource.run(leader.pid, t.resource_type, resourcePool);
+        } else {
+          const perMember = Math.floor(resourcePool / members.length);
+          if (perMember > 0) {
+            for (const m of members) upsertResource.run(m.player_id, t.resource_type, perMember);
+          }
+        }
+      }
+    } else if (c.owner_type === 'faction') {
+      // Faction-held land has no treasury, so distribute a per-hour resource
+      // dividend to every sworn lord/lady. This makes the default realm state
+      // actually pay something instead of silently dropping all yield.
+      const resourcePool = Math.floor(netYield * RESOURCE_SHARE_RATE);
+      if (resourcePool > 0) {
+        const sworn = db
+          .prepare('SELECT id FROM players WHERE faction_id = ? AND banned = 0')
+          .all(c.owner_id);
+        if (sworn.length > 0) {
+          const perMember = Math.max(1, Math.floor(resourcePool / sworn.length));
+          for (const m of sworn) upsertResource.run(m.id, t.resource_type, perMember);
+        }
+      }
     }
+
+    updateLastYield.run(nowIso, c.territory_id);
   }
 }
 

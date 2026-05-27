@@ -256,6 +256,7 @@ CREATE TABLE IF NOT EXISTS territory_control (
   owner_id TEXT NOT NULL,
   garrison_power INTEGER NOT NULL DEFAULT 0,
   captured_at TEXT NOT NULL DEFAULT (datetime('now')),
+  last_yield_at TEXT,
   tax_rate REAL NOT NULL DEFAULT 0.1
 );
 
